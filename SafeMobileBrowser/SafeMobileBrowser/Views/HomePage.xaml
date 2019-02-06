@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SafeMobileBrowser.Views.HomePage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:SafeMobileBrowser.Controls">
+    <NavigationPage.TitleView>
+        <StackLayout x:Name="stackLayout"
+                     Padding="0,3,10,7"
+                     HorizontalOptions="FillAndExpand"
+                     Orientation="Horizontal"
+                     Spacing="15"
+                     VerticalOptions="Start">
+
+            <Frame Padding="0"
+                   BackgroundColor="#515151"
+                   CornerRadius="2"
+                   HasShadow="False"
+                   HeightRequest="25"
+                   VerticalOptions="Center"
+                   WidthRequest="25">
+                <Frame Margin="2"
+                       Padding="5,0,5,5"
+                       BackgroundColor="#E0E0E0"
+                       CornerRadius="2"
+                       HasShadow="False">
+                    <Label BackgroundColor="Transparent"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Text="5"
+                           TextColor="Black"
+                           VerticalOptions="Center" />
+                </Frame>
+            </Frame>
+
+            <Frame Margin="2"
+                   Padding="10,5"
+                   BackgroundColor="White"
+                   CornerRadius="2"
+                   HasShadow="False"
+                   HorizontalOptions="FillAndExpand">
+                <Grid Padding="0"
+                      ColumnSpacing="2"
+                      HorizontalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Frame Padding="0"
+                           BackgroundColor="LightGreen"
+                           CornerRadius="5"
+                           HasShadow="False"
+                           VerticalOptions="Center">
+                        <Frame Margin="2"
+                               Padding="5"
+                               BackgroundColor="LightGreen"
+                               CornerRadius="5"
+                               HasShadow="False">
+                            <Label BackgroundColor="Transparent"
+                                   Text="safe://"
+                                   TextColor="Black"
+                                   VerticalOptions="Center" />
+                        </Frame>
+                    </Frame>
+
+                    <controls:AddressBarEntry x:Name="searchBar"
+                                              Grid.Column="1"
+                                              Margin="0,0,0,5"
+                                              FontSize="Medium"
+                                              HeightRequest="30"
+                                              HorizontalOptions="FillAndExpand"
+                                              Placeholder="Enter url"
+                                              PlaceholderColor="Black"
+                                              VerticalOptions="Center" />
+
+                    <Image x:Name="searchBarButton"
+                           Grid.Column="2"
+                           HeightRequest="15"
+                           HorizontalOptions="End"
+                           Source="refresh" />
+                </Grid>
+            </Frame>
+
+
+            <Image x:Name="SettingsButton"
+                   HeightRequest="15"
+                   HorizontalOptions="End"
+                   Source="menu" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label HorizontalOptions="CenterAndExpand"
+                   Text="Welcome to Xamarin.Forms!"
+                   VerticalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
