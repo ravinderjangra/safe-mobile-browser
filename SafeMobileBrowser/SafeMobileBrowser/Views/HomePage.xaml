@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="SafeMobileBrowser.Views.HomePage"
-             xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
-             BackgroundColor="#F1F1F1">
+<t:MenuContainerPage x:Class="SafeMobileBrowser.Views.HomePage"
+                     xmlns="http://xamarin.com/schemas/2014/forms"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
+                     xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
+                     BackgroundColor="#F1F1F1">
     <NavigationPage.TitleView>
         <StackLayout x:Name="stackLayout"
                      Padding="10,3,10,7"
@@ -12,7 +13,8 @@
                      Spacing="15"
                      VerticalOptions="Start">
 
-            <Frame Padding="0"
+            <Frame x:Name="TabCountFrame"
+                   Padding="0"
                    BackgroundColor="#515151"
                    CornerRadius="2"
                    HasShadow="False"
@@ -72,17 +74,12 @@
                 </Grid>
             </Frame>
 
-
             <Image x:Name="SettingsButton"
                    HeightRequest="15"
                    Source="menu" />
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
-        <StackLayout>
-            <Label HorizontalOptions="CenterAndExpand"
-                   Text="Welcome to Xamarin.Forms!"
-                   VerticalOptions="CenterAndExpand" />
-        </StackLayout>
+        <StackLayout />
     </ContentPage.Content>
-</ContentPage>
+</t:MenuContainerPage>

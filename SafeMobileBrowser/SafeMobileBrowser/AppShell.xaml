@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="SafeMobileBrowser.AppShell"
+       xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:SafeMobileBrowser.Views"
-       RouteHost="maidsafe.net"
-       RouteScheme="app"
-       Route="SafeMobileBrowser"
        FlyoutBehavior="Flyout"
        FlyoutHeaderBehavior="CollapseOnScroll"
-       x:Class="SafeMobileBrowser.AppShell">
+       Route="SafeMobileBrowser"
+       RouteHost="maidsafe.net"
+       RouteScheme="app">
 
     <!--
         Shell is an all new way to quickly get started with your application. There are 3 levels to a Shell app:
@@ -16,8 +16,8 @@
         * ShellContent: a ContentPage host. Multiple ShellContent within a ShellSection are navigable by top tabs
     -->
 
-    <!-- 
-        Styles and Resources 
+    <!--
+        Styles and Resources
     -->
     <Shell.Resources>
         <ResourceDictionary>
@@ -29,15 +29,15 @@
                 <Setter Property="Shell.ShellDisabledColor" Value="#B4FFFFFF" />
                 <Setter Property="Shell.ShellUnselectedColor" Value="#95FFFFFF" />
                 <Setter Property="Shell.ShellTabBarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
-                <Setter Property="Shell.ShellTabBarForegroundColor" Value="White"/>
-                <Setter Property="Shell.ShellTabBarUnselectedColor" Value="#95FFFFFF"/>
-                <Setter Property="Shell.ShellTabBarTitleColor" Value="White"/>
+                <Setter Property="Shell.ShellTabBarForegroundColor" Value="White" />
+                <Setter Property="Shell.ShellTabBarUnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.ShellTabBarTitleColor" Value="White" />
             </Style>
-            <Style TargetType="ShellItem" BasedOn="{StaticResource BaseStyle}" />
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="ShellItem" />
         </ResourceDictionary>
     </Shell.Resources>
 
-    <!-- Empty HomePage -->
+    <!--  Empty HomePage  -->
     <ShellItem Title="Home">
         <ShellSection>
             <ShellContent>
@@ -46,7 +46,7 @@
         </ShellSection>
     </ShellItem>
 
-    <!-- Tabs Flyout Header-->
+    <!--  Tabs Flyout Header  -->
     <Shell.FlyoutHeader>
         <DataTemplate>
             <Grid>
@@ -55,7 +55,7 @@
         </DataTemplate>
     </Shell.FlyoutHeader>
 
-    <!-- Tabs List-->
+    <!--  Tabs List  -->
     <Shell.MenuItems>
         <MenuItem Text="Website 3" />
         <MenuItem Text="Website 2" />

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<t:SlideMenuView x:Class="SafeMobileBrowser.Views.TabsRightMenuView"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit">
+    <StackLayout Padding="0,10">
+        <Label FontSize="Medium"
+               HorizontalOptions="Center"
+               Text="Tabs"
+               TextColor="Black" />
+
+        <ListView x:Name="TabCollectionView" ItemsSource="{Binding Pages}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Image HeightRequest="20"
+                                   Source="pageIcon"
+                                   VerticalOptions="Center" />
+                            <Label Text="{Binding PageTitle}"
+                                   TextColor="Black"
+                                   VerticalOptions="Center" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</t:SlideMenuView>

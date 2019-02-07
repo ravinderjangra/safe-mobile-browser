@@ -1,8 +1,6 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Views;
-using Xamarin.Forms.Platform.Android;
 
 namespace SafeMobileBrowser.Droid
 {
@@ -16,13 +14,13 @@ namespace SafeMobileBrowser.Droid
 
             base.OnCreate(savedInstanceState);
 
-
             global::Xamarin.Forms.Forms.SetFlags(
                 "Shell_Experimental",
                 "Visual_Experimental",
                 "CollectionView_Experimental",
                 "FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
             LoadApplication(new App());
         }
     }

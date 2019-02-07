@@ -1,13 +1,17 @@
-﻿using SafeMobileBrowser.Views;
+﻿using SafeMobileBrowser.Models;
+using SafeMobileBrowser.Views;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser
 {
     public partial class App : Application
     {
+        public static TabPageStore TabPageStore{get;set;}
         public App()
         {
             InitializeComponent();
+
+            TabPageStore = new TabPageStore();
 
             MainPage = new NavigationPage(new HomePage())
             {
