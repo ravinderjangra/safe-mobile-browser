@@ -16,12 +16,6 @@ namespace SafeMobileBrowser.Droid
 
             base.OnCreate(savedInstanceState);
 
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
-            {
-                Window.ClearFlags(WindowManagerFlags.TranslucentStatus);
-                Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
-                Window.SetStatusBarColor(Xamarin.Forms.Color.FromHex("#868686").ToAndroid());
-            }
 
             global::Xamarin.Forms.Forms.SetFlags(
                 "Shell_Experimental",

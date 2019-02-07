@@ -11,7 +11,7 @@ namespace SafeMobileBrowser
 
             MainPage = new NavigationPage(new HomePage())
             {
-                BarBackgroundColor = Color.FromHex("#E0E0E0")
+                BarBackgroundColor = Color.White
             };
         }
 
