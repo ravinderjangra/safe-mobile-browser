@@ -1,4 +1,5 @@
-﻿using SafeMobileBrowser.Models;
+﻿using SafeApp;
+using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Views;
 using Xamarin.Forms;
 
@@ -6,7 +7,8 @@ namespace SafeMobileBrowser
 {
     public partial class App : Application
     {
-        public static TabPageStore TabPageStore{get;set;}
+        public static TabPageStore TabPageStore { get; set; }
+        public static Session AppSession;
         public App()
         {
             InitializeComponent();

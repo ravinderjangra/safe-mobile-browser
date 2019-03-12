@@ -56,7 +56,7 @@
                            TextColor="DarkGreen"
                            VerticalOptions="Center" />
 
-                    <controls:AddressBarEntry x:Name="searchBar"
+                    <controls:AddressBarEntry x:Name="AddressBarEntry"
                                               Grid.Column="1"
                                               Margin="0,0,0,5"
                                               FontSize="14"
@@ -66,7 +66,7 @@
                                               PlaceholderColor="DarkGray"
                                               VerticalOptions="Center" />
 
-                    <Image x:Name="searchBarButton"
+                    <Image x:Name="AddressBarButton"
                            Grid.Column="2"
                            HeightRequest="15"
                            HorizontalOptions="End"
@@ -80,6 +80,17 @@
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
-        <StackLayout />
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+            <Button x:Name="AuthenticateButton"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="Authenticate"
+                    VerticalOptions="CenterAndExpand" />
+
+            <controls:HybridWebView x:Name="HybridWebView"
+                                    HorizontalOptions="FillAndExpand"
+                                    IsVisible="False"
+                                    VerticalOptions="FillAndExpand" />
+        </StackLayout>
     </ContentPage.Content>
 </t:MenuContainerPage>
