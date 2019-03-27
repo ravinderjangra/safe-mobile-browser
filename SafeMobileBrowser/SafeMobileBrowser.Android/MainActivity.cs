@@ -6,11 +6,12 @@ using Xamarin.Forms;
 using System;
 using SafeMobileBrowser.Services;
 using SafeMobileBrowser.Helpers;
+using Android.Runtime;
 
 namespace SafeMobileBrowser.Droid
 {
     [Activity(
-        Label = "SafeMobileBrowser",
+        Label = "SAFE Browser",
         Icon = "@mipmap/icon",
         Theme = "@style/MainTheme",
         MainLauncher = true,
@@ -32,12 +33,10 @@ namespace SafeMobileBrowser.Droid
 
             base.OnCreate(savedInstanceState);
 
-            global::Xamarin.Forms.Forms.SetFlags(
-                "Shell_Experimental",
-                "CollectionView_Experimental",
-                "FastRenderers_Experimental");
+            global::Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
+
             LoadApplication(new App());
         }
 
@@ -65,6 +64,13 @@ namespace SafeMobileBrowser.Droid
                       System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
                   }
               });
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }
