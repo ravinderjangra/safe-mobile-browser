@@ -11,10 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaidSafe.SafeApp" Version="0.2.0" />
+    <PackageReference Include="MaidSafe.SafeApp" Version="0.2.1" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
     <PackageReference Include="SlideOverKit" Version="2.1.6.2" />
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.62955-pre2" />  
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.250467-pre7" />
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="4.0.0.250467-pre7" />  
   </ItemGroup>
 
   <ItemGroup>

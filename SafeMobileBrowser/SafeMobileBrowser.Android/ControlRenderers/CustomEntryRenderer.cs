@@ -25,7 +25,7 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             {
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetColor(global::Android.Graphics.Color.Transparent);
-                Control.SetBackgroundDrawable(gd);
+                Control.SetBackground(gd);
                 Control.SetRawInputType(InputTypes.TextFlagNoSuggestions);
                 Control.SetPadding(Control.PaddingLeft, Control.PaddingTop, Control.PaddingRight, 0);
             }
