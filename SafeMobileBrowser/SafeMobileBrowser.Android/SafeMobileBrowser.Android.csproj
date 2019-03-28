@@ -78,11 +78,18 @@
     <Compile Include="ControlRenderers\CustomEntryRenderer.cs" />
     <Compile Include="ControlRenderers\HybridWebViewRenderer.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="PlatformServices\FileTransferService.cs" />
     <Compile Include="PlatformServices\ScreenshotService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="..\SafeMobileBrowser\AssetFiles\log.toml">
+      <Link>Assets\log.toml</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\SafeMobileBrowser\AssetFiles\MockVault">
+      <Link>Assets\MockVault</Link>
+    </AndroidAsset>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />

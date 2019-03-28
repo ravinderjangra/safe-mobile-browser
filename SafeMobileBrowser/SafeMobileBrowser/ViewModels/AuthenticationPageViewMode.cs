@@ -1,8 +1,10 @@
 ﻿using SafeApp;
 using SafeMobileBrowser.CustomAsyncCommand;
+using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using System;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
@@ -37,6 +39,9 @@ namespace SafeMobileBrowser.ViewModels
             {
                 IsBusy = true;
 #if SAFE_APP_MOCK
+                //TODO: Update code to transfer the mockvault file
+                ProgressText = "Transferring assets";
+                await DeviceServices.TransferAssetFiles();
                 ProgressText = "Creating mock account";
                 await AuthenticationService.CreateMockAccount();
                 ProgressText = "Mock authentication in progress";

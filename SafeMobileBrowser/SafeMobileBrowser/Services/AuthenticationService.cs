@@ -33,10 +33,18 @@ namespace SafeMobileBrowser.Services
 
         public static async Task CreateMockAccount()
         {
-            var locator = RandomGenerators.GetRandomString(5);
-            var secret = RandomGenerators.GetRandomString(5);
-            var invitation = RandomGenerators.GetRandomString(5);
-            _authenticator = await Authenticator.CreateAccountAsync(locator, secret, invitation);
+            try
+            {
+                var locator = RandomGenerators.GetRandomString(5);
+                var secret = RandomGenerators.GetRandomString(5);
+                var invitation = RandomGenerators.GetRandomString(5);
+                _authenticator = await Authenticator.CreateAccountAsync(locator, secret, invitation);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw ex;
+            }
         }
 #else
         public static async Task RequestLiveNetworkAuthenticationAsync()
@@ -53,7 +61,7 @@ namespace SafeMobileBrowser.Services
                 throw ex;
             }
         }
-
+#endif
         public async Task ProcessAuthenticationResponseAsync(string url)
         {
             try
@@ -78,6 +86,5 @@ namespace SafeMobileBrowser.Services
                 MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
             }
         }
-#endif
     }
 }
