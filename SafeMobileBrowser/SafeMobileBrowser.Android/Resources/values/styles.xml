@@ -23,9 +23,14 @@
     <item name="windowActionModeOverlay">true</item>
 
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
+    <item name="toolbarStyle">@style/Widget.Toolbar</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
     <item name="colorAccent">#FF4081</item>
+  </style>
+  
+  <style name="Widget.Toolbar" parent="@style/Widget.AppCompat.Toolbar">
+    <item name="contentInsetStart">0dp</item>
   </style>
 </resources>

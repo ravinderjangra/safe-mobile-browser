@@ -1,19 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<t:MenuContainerPage x:Class="SafeMobileBrowser.Views.HomePage"
-                     xmlns="http://xamarin.com/schemas/2014/forms"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                     xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
-                     xmlns:t="clr-namespace:SlideOverKit;assembly=SlideOverKit"
-                     BackgroundColor="#F1F1F1">
+<ContentPage x:Class="SafeMobileBrowser.Views.HomePage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
+             BackgroundColor="#F1F1F1">
     <NavigationPage.TitleView>
         <StackLayout x:Name="stackLayout"
-                     Padding="10,3,10,7"
+                     Padding="10,3"
                      HorizontalOptions="FillAndExpand"
                      Orientation="Horizontal"
-                     Spacing="15"
                      VerticalOptions="Start">
 
-            <Frame x:Name="TabCountFrame"
+            <!--<Frame x:Name="TabCountFrame"
                    Padding="0"
                    BackgroundColor="#515151"
                    CornerRadius="2"
@@ -33,16 +31,16 @@
                            TextColor="Black"
                            VerticalOptions="Start" />
                 </Frame>
-            </Frame>
+            </Frame>-->
 
-            <Frame Margin="2"
-                   Padding="10,2"
+            <Frame Padding="5,2"
                    BackgroundColor="#F1F1F1"
-                   CornerRadius="10"
+                   CornerRadius="20"
                    HasShadow="False"
                    HorizontalOptions="FillAndExpand">
-                <Grid Padding="0,2"
-                      ColumnSpacing="2"
+                <Grid Padding="5,2"
+                      HeightRequest="30"
+                      ColumnSpacing="1"
                       HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -58,11 +56,9 @@
 
                     <controls:AddressBarEntry x:Name="AddressBarEntry"
                                               Grid.Column="1"
-                                              Margin="0,0,0,5"
                                               FontSize="14"
-                                              HeightRequest="30"
                                               HorizontalOptions="FillAndExpand"
-                                              Placeholder="Enter url"
+                                              Placeholder="enter url"
                                               PlaceholderColor="DarkGray"
                                               VerticalOptions="Center" />
 
@@ -74,23 +70,18 @@
                 </Grid>
             </Frame>
 
-            <Image x:Name="SettingsButton"
+            <!--<Image x:Name="SettingsButton"
                    HeightRequest="15"
-                   Source="menu" />
+                   Source="menu" />-->
+
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-
-            <Button x:Name="AuthenticateButton"
-                    HorizontalOptions="CenterAndExpand"
-                    Text="Authenticate"
-                    VerticalOptions="CenterAndExpand" />
-
+        <StackLayout HorizontalOptions="FillAndExpand"
+                     VerticalOptions="FillAndExpand">
             <controls:HybridWebView x:Name="HybridWebView"
                                     HorizontalOptions="FillAndExpand"
-                                    IsVisible="False"
                                     VerticalOptions="FillAndExpand" />
         </StackLayout>
     </ContentPage.Content>
-</t:MenuContainerPage>
+</ContentPage>

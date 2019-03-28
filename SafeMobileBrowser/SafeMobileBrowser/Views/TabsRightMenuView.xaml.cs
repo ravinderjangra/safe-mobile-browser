@@ -1,6 +1,4 @@
-﻿using SafeMobileBrowser.Models;
-using SlideOverKit;
-using System.Collections.ObjectModel;
+﻿using SlideOverKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -9,7 +7,7 @@ namespace SafeMobileBrowser.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TabsRightMenuView : SlideMenuView
     {
-        public ObservableCollection<TabPage> Pages => App.TabPageStore.TabPages;
+        // public ObservableCollection<TabPage> Pages => App.TabPageStore.TabPages;
 
         public TabsRightMenuView()
         {

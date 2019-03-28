@@ -1,14 +1,16 @@
-﻿using System;
+﻿using SafeMobileBrowser.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public AuthenticationService AuthService => DependencyService.Get<AuthenticationService>();
+
         bool isBusy = false;
         public bool IsBusy
         {

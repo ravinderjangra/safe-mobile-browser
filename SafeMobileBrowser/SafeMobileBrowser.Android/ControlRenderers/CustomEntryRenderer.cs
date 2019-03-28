@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Android.Content;
-using Android.Content.Res;
 using Android.Graphics.Drawables;
 using Android.Text;
 using SafeMobileBrowser.Controls;
@@ -27,7 +26,7 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
                 gd.SetColor(global::Android.Graphics.Color.Transparent);
                 Control.SetBackground(gd);
                 Control.SetRawInputType(InputTypes.TextFlagNoSuggestions);
-                Control.SetPadding(Control.PaddingLeft, Control.PaddingTop, Control.PaddingRight, 0);
+                Control.SetPadding(Control.PaddingLeft, 0, Control.PaddingRight, 0);
             }
         }
 
