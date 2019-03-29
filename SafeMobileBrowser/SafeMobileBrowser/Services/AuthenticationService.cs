@@ -7,6 +7,7 @@ using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -76,8 +77,30 @@ namespace SafeMobileBrowser.Services
                     if (ipcMsg != null)
                     {
                         App.AppSession = await Session.AppUnregisteredAsync(ipcMsg.SerialisedCfg);
-                        MessagingCenter.Send(this, MessageCenterConstants.Authenticated);
+                        MessagingCenter.Send(this, MessageCenterConstants.Authenticated, ipcMsg.SerialisedCfg.ToUtfString());
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
+            }
+        }
+
+        public async Task ConnectUsingStoredSerialisedConfiguration(string utfSerializedCfg)
+        {
+            try
+            {
+                if (utfSerializedCfg != null)
+                {
+                    var serialisedCfg = utfSerializedCfg.ToUtfBytes().ToList();
+                    App.AppSession = await Session.AppUnregisteredAsync(serialisedCfg);
+                    MessagingCenter.Send(this, MessageCenterConstants.Authenticated);
+                }
+                else
+                {
+                    throw new NullReferenceException("Null serialised configuration");
                 }
             }
             catch (Exception ex)

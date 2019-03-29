@@ -60,10 +60,11 @@
                          Grid.Row="2">
 
                 <Button x:Name="AuthenticateButton"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"
                         VerticalOptions="End"
                         BackgroundColor="{StaticResource PrimaryColor}"
-                        HorizontalOptions="CenterAndExpand"
-                        Text="Authenticate"
+                        Text="{Binding AuthenticationButtonText}"
                         Command="{Binding AuthenticateCommand}"
                         IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverter}}">
                 </Button>

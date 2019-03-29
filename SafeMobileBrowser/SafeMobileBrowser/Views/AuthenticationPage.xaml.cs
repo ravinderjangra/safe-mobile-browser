@@ -1,6 +1,7 @@
 ﻿using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using SafeMobileBrowser.ViewModels;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,12 +25,22 @@ namespace SafeMobileBrowser.Views
 
             BindingContext = _viewModel;
 
-            MessagingCenter.Subscribe<AuthenticationService>(this, MessageCenterConstants.Authenticated,
-                (sender) =>
+            MessagingCenter.Subscribe<AuthenticationService, string>(this, MessageCenterConstants.Authenticated,
+                async (sender, serializedconfig) =>
                 {
                     _viewModel.ProgressText = "Authentication successful";
+                    var storeResponse = await DisplayAlert("Store authentication response",
+                        "Do you want to store auth response for future use.",
+                        "Yes",
+                        "No");
+                    if (storeResponse)
+                    {
+                        await CredentialCacheService.Store(serializedconfig);
+                    }
                     Application.Current.MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White };
                 });
+            MessagingCenter.Subscribe<AuthenticationService>(this, MessageCenterConstants.Authenticated,
+                (sender) => Application.Current.MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White });
             MessagingCenter.Subscribe<AuthenticationPageViewMode>(this, MessageCenterConstants.Authenticated,
                 (sender) => Application.Current.MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White });
             MessagingCenter.Subscribe<AuthenticationService>(this, MessageCenterConstants.ProcessingAuthResponse,

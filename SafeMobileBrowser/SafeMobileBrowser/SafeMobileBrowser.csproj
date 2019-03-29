@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="MaidSafe.SafeApp" Version="0.2.1" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.14.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="1.14.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
     <PackageReference Include="SlideOverKit" Version="2.1.6.2" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />

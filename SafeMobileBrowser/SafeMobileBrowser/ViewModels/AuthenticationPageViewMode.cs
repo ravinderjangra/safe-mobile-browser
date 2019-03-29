@@ -1,10 +1,8 @@
 ﻿using SafeApp;
 using SafeMobileBrowser.CustomAsyncCommand;
-using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using System;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
@@ -20,12 +18,32 @@ namespace SafeMobileBrowser.ViewModels
             set { SetProperty(ref _progressText, value); }
         }
 
+        public string StoredConfiguration { get; private set; }
+
+        public string AuthenticationButtonText { get; set; }
+
         public IAsyncCommand AuthenticateCommand { get; private set; }
 
         public AuthenticationPageViewMode()
         {
+            Task.Run(async () =>
+            {
+                IsBusy = true;
+                ProgressText = "Checking cached response";
+                StoredConfiguration = await CredentialCacheService.Retrieve();
+                IsBusy = false;
+            }).Wait();
+            SetAuthenticationButtonText();
             CheckIfMock();
             AuthenticateCommand = new AsyncCommand(AuthenticateAppAsync, CanExecute);
+        }
+
+        private void SetAuthenticationButtonText()
+        {
+            if (StoredConfiguration == null)
+                AuthenticationButtonText = "Authorise";
+            else
+                AuthenticationButtonText = "Connect";
         }
 
         private bool CanExecute()
@@ -49,8 +67,17 @@ namespace SafeMobileBrowser.ViewModels
                 MessagingCenter.Send(this, MessageCenterConstants.Authenticated);
                 IsBusy = false;
 #else
-                ProgressText = "Requesting authentication for authenticator app";
-                await AuthenticationService.RequestLiveNetworkAuthenticationAsync();
+                if (StoredConfiguration == null)
+                {
+                    ProgressText = "Requesting authentication for authenticator app";
+                    await AuthenticationService.RequestLiveNetworkAuthenticationAsync();
+                }
+                else
+                {
+                    ProgressText = "Estaiblishing session using cached response";
+                    var authServicec = new AuthenticationService();
+                    await AuthService.ConnectUsingStoredSerialisedConfiguration(StoredConfiguration);
+                }
 #endif
             }
             catch (Exception ex)
