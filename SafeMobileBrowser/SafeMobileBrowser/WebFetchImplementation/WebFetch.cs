@@ -8,16 +8,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SafeMobileBrowser.Services
+namespace SafeMobileBrowser.WebFetchImplementation
 {
     public class WebFetch
     {
-        private const int TAG_TYPE_DNS = 15001;
-        private const int TAG_TYPE_WWW = 15002;
-        private const int NFS_FILE_START = 0;
-        private const int NFS_FILE_END = 0;
-        private const string INDEX_HTML = "index.html";
-
         public static Session session;
 
         public WebFetch()
@@ -31,7 +25,7 @@ namespace SafeMobileBrowser.Services
             var uri = new Uri(url);
 
             var hostname = uri.Host;
-            var path = uri.AbsolutePath ?? $"/{INDEX_HTML}";
+            var path = uri.AbsolutePath ?? $"/{WebFetchConstants.INDEX_HTML}";
 
             string[] hostparts = hostname.Split('.');
             var lookupname = hostparts.Last();
@@ -71,7 +65,7 @@ namespace SafeMobileBrowser.Services
                 List<byte> address = await SafeApp.Misc.Crypto.Sha3HashAsync(pubName.ToUtfBytes());
                 MDataInfo servicesContainer = new MDataInfo
                 {
-                    TypeTag = TAG_TYPE_DNS,
+                    TypeTag = WebFetchConstants.TAG_TYPE_DNS,
                     Name = address.ToArray()
                 };
                 serviceInfo = await session.MData.GetValueAsync(servicesContainer, (servName ?? "www").ToUtfBytes());
@@ -98,7 +92,7 @@ namespace SafeMobileBrowser.Services
 
                 serviceMd = new MDataInfo
                 {
-                    TypeTag = TAG_TYPE_WWW,
+                    TypeTag = WebFetchConstants.TAG_TYPE_WWW,
                     Name = serviceInfo.Item1.ToArray()
                 };
             }
@@ -110,7 +104,7 @@ namespace SafeMobileBrowser.Services
         public static async Task<WebFile> TryDifferentPaths(MDataInfo fileMdInfo, string initialPath)
         {
             var file = new File() { DataMapName = initialPath.ToUtfBytes().ToArray() };
-            var filePath = initialPath == "/" ? INDEX_HTML : initialPath.Trim('/');
+            var filePath = initialPath == "/" ? WebFetchConstants.INDEX_HTML : initialPath.Trim('/');
             try
             {
                 (file, _) = await session.NFS.DirFetchFileAsync(fileMdInfo, filePath);

@@ -1,7 +1,7 @@
 ﻿using Foundation;
 using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.iOS.ControlRenderers;
-using SafeMobileBrowser.Services;
+using SafeMobileBrowser.WebFetchImplementation;
 using System;
 using System.Text;
 using System.Threading.Tasks;

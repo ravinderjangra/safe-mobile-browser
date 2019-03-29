@@ -41,7 +41,16 @@ namespace SafeMobileBrowser.Views
                     _viewModel.IsBusy = false;
                     _viewModel.AuthenticateCommand.ForceCanExecute();
                 });
+        }
 
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<AuthenticationService>(this, MessageCenterConstants.Authenticated);
+            MessagingCenter.Unsubscribe<AuthenticationPageViewMode>(this, MessageCenterConstants.Authenticated);
+            MessagingCenter.Unsubscribe<AuthenticationService>(this, MessageCenterConstants.ProcessingAuthResponse);
+            MessagingCenter.Unsubscribe<AuthenticationService>(this, MessageCenterConstants.AuthenticationFailed);
         }
     }
 }

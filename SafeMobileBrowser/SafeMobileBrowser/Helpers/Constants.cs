@@ -1,6 +1,6 @@
 ﻿namespace SafeMobileBrowser.Helpers
 {
-    public class Constants
+    public static class Constants
     {
         public const string AppName = "SAFE Browser";
         public const string AppId = "net.maidsafe.mobilebrowser";

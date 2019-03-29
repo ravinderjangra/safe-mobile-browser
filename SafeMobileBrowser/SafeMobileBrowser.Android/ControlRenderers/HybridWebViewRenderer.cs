@@ -9,7 +9,7 @@ using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.Droid.ControlRenderers;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
-using SafeMobileBrowser.Services;
+using SafeMobileBrowser.WebFetchImplementation;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using AWeb = Android.Webkit;

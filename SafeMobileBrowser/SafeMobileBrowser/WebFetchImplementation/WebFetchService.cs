@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace SafeMobileBrowser.Services
+namespace SafeMobileBrowser.WebFetchImplementation
 {
     public class WebFetchService
     {
