@@ -33,4 +33,8 @@
   <style name="Widget.Toolbar" parent="@style/Widget.AppCompat.Toolbar">
     <item name="contentInsetStart">0dp</item>
   </style>
+
+<style name="ToolbarDarkOverflow" parent="Theme.AppCompat.Light">
+  <item name="android:textColorSecondary">#000000</item>
+</style>
 </resources>

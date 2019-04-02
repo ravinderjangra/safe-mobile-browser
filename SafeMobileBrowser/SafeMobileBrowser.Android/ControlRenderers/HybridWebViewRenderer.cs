@@ -175,13 +175,24 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
 
             public override WebResourceResponse ShouldInterceptRequest(AWeb.WebView view, string url)
             {
-                if (url.Contains("favicon"))
-                    return base.ShouldInterceptRequest(view, url);
-
-                var saferesponse = WebFetchService.FetchResourceAsync(url).Result;
-                Stream stream = new MemoryStream(saferesponse.Data);
-                WebResourceResponse response = new WebResourceResponse(saferesponse.MimeType, "UTF-8", stream);
-                return response;
+                try
+                {
+                    var saferesponse = WebFetchService.FetchResourceAsync(url).Result;
+                    var stream = new MemoryStream(saferesponse.Data);
+                    var response = new WebResourceResponse(saferesponse.MimeType, "UTF-8", stream);
+                    return response;
+                }
+                catch(WebFetchException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error Code: " + ex.ErrorCode);
+                    System.Diagnostics.Debug.WriteLine("Error Message: " + ex.Message);
+                }
+                catch(Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                }
+                var emptyStream = new MemoryStream(0);
+                return new WebResourceResponse("text/plain", "utf-8", emptyStream);
             }
 
             protected override void Dispose(bool disposing)
