@@ -36,5 +36,6 @@
 
 <style name="ToolbarDarkOverflow" parent="Theme.AppCompat.Light">
   <item name="android:textColorSecondary">#000000</item>
+  <item name="android:background">#FFFFFF</item>
 </style>
 </resources>

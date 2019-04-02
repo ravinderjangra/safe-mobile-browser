@@ -15,11 +15,16 @@ namespace SafeMobileBrowser.WebFetchImplementation
             {
                 return await webFetch.FetchAsync(url, options);
             }
+            catch(WebFetchException ex)
+            {
+                Debug.WriteLine("Error: " + ex.Message);
+                throw ex;
+            }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("Error: " + ex.Message);
+                throw ex;
             }
-            return null;
         }
     }
 }

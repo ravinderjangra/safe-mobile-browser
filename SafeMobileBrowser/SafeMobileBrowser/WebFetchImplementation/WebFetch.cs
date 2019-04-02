@@ -39,12 +39,16 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 }
                 return response;
             }
+            catch (WebFetchException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                throw ex;
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Error: " + ex.Message);
+                throw ex;
             }
-
-            return response;
         }
 
         private static string CreateFinalPath(string path)

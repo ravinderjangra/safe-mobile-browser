@@ -4,12 +4,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
              BackgroundColor="#F1F1F1">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Hello" Order="Secondary" Icon="menu"/>
-        <ToolbarItem Text="Hello" Order="Secondary" />
-        <ToolbarItem Text="Hello" Order="Secondary" />
-        <ToolbarItem Text="Hello" Order="Secondary" />
-    </ContentPage.ToolbarItems>
     <NavigationPage.TitleView>
         <StackLayout x:Name="stackLayout"
                      Padding="10,3"
@@ -66,7 +60,8 @@
                                               HorizontalOptions="FillAndExpand"
                                               Placeholder="enter url"
                                               PlaceholderColor="DarkGray"
-                                              VerticalOptions="Center" />
+                                              VerticalOptions="Center"
+                                              Text="{Binding AddressbarText}"/>
 
                     <Image x:Name="AddressBarButton"
                            Grid.Column="2"
@@ -85,9 +80,9 @@
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand"
                      VerticalOptions="FillAndExpand">
-            <controls:HybridWebView x:Name="HybridWebView"
-                                    HorizontalOptions="FillAndExpand"
-                                    VerticalOptions="FillAndExpand" />
+            <controls:HybridWebView HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                    Uri="{Binding Url}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
