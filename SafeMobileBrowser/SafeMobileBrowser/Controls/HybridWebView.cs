@@ -13,6 +13,25 @@ namespace SafeMobileBrowser.Controls
             typeof(HybridWebView),
             default(string));
 
+        public static readonly BindableProperty IsLoadingProperty = BindableProperty.Create(
+            nameof(Uri),
+            typeof(bool),
+            typeof(HybridWebView),
+            default(bool));
+
+        public event EventHandler LoadingStateChanged;
+
+        public void ViewLoadingStatechanged(bool state)
+        {
+            IsLoading = state;
+        }
+
+        public bool IsLoading
+        {
+            get { return (bool)GetValue(IsLoadingProperty); }
+            set { SetValue(IsLoadingProperty, value); }
+        }
+
         public string Uri
         {
             get { return (string)GetValue(UriProperty); }
