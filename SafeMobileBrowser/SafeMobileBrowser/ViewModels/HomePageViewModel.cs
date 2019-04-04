@@ -12,9 +12,9 @@ namespace SafeMobileBrowser.ViewModels
 
         public ICommand ToolbarItemCommand { get; private set; }
 
-        private string _pageLoading;
+        private bool _pageLoading;
 
-        public string IsPageLoading
+        public bool IsPageLoading
         {
             get { return _pageLoading; }
             set { SetProperty(ref _pageLoading, value); }

@@ -8,7 +8,7 @@ namespace SafeMobileBrowser.Controls
     public class AdvancedProgressBar : ProgressBar
     {
         public static readonly BindableProperty IsRunningProperty = BindableProperty.Create(
-            nameof(Uri),
+            nameof(IsRunning),
             typeof(bool),
             typeof(AdvancedProgressBar),
             default(bool));

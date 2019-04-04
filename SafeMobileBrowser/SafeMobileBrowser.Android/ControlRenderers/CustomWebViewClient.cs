@@ -24,11 +24,6 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
         {
         }
 
-        public void UpdateLoadingState(bool state)
-        {
-            _renderer.LoadingStateChanged(state);
-        }
-
         //public override WebResourceResponse ShouldInterceptRequest(AWeb.WebView view, IWebResourceRequest request)
         //{
         //    try
@@ -140,28 +135,18 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             return new WebResourceResponse("text/plain", "utf-8", emptyStream);
         }
 
-        //public override bool ShouldOverrideUrlLoading(AWeb.WebView view, string url)
-        //{
-        //    if (!IsRedirecting)
-        //        IsRedirecting = true;
-        //    UpdateLoadingState(true);
-        //    return base.ShouldOverrideUrlLoading(view, url);
-        //}
 
-        //public override void OnPageStarted(AWeb.WebView view, string url, Bitmap favicon)
-        //{
-        //    base.OnPageStarted(view, url, favicon);
-        //    UpdateLoadingState(true);
-        //}
+        public override void OnPageStarted(AWeb.WebView view, string url, Bitmap favicon)
+        {
+            _renderer.Element.IsLoading = true;
+            base.OnPageStarted(view, url, favicon);
+        }
 
-        //public override void OnPageFinished(AWeb.WebView view, string url)
-        //{
-        //    base.OnPageFinished(view, url);
-        //    if (!IsRedirecting)
-        //        UpdateLoadingState(false);
-        //    else
-        //        UpdateLoadingState(true);
-        //}
+        public override void OnPageFinished(AWeb.WebView view, string url)
+        {
+            _renderer.Element.IsLoading = false;
+            base.OnPageFinished(view, url);
+        }
 
         protected override void Dispose(bool disposing)
         {

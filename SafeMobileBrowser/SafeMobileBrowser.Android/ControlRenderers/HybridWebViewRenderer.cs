@@ -75,23 +75,13 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             return new FormsWebChromeClient();
         }
 
-        public void LoadingStateChanged(bool state)
-        {
-            ((HybridWebView)Element).ViewLoadingStatechanged(state);
-        }
-
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            switch (e.PropertyName)
-            {
-                case "Uri":
-                    if (!string.IsNullOrEmpty(Element.Uri))
-                        Control.LoadUrl(string.Format(Element.Uri));
-                    break;
-                default:
-                    break;
-            }
+
+            if (e.PropertyName == HybridWebView.UriProperty.PropertyName)
+                if (!string.IsNullOrEmpty(Element.Uri))
+                    Control.LoadUrl(string.Format(Element.Uri));
         }
 
         protected override void Dispose(bool disposing)

@@ -85,11 +85,22 @@
                      Spacing="0"
                      VerticalOptions="FillAndExpand">
 
-            <!--<controls:AdvancedProgressBar IsRunning="{Binding IsPageLoading}"
-                                          IsVisible="{Binding IsPageLoading}"
+            <controls:AdvancedProgressBar IsRunning="False"
+                                          IsVisible="False"
                                           HeightRequest="5"
-                                          BackgroundColor="Transparent"/>-->
-            <controls:HybridWebView HorizontalOptions="FillAndExpand"
+                                          BackgroundColor="Transparent">
+                <controls:AdvancedProgressBar.Triggers>
+                    <DataTrigger TargetType="controls:AdvancedProgressBar"
+                                 Binding="{Binding Source={x:Reference HybridWebViewControl}, Path=IsLoading}"
+                                 Value="True">
+                        <Setter Property="IsRunning" Value="True" />
+                        <Setter Property="IsVisible" Value="True" />
+                    </DataTrigger>
+                </controls:AdvancedProgressBar.Triggers>
+            </controls:AdvancedProgressBar>
+            
+            <controls:HybridWebView x:Name="HybridWebViewControl"
+                                    HorizontalOptions="FillAndExpand"
                                     VerticalOptions="FillAndExpand"
                                     Uri="{Binding Url}"/>
         </StackLayout>
