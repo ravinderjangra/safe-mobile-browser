@@ -16,7 +16,6 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
     public class HybridWebViewRenderer : ViewRenderer<HybridWebView, WKWebView>
     {
         private WKUserContentController _userController;
-        private bool _ignoreSourceChanges;
 
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
         {
@@ -46,11 +45,6 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 
         private async Task LoadHtmlFromSafe()
         {
-            if (_ignoreSourceChanges)
-            {
-                return;
-            }
-
             var safeResponse = await WebFetchService.FetchResourceAsync(Element.Uri.ToString());
             var base64String = Convert.ToBase64String(safeResponse.Data);
             string decodedString = Encoding.UTF8.GetString(safeResponse.Data);

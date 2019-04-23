@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Android.Graphics;
+using Plugin.CurrentActivity;
 using SafeMobileBrowser.Droid.PlatformServices;
 using SafeMobileBrowser.Services;
 
@@ -10,7 +11,7 @@ namespace SafeMobileBrowser.Droid.PlatformServices
     {
         public byte[] Capture()
         {
-            var activity = Xamarin.Forms.Forms.Context as MainActivity;
+            var activity = CrossCurrentActivity.Current.Activity;
             if (activity == null)
             {
                 return null;
