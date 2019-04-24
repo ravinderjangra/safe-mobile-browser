@@ -63,12 +63,9 @@
     <PackageReference Include="MimeMapping">
       <Version>1.0.1.12</Version>
     </PackageReference>
-<<<<<<< HEAD
-=======
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
     </PackageReference>
->>>>>>> 9e20af1... a
     <PackageReference Include="SlideOverKit">
       <Version>2.1.6.2</Version>
     </PackageReference>
