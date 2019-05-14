@@ -27,7 +27,12 @@ namespace SafeMobileBrowser.Views
             BindingContext = _viewModel;
 
             InitilizeTapGestures();
-            AddWebsiteList();
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                AddWebsiteList();
+            }
+
             AddressBarEntry.Completed += (s, e) =>
             {
                 _viewModel.PageLoadCommand.Execute(null);

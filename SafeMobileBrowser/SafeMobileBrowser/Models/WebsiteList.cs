@@ -20,6 +20,7 @@ namespace SafeMobileBrowser.Models
         {
             return new List<string>
             {
+                "test.mobiletest",
                 "cat.ashi",
                 "home.chickenbacon",
                 "home.dgeddes",

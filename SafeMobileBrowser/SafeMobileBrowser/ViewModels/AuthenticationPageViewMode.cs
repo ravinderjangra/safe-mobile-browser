@@ -67,17 +67,17 @@ namespace SafeMobileBrowser.ViewModels
                 MessagingCenter.Send(this, MessageCenterConstants.Authenticated);
                 IsBusy = false;
 #else
-                if (StoredConfiguration == null)
-                {
+                //if (StoredConfiguration == null)
+                //{
                     ProgressText = "Requesting authentication for authenticator app";
                     await AuthenticationService.RequestLiveNetworkAuthenticationAsync();
-                }
-                else
-                {
-                    ProgressText = "Estaiblishing session using cached response";
-                    var authServicec = new AuthenticationService();
-                    await AuthService.ConnectUsingStoredSerialisedConfiguration(StoredConfiguration);
-                }
+                //}
+                //else
+                //{
+                //    ProgressText = "Estaiblishing session using cached response";
+                //    var authServicec = new AuthenticationService();
+                //    await AuthService.ConnectUsingStoredSerialisedConfiguration(StoredConfiguration);
+                //}
 #endif
             }
             catch (Exception ex)
