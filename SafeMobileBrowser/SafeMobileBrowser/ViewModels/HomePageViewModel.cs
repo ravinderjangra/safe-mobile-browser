@@ -50,7 +50,14 @@ namespace SafeMobileBrowser.ViewModels
 
         private void LoadUrl()
         {
-            Url = $"http://{AddressbarText}";
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                Url = $"safe://{AddressbarText}";
+            }
+            else
+            {
+                Url = $"http://{AddressbarText}";
+            }
         }
     }
 }

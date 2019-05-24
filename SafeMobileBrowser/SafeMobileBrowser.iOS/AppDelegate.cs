@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using SafeMobileBrowser.iOS.ControlRenderers;
 using SafeMobileBrowser.Services;
 using System;
 using System.Diagnostics;
@@ -14,6 +15,9 @@ namespace SafeMobileBrowser.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            // Register custom SAFE protocol
+            NSUrlProtocol.RegisterClass(new ObjCRuntime.Class(typeof(SafeUrlProtocol)));
+
             global::Xamarin.Forms.Forms.Init();
             global::Xamarin.Forms.FormsMaterial.Init();
 

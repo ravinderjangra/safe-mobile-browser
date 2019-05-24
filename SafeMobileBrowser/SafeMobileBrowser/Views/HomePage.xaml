@@ -62,7 +62,17 @@
                                               Placeholder="enter url"
                                               PlaceholderColor="DarkGray"
                                               VerticalOptions="Center"
-                                              Text="{Binding AddressbarText}"/>
+                                              IsSpellCheckEnabled="False"
+                                              IsTextPredictionEnabled="False"
+                                              Text="{Binding AddressbarText}">
+                        <controls:AddressBarEntry.Keyboard>
+                            <Keyboard x:FactoryMethod="Create">
+                                <x:Arguments>
+                                    <KeyboardFlags>CapitalizeNone</KeyboardFlags>
+                                </x:Arguments>
+                            </Keyboard>
+                        </controls:AddressBarEntry.Keyboard>
+                    </controls:AddressBarEntry>
 
                     <Image x:Name="AddressBarButton"
                            Grid.Column="2"

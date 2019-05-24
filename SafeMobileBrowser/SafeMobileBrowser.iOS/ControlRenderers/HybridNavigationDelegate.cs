@@ -26,14 +26,16 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
             return false;
         }
 
-        [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
-        public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
-        {
-            if (Reference == null || !Reference.TryGetTarget(out HybridWebViewRenderer renderer)) return;
-            if (renderer.Element == null) return;
+        //[Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
+        //public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
+        //{
+        //    if (Reference == null || !Reference.TryGetTarget(out HybridWebViewRenderer renderer)) return;
+        //    if (renderer.Element == null) return;
 
-            renderer.Element.IsLoading = true;
-        }
+        //    renderer.Element.IsLoading = true;
+
+        //    decisionHandler(WKNavigationActionPolicy.Allow);
+        //}
 
         public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
         {

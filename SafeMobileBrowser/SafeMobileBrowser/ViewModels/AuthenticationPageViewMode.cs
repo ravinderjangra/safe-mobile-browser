@@ -30,6 +30,7 @@ namespace SafeMobileBrowser.ViewModels
             {
                 IsBusy = true;
                 ProgressText = "Checking cached response";
+                CredentialCacheService.Delete();
                 StoredConfiguration = await CredentialCacheService.Retrieve();
                 IsBusy = false;
             }).Wait();

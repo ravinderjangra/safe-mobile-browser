@@ -180,19 +180,20 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
         }
 
 
-        protected override async void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
             if (e.PropertyName == nameof(Element.Uri))
             {
-                await LoadHtmlFromSafe();
+                //await LoadHtmlFromSafe();
+                //Control.Url = new NSUrl(Element.Uri);
+                Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
             }
         }
 
         private async Task LoadHtmlFromSafe()
         {
             var safeResponse = await WebFetchService.FetchResourceAsync(Element.Uri.ToString());
-            var base64String = Convert.ToBase64String(safeResponse.Data);
             string decodedString = Encoding.UTF8.GetString(safeResponse.Data);
             Control.LoadHtmlString(decodedString, new NSUrl(Element.Uri));
             //var imageLinks = LinkFinder.FindImages(decodedString);
