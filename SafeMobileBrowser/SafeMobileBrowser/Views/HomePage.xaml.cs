@@ -26,8 +26,9 @@ namespace SafeMobileBrowser.Views
 
             BindingContext = _viewModel;
 
-            InitilizeTapGestures();
-            AddWebsiteList();
+            if (Device.RuntimePlatform == Device.Android)
+                AddWebsiteList();
+
             AddressBarEntry.Completed += (s, e) =>
             {
                 _viewModel.PageLoadCommand.Execute(null);
@@ -51,37 +52,6 @@ namespace SafeMobileBrowser.Views
                     item.SetBinding(MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
                     ToolbarItems.Add(item);
                 }
-        }
-
-        private void InitilizeTapGestures()
-        {
-            //var tabCountFrameTapGestureRecognizer = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
-            //tabCountFrameTapGestureRecognizer.Tapped += (s, e) =>
-            //{
-            //    if (this.SlideMenu.IsShown)
-            //    {
-            //        this.HideMenu();
-            //    }
-            //    else
-            //    {
-            //        this.ShowMenu();
-            //    }
-            //};
-            //TabCountFrame.GestureRecognizers.Add(tabCountFrameTapGestureRecognizer);
-
-            //var refreshTapGestureRecognizer = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
-            //refreshTapGestureRecognizer.Tapped += (s, e) =>
-            //{
-
-            //};
-            //AddressBarButton.GestureRecognizers.Add(refreshTapGestureRecognizer);
-
-            //var menuTapGestureRecognizer = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
-            //menuTapGestureRecognizer.Tapped += (s, e) =>
-            //{
-
-            //};
-            //SettingsButton.GestureRecognizers.Add(menuTapGestureRecognizer);
         }
     }
 }

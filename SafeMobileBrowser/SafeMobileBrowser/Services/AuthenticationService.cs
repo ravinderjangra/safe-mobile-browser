@@ -8,6 +8,7 @@ using SafeMobileBrowser.Services;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -86,6 +87,11 @@ namespace SafeMobileBrowser.Services
                 Debug.WriteLine(ex.Message);
                 MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
             }
+        }
+
+        public async Task ConnectUsingHardcodedResponse()
+        {
+            await ConnectUsingStoredSerialisedConfiguration(Constants.HardCodedAuthResponse);
         }
 
         public async Task ConnectUsingStoredSerialisedConfiguration(string encodedResponse)

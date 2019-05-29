@@ -11,7 +11,7 @@ namespace SafeMobileBrowser
         {
             InitializeComponent();
 
-            MainPage = new AuthenticationPage();
+            MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White };
         }
 
         protected override void OnStart()

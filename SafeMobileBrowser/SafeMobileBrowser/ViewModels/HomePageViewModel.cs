@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -40,6 +41,13 @@ namespace SafeMobileBrowser.ViewModels
         {
             PageLoadCommand = new Command(LoadUrl);
             ToolbarItemCommand = new Command<string>(LoadUrl);
+            InitilizeSessionAsync();
+        }
+
+        private async Task InitilizeSessionAsync()
+        {
+            //TODO: Connect using hardcoded response, provide option to authenticate using Authenticator
+            await AuthService.ConnectUsingHardcodedResponse();
         }
 
         private void LoadUrl(string url)
