@@ -68,8 +68,8 @@ namespace SafeMobileBrowser.Services
             try
             {
                 MessagingCenter.Send(this, MessageCenterConstants.ProcessingAuthResponse);
-                var encodedRequest = RequestHelpers.GetRequestData(url);
-                var decodeResult = await Session.DecodeIpcMessageAsync(encodedRequest);
+                var encodedResponse = RequestHelpers.GetRequestData(url);
+                var decodeResult = await Session.DecodeIpcMessageAsync(encodedResponse);
                 if (decodeResult.GetType() == typeof(UnregisteredIpcMsg))
                 {
                     var ipcMsg = decodeResult as UnregisteredIpcMsg;
@@ -77,7 +77,7 @@ namespace SafeMobileBrowser.Services
                     if (ipcMsg != null)
                     {
                         App.AppSession = await Session.AppUnregisteredAsync(ipcMsg.SerialisedCfg);
-                        MessagingCenter.Send(this, MessageCenterConstants.Authenticated, ipcMsg.SerialisedCfg.ToUtfString());
+                        MessagingCenter.Send(this, MessageCenterConstants.Authenticated, encodedResponse);
                     }
                 }
             }
@@ -88,15 +88,22 @@ namespace SafeMobileBrowser.Services
             }
         }
 
-        public async Task ConnectUsingStoredSerialisedConfiguration(string utfSerializedCfg)
+        public async Task ConnectUsingStoredSerialisedConfiguration(string encodedResponse)
         {
             try
             {
-                if (utfSerializedCfg != null)
+                if (!string.IsNullOrEmpty(encodedResponse))
                 {
-                    var serialisedCfg = utfSerializedCfg.ToUtfBytes().ToList();
-                    App.AppSession = await Session.AppUnregisteredAsync(serialisedCfg);
-                    MessagingCenter.Send(this, MessageCenterConstants.Authenticated);
+                    var decodeResult = await Session.DecodeIpcMessageAsync(encodedResponse);
+                    if (decodeResult.GetType() == typeof(UnregisteredIpcMsg))
+                    {
+                        var ipcMsg = decodeResult as UnregisteredIpcMsg;
+
+                        if (ipcMsg != null)
+                        {
+                            App.AppSession = await Session.AppUnregisteredAsync(ipcMsg.SerialisedCfg);
+                        }
+                    }
                 }
                 else
                 {

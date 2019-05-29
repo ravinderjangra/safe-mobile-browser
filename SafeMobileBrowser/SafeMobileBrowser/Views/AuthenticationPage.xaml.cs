@@ -26,7 +26,7 @@ namespace SafeMobileBrowser.Views
             BindingContext = _viewModel;
 
             MessagingCenter.Subscribe<AuthenticationService, string>(this, MessageCenterConstants.Authenticated,
-                async (sender, serializedconfig) =>
+                async (sender, encodedResponse) =>
                 {
                     _viewModel.ProgressText = "Authentication successful";
                     var storeResponse = await DisplayAlert("Store authentication response",
@@ -35,7 +35,7 @@ namespace SafeMobileBrowser.Views
                         "No");
                     if (storeResponse)
                     {
-                        await CredentialCacheService.Store(serializedconfig);
+                        await CredentialCacheService.Store(encodedResponse);
                     }
                     Application.Current.MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White };
                 });

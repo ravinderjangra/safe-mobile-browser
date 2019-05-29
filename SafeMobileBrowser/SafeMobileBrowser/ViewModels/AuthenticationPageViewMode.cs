@@ -18,7 +18,7 @@ namespace SafeMobileBrowser.ViewModels
             set { SetProperty(ref _progressText, value); }
         }
 
-        public string StoredConfiguration { get; private set; }
+        public string StoredResponse { get; private set; }
 
         public string AuthenticationButtonText { get; set; }
 
@@ -30,7 +30,7 @@ namespace SafeMobileBrowser.ViewModels
             {
                 IsBusy = true;
                 ProgressText = "Checking cached response";
-                StoredConfiguration = await CredentialCacheService.Retrieve();
+                StoredResponse = await CredentialCacheService.Retrieve();
                 IsBusy = false;
             }).Wait();
             SetAuthenticationButtonText();
@@ -40,7 +40,7 @@ namespace SafeMobileBrowser.ViewModels
 
         private void SetAuthenticationButtonText()
         {
-            if (StoredConfiguration == null)
+            if (StoredResponse == null)
                 AuthenticationButtonText = "Authorise";
             else
                 AuthenticationButtonText = "Connect";
@@ -67,7 +67,7 @@ namespace SafeMobileBrowser.ViewModels
                 MessagingCenter.Send(this, MessageCenterConstants.Authenticated);
                 IsBusy = false;
 #else
-                if (StoredConfiguration == null)
+                if (StoredResponse == null)
                 {
                     ProgressText = "Requesting authentication for authenticator app";
                     await AuthenticationService.RequestLiveNetworkAuthenticationAsync();
@@ -76,7 +76,7 @@ namespace SafeMobileBrowser.ViewModels
                 {
                     ProgressText = "Estaiblishing session using cached response";
                     var authServicec = new AuthenticationService();
-                    await AuthService.ConnectUsingStoredSerialisedConfiguration(StoredConfiguration);
+                    await AuthService.ConnectUsingStoredSerialisedConfiguration(StoredResponse);
                 }
 #endif
             }
