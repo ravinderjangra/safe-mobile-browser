@@ -88,7 +88,6 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="PlatformServices\FileTransferService.cs" />
     <Compile Include="PlatformServices\GetAssetsFileData.cs" />
-    <Compile Include="PlatformServices\ScreenshotService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
