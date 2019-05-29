@@ -19,8 +19,7 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 
             if (NativeView != null)
             {
-                var control = (WKWebView)NativeView;
-                control.Configuration.SetUrlSchemeHandler(new SafeSchemaHandler(), "safe");
+                ((WKWebView)NativeView).Configuration.SetUrlSchemeHandler(new SafeSchemaHandler(), "safe");
                 SetSource();
             }
         }
