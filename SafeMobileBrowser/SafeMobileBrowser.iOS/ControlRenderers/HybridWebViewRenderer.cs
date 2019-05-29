@@ -3,6 +3,7 @@ using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.iOS.ControlRenderers;
 using SafeMobileBrowser.WebFetchImplementation;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,10 +69,12 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
             _navigationDelegate = new HybridNavigationDelegate(this);
             _contentController = new WKUserContentController();
             _contentController.AddScriptMessageHandler(this, "safe");
+
             _configuration = new WKWebViewConfiguration
             {
                 UserContentController = _contentController
             };
+            _configuration.SetUrlSchemeHandler(new SafeAssetHandler(), "safe");
 
             var wkWebView = new WKWebView(Frame, _configuration)
             {
@@ -182,13 +185,22 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            base.OnElementPropertyChanged(sender, e);
-            if (e.PropertyName == nameof(Element.Uri))
+            try
             {
-                //await LoadHtmlFromSafe();
-                //Control.Url = new NSUrl(Element.Uri);
-                Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
+                base.OnElementPropertyChanged(sender, e);
+                if (e.PropertyName == nameof(Element.Uri))
+                {
+                    //await LoadHtmlFromSafe();
+                    //Control.Url = new NSUrl(Element.Uri);
+                    //Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
+                    Control.LoadRequest(NSUrlRequest.FromUrl(NSUrl.FromString(Element.Uri)));
+                }
             }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
+            }
+
         }
 
         private async Task LoadHtmlFromSafe()
