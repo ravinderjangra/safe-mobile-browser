@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Android.Graphics;
-using Android.Runtime;
-using Android.Webkit;
+﻿using Android.Webkit;
 using SafeMobileBrowser.Droid.PlatformServices;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.WebFetchImplementation;
-using Xamarin.Forms;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Xamarin.Forms.Platform.Android;
 using AWeb = Android.Webkit;
 
 namespace SafeMobileBrowser.Droid.ControlRenderers
 {
-    public class CustomWebViewClient : WebViewClient
+    public class HybridWebViewClient : FormsWebViewClient
     {
-        private HybridWebViewRenderer _renderer;
-        public bool IsLoading;
-        public bool IsRedirecting;
-
-        public CustomWebViewClient(HybridWebViewRenderer renderer) => _renderer = renderer ?? throw new ArgumentNullException("null renderer");
-
-        protected CustomWebViewClient(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+        public HybridWebViewClient(HybridWebViewRenderer renderer) : base(renderer)
         {
         }
 
@@ -90,28 +82,6 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
                 }
             }
             return base.ShouldInterceptRequest(view, request);
-        }
-
-
-        public override void OnPageStarted(AWeb.WebView view, string url, Bitmap favicon)
-        {
-            _renderer.Element.IsLoading = true;
-            base.OnPageStarted(view, url, favicon);
-        }
-
-        public override void OnPageFinished(AWeb.WebView view, string url)
-        {
-            _renderer.Element.IsLoading = false;
-            base.OnPageFinished(view, url);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            if (disposing)
-            {
-                _renderer = null;
-            }
         }
     }
 }

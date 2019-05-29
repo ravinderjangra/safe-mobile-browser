@@ -86,7 +86,7 @@
   <ItemGroup>
     <Compile Include="ControlRenderers\AdvancedProgressBarRenderer.cs" />
     <Compile Include="ControlRenderers\CustomEntryRenderer.cs" />
-    <Compile Include="ControlRenderers\CustomWebViewClient.cs" />
+    <Compile Include="ControlRenderers\HybridWebViewClient.cs" />
     <Compile Include="ControlRenderers\HybridWebViewRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="PlatformServices\FileTransferService.cs" />

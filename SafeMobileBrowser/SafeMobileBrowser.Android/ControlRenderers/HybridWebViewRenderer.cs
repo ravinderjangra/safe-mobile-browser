@@ -1,99 +1,42 @@
-﻿using System.ComponentModel;
+﻿using System;
 using Android.Content;
-using Android.OS;
-using Android.Webkit;
 using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.Droid.ControlRenderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using AWeb = Android.Webkit;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
 namespace SafeMobileBrowser.Droid.ControlRenderers
 {
-    public class HybridWebViewRenderer : ViewRenderer<HybridWebView, AWeb.WebView>
+    public class HybridWebViewRenderer : WebViewRenderer
     {
-        public const string AssetBaseUrl = "file:///android_asset/";
-        CustomWebViewClient _webViewClient;
-        FormsWebChromeClient _webChromeClient;
-        //const string JavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);} ; ";
-        private readonly Context _context;
-
+        HybridWebViewClient _webViewClient;
 
         public HybridWebViewRenderer(Context context) : base(context)
         {
-            _context = context;
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);
-            if (Control == null)
+
+            if (Control != null)
             {
-                var webView = new AWeb.WebView(_context);
-
-                _webViewClient = GetWebViewClient();
-                webView.SetWebViewClient(_webViewClient);
-
-                _webChromeClient = GetFormsWebChromeClient();
-                webView.SetWebChromeClient(_webChromeClient);
-
-                webView.Settings.JavaScriptEnabled = true;
-                webView.Settings.DomStorageEnabled = true;
-
-                SetNativeControl(webView);
-
-                if ((int)Build.VERSION.SdkInt >= 19)
-                {
-                    Control.SetLayerType(Android.Views.LayerType.Hardware, null);
-                }
-                else
-                {
-                    Control.SetLayerType(Android.Views.LayerType.Software, null);
-                }
-            }
-            if (e.OldElement != null)
-            {
-                //Control.RemoveJavascriptInterface("jsBridge");
-                var hybridWebView = e.OldElement as HybridWebView;
-                hybridWebView.Cleanup();
-            }
-            if (e.NewElement != null)
-            {
-                //Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
-                Control.LoadUrl("file:///android_asset/startbrowsing.html");
+                _webViewClient = GetHybridWebViewClient();
+                Control.SetWebViewClient(_webViewClient);
+                Control.LoadUrl($"{AssetBaseUrl}startbrowsing.html");
             }
         }
 
-        protected virtual CustomWebViewClient GetWebViewClient()
+        private HybridWebViewClient GetHybridWebViewClient()
         {
-            return new CustomWebViewClient(this);
-        }
-
-        protected virtual FormsWebChromeClient GetFormsWebChromeClient()
-        {
-            return new FormsWebChromeClient();
-        }
-
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            base.OnElementPropertyChanged(sender, e);
-
-            if (e.PropertyName == HybridWebView.UriProperty.PropertyName)
-                if (!string.IsNullOrEmpty(Element.Uri))
-                    Control.LoadUrl(string.Format(Element.Uri));
+            return new HybridWebViewClient(this);
         }
 
         protected override void Dispose(bool disposing)
         {
+            _webViewClient?.Dispose();
             base.Dispose(disposing);
-
-            if (Element != null)
-            {
-                Control?.StopLoading();
-
-                _webViewClient?.Dispose();
-            }
         }
     }
 }

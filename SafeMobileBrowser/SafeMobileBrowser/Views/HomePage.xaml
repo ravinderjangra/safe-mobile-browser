@@ -11,29 +11,7 @@
                      HorizontalOptions="FillAndExpand"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
-
-            <!--<Frame x:Name="TabCountFrame"
-                   Padding="0"
-                   BackgroundColor="#515151"
-                   CornerRadius="2"
-                   HasShadow="False"
-                   HeightRequest="25"
-                   VerticalOptions="Center"
-                   WidthRequest="25">
-                <Frame Margin="2"
-                       Padding="4,0,4,4"
-                       BackgroundColor="White"
-                       CornerRadius="2"
-                       HasShadow="False">
-                    <Label BackgroundColor="Transparent"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           Text="5"
-                           TextColor="Black"
-                           VerticalOptions="Start" />
-                </Frame>
-            </Frame>-->
-
+          
             <Frame Padding="5,2"
                    BackgroundColor="#F1F1F1"
                    CornerRadius="20"
@@ -62,7 +40,17 @@
                                               Placeholder="enter url"
                                               PlaceholderColor="DarkGray"
                                               VerticalOptions="Center"
-                                              Text="{Binding AddressbarText}"/>
+                                              IsSpellCheckEnabled="False"
+                                              IsTextPredictionEnabled="False"
+                                              Text="{Binding AddressbarText}">
+                        <controls:AddressBarEntry.Keyboard>
+                            <Keyboard x:FactoryMethod="Create">
+                                <x:Arguments>
+                                    <KeyboardFlags>CapitalizeNone</KeyboardFlags>
+                                </x:Arguments>
+                            </Keyboard>
+                        </controls:AddressBarEntry.Keyboard>
+                    </controls:AddressBarEntry>
 
                     <Image x:Name="AddressBarButton"
                            Grid.Column="2"
@@ -71,11 +59,6 @@
                            Source="refresh" />
                 </Grid>
             </Frame>
-
-            <!--<Image x:Name="SettingsButton"
-                   HeightRequest="15"
-                   Source="menu" />-->
-
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
@@ -102,7 +85,7 @@
             <controls:HybridWebView x:Name="HybridWebViewControl"
                                     HorizontalOptions="FillAndExpand"
                                     VerticalOptions="FillAndExpand"
-                                    Uri="{Binding Url}"/>
+                                    Source="{Binding Url}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
