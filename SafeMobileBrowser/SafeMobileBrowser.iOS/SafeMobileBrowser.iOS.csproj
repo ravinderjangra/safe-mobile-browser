@@ -180,4 +180,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\refresh.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\notfound.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\startbrowsing.html" />
+  </ItemGroup>
 </Project>
