@@ -3,15 +3,31 @@
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
+             xmlns:local="clr-namespace:SafeMobileBrowser.Effects"
              BackgroundColor="White"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              Padding="0">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="ffimageloading:CachedImage">
+                <Setter Property="DownsampleToViewSize" Value="True" />
+                <Setter Property="IsOpaque" Value="True" />
+                <Setter Property="HeightRequest" Value="10" />
+                <Setter Property="WidthRequest" Value="10" />
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="Opacity" Value="0.75"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <NavigationPage.TitleView>
         <StackLayout x:Name="stackLayout"
                      Padding="10,3"
                      HorizontalOptions="FillAndExpand"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
-          
+
             <Frame Padding="5,2"
                    BackgroundColor="#F1F1F1"
                    CornerRadius="20"
@@ -42,15 +58,8 @@
                                               VerticalOptions="Center"
                                               IsSpellCheckEnabled="False"
                                               IsTextPredictionEnabled="False"
-                                              Text="{Binding AddressbarText}">
-                        <controls:AddressBarEntry.Keyboard>
-                            <Keyboard x:FactoryMethod="Create">
-                                <x:Arguments>
-                                    <KeyboardFlags>CapitalizeNone</KeyboardFlags>
-                                </x:Arguments>
-                            </Keyboard>
-                        </controls:AddressBarEntry.Keyboard>
-                    </controls:AddressBarEntry>
+                                              Text="{Binding AddressbarText}"
+                                              AddressBarFocusCommand="{Binding AddressBarFocusCommand, Mode=OneWayToSource}" />
 
                     <Image x:Name="AddressBarButton"
                            Grid.Column="2"
@@ -59,6 +68,7 @@
                            Source="refresh" />
                 </Grid>
             </Frame>
+
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
@@ -68,24 +78,107 @@
                      Spacing="0"
                      VerticalOptions="FillAndExpand">
 
-            <controls:AdvancedProgressBar IsRunning="False"
-                                          IsVisible="False"
+            <controls:AdvancedProgressBar IsRunning="{Binding IsRunning}"
+                                          IsVisible="{Binding IsVisible}"
                                           HeightRequest="5"
-                                          BackgroundColor="Transparent">
-                <controls:AdvancedProgressBar.Triggers>
-                    <DataTrigger TargetType="controls:AdvancedProgressBar"
-                                 Binding="{Binding Source={x:Reference HybridWebViewControl}, Path=IsLoading}"
-                                 Value="True">
-                        <Setter Property="IsRunning" Value="True" />
-                        <Setter Property="IsVisible" Value="True" />
-                    </DataTrigger>
-                </controls:AdvancedProgressBar.Triggers>
+                                          BackgroundColor="Transparent"
+                                          x:Name="AdvancedProgressbar">
             </controls:AdvancedProgressBar>
-            
+
             <controls:HybridWebView x:Name="HybridWebViewControl"
                                     HorizontalOptions="FillAndExpand"
                                     VerticalOptions="FillAndExpand"
+                                    CanGoBack="{Binding CanGoBack}"
+                                    CanGoForward="{Binding CanGoForward}"
+                                    GoBackCommand ="{Binding GoBackCommand, Mode=OneWayToSource}"
+                                    GoForwardCommand="{Binding GoForwardCommand, Mode=OneWayToSource}"
+                                    ReloadCommand="{Binding ReloadCommand, Mode=OneWayToSource}"
                                     Source="{Binding Url}" />
+
+            <Grid BackgroundColor="White" >
+
+                <BoxView BackgroundColor="Gray" />
+
+                <Grid BackgroundColor="White" Margin="0,1,0,0" Padding="0,8,0,8" HeightRequest="30" HorizontalOptions="FillAndExpand">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ffimageloadingsvg:SvgCachedImage  Source = "left.svg" Opacity="0.25">
+                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                                   Command="{Binding BottomNavbarTapCommand}"
+                                                   CommandParameter="LeftImage"
+                                                   NumberOfTapsRequired="1"/>
+                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                        <ffimageloadingsvg:SvgCachedImage.Triggers>
+                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
+                                         Binding="{Binding CanGoBack,Mode=Default}"
+                                         Value="True">
+                                <Setter Property="Opacity" Value="0.75" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
+                                         Binding="{Binding CanGoBack, Mode=Default}"
+                                         Value="False">
+                                <Setter Property="Opacity" Value="0.25" />
+                            </DataTrigger>
+                        </ffimageloadingsvg:SvgCachedImage.Triggers>
+                    </ffimageloadingsvg:SvgCachedImage>
+                    
+                    <ffimageloadingsvg:SvgCachedImage  Grid.Column="1" Source = "right.svg" Opacity="0.25" >
+                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                                   Command="{Binding BottomNavbarTapCommand}"
+                                                   CommandParameter="RightImage"
+                                                   NumberOfTapsRequired="1"/>
+                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                        <ffimageloadingsvg:SvgCachedImage.Triggers>
+                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
+                                         Binding="{Binding CanGoForward, Mode=Default}"
+                                         Value="True">
+                                <Setter Property="Opacity" Value="0.75" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
+                                         Binding="{Binding CanGoForward,Mode=Default}"
+                                         Value="False">
+                                <Setter Property="Opacity" Value="0.25" />
+                            </DataTrigger>
+                        </ffimageloadingsvg:SvgCachedImage.Triggers>
+                    </ffimageloadingsvg:SvgCachedImage>
+                    
+                    <ffimageloadingsvg:SvgCachedImage x:Name="searchImageButton" Grid.Column="2" Source = "search.svg" >
+                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                                   Command="{Binding BottomNavbarTapCommand}"
+                                                   CommandParameter="SearchImage"
+                                                   NumberOfTapsRequired="1"/>
+                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                    </ffimageloadingsvg:SvgCachedImage>
+                    <ffimageloadingsvg:SvgCachedImage x:Name="refreshImageButton" Grid.Column="3" Source = "refresh.svg" >
+                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                                   Command="{Binding BottomNavbarTapCommand}"
+                                                   CommandParameter="RefreshImage"
+                                                   NumberOfTapsRequired="1"/>
+                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                    </ffimageloadingsvg:SvgCachedImage>
+                    
+                    <ffimageloadingsvg:SvgCachedImage x:Name="menuImageButton" Grid.Column="4" Source = "menu.svg" >
+                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                                   Command="{Binding BottomNavbarTapCommand}"
+                                                   CommandParameter="MenuImage"
+                                                   NumberOfTapsRequired="1"/>
+                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                    </ffimageloadingsvg:SvgCachedImage>
+                </Grid>
+            </Grid>
+
         </StackLayout>
+
     </ContentPage.Content>
 </ContentPage>

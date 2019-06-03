@@ -68,6 +68,7 @@
     <Compile Include="ControlRenderers\CustomEntryRenderer.cs" />
     <Compile Include="ControlRenderers\HybridWebViewRenderer.cs" />
     <Compile Include="ControlRenderers\SafeSchemaHandler.cs" />
+    <Compile Include="GridShadowEffect.cs" />
     <Compile Include="LinkFinder.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -175,10 +176,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\menu.png" />
+    <BundleResource Include="Resources\search.svg" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\refresh.png" />
+    <BundleResource Include="Resources\left.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\menu.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\refresh.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\right.svg" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\notfound.html" />

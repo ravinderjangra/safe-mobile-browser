@@ -15,14 +15,27 @@ namespace SafeMobileBrowser.Views
         public HomePage()
         {
             InitializeComponent();
-        }
+            BindingContext = new HomePageViewModel();
+            HybridWebViewControl.Navigating += (s, e) =>
+            {
+                _viewModel.WebViewNavigatingCommand.Execute(e);
+            };
 
-        protected override void OnAppearing()
+            HybridWebViewControl.Navigated += (s, e) =>
+            {
+                _viewModel.WebViewNavigatedCommand.Execute(e);
+            };
+        }               
+
+        protected override async  void OnAppearing()
         {
             base.OnAppearing();
 
             if (_viewModel == null)
+            {
                 _viewModel = new HomePageViewModel();
+                await _viewModel.InitilizeSessionAsync();
+            }
 
             BindingContext = _viewModel;
 
@@ -52,6 +65,20 @@ namespace SafeMobileBrowser.Views
                     item.SetBinding(MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
                     ToolbarItems.Add(item);
                 }
+        }
+
+        public static string GetRGBFill(Xamarin.Forms.Color color)
+        {
+            var red = (int)(color.R * 255);
+            var green = (int)(color.G * 255);
+            var blue = (int)(color.B * 255);
+            var rgbFill = $"fill: rgb({red},{green},{blue});";
+            return rgbFill;
+        }
+
+        private void HybridWebViewControl_Navigating(object sender, WebNavigatingEventArgs e)
+        {
+
         }
     }
 }
