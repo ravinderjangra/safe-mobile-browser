@@ -1,5 +1,4 @@
-﻿using SafeMobileBrowser.Controls;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -100,19 +99,14 @@ namespace SafeMobileBrowser.ViewModels
             get { return _addressbarText; }
             set { SetProperty(ref _addressbarText, value); }
         }
- 
-       public HomePageViewModel()
-       {
+
+        public HomePageViewModel()
+        {
             PageLoadCommand = new Command(LoadUrl);
             ToolbarItemCommand = new Command<string>(LoadUrl);
             BottomNavbarTapCommand = new Command<string>(OnTapped);
             WebViewNavigatingCommand = new Command<WebNavigatingEventArgs>(OnNavigating);
             WebViewNavigatedCommand = new Command<WebNavigatedEventArgs>(OnNavigated);
-       }
-       
-        private void doNothing(WebNavigatedEventArgs obj)
-        {
-            
         }
 
         private void OnNavigated(WebNavigatedEventArgs obj)
@@ -150,11 +144,11 @@ namespace SafeMobileBrowser.ViewModels
                     IsRunning = true;
                     IsVisible = true;
                 }
-            } 
-            catch (Exception e)
+            }
+            catch (Exception ex)
             {
-
-            }           
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         internal async Task InitilizeSessionAsync()
@@ -163,10 +157,6 @@ namespace SafeMobileBrowser.ViewModels
             await AuthService.ConnectUsingHardcodedResponse();
         }
 
-        private void doNothing()
-        {
-            
-        }
         public void OnTapped(string imageButton)
         {
             switch (imageButton)
@@ -180,10 +170,10 @@ namespace SafeMobileBrowser.ViewModels
                         this.GoForwardCommand.Execute(null);
                     break;
                 case "SearchImage":
-                        this.AddressBarFocusCommand.Execute(null);
+                    this.AddressBarFocusCommand.Execute(null);
                     break;
                 case "RefreshImage":
-                        this.ReloadCommand.Execute(null);
+                    this.ReloadCommand.Execute(null);
                     break;
                 default:
                     break;

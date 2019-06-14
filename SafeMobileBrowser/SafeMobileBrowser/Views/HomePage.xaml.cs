@@ -1,6 +1,5 @@
 ﻿using SafeMobileBrowser.Models;
 using SafeMobileBrowser.ViewModels;
-using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -25,9 +24,9 @@ namespace SafeMobileBrowser.Views
             {
                 _viewModel.WebViewNavigatedCommand.Execute(e);
             };
-        }               
+        }
 
-        protected override async  void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 

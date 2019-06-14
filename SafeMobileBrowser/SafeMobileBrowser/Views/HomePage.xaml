@@ -3,24 +3,19 @@
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
-             xmlns:local="clr-namespace:SafeMobileBrowser.Effects"
              BackgroundColor="White"
-             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-             xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
              Padding="0">
+
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="ffimageloading:CachedImage">
-                <Setter Property="DownsampleToViewSize" Value="True" />
-                <Setter Property="IsOpaque" Value="True" />
-                <Setter Property="HeightRequest" Value="10" />
-                <Setter Property="WidthRequest" Value="10" />
-                <Setter Property="BackgroundColor" Value="Transparent"/>
-                <Setter Property="Opacity" Value="0.75"/>
+            <Style TargetType="Image">
+                <Setter Property="Opacity"
+                        Value="0.75" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
+
     <NavigationPage.TitleView>
         <StackLayout x:Name="stackLayout"
                      Padding="10,3"
@@ -71,6 +66,7 @@
 
         </StackLayout>
     </NavigationPage.TitleView>
+
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand"
                      Margin="0"
@@ -90,95 +86,140 @@
                                     VerticalOptions="FillAndExpand"
                                     CanGoBack="{Binding CanGoBack}"
                                     CanGoForward="{Binding CanGoForward}"
-                                    GoBackCommand ="{Binding GoBackCommand, Mode=OneWayToSource}"
+                                    GoBackCommand="{Binding GoBackCommand, Mode=OneWayToSource}"
                                     GoForwardCommand="{Binding GoForwardCommand, Mode=OneWayToSource}"
                                     ReloadCommand="{Binding ReloadCommand, Mode=OneWayToSource}"
                                     Source="{Binding Url}" />
 
-            <Grid BackgroundColor="White" >
+            <Grid BackgroundColor="Transparent"
+                  RowSpacing="0"
+                  HeightRequest="55"
+                  ColumnSpacing="0"
+                  Margin="0,-6,0,0">
 
-                <BoxView BackgroundColor="Gray" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <Grid BackgroundColor="White" Margin="0,1,0,0" Padding="0,8,0,8" HeightRequest="30" HorizontalOptions="FillAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <ffimageloadingsvg:SvgCachedImage  Source = "left.svg" Opacity="0.25">
-                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                                   Command="{Binding BottomNavbarTapCommand}"
-                                                   CommandParameter="LeftImage"
-                                                   NumberOfTapsRequired="1"/>
-                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                        <ffimageloadingsvg:SvgCachedImage.Triggers>
-                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
-                                         Binding="{Binding CanGoBack,Mode=Default}"
-                                         Value="True">
-                                <Setter Property="Opacity" Value="0.75" />
-                            </DataTrigger>
-                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
-                                         Binding="{Binding CanGoBack, Mode=Default}"
-                                         Value="False">
-                                <Setter Property="Opacity" Value="0.25" />
-                            </DataTrigger>
-                        </ffimageloadingsvg:SvgCachedImage.Triggers>
-                    </ffimageloadingsvg:SvgCachedImage>
-                    
-                    <ffimageloadingsvg:SvgCachedImage  Grid.Column="1" Source = "right.svg" Opacity="0.25" >
-                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                                   Command="{Binding BottomNavbarTapCommand}"
-                                                   CommandParameter="RightImage"
-                                                   NumberOfTapsRequired="1"/>
-                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                        <ffimageloadingsvg:SvgCachedImage.Triggers>
-                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
-                                         Binding="{Binding CanGoForward, Mode=Default}"
-                                         Value="True">
-                                <Setter Property="Opacity" Value="0.75" />
-                            </DataTrigger>
-                            <DataTrigger TargetType="ffimageloadingsvg:SvgCachedImage"
-                                         Binding="{Binding CanGoForward,Mode=Default}"
-                                         Value="False">
-                                <Setter Property="Opacity" Value="0.25" />
-                            </DataTrigger>
-                        </ffimageloadingsvg:SvgCachedImage.Triggers>
-                    </ffimageloadingsvg:SvgCachedImage>
-                    
-                    <ffimageloadingsvg:SvgCachedImage x:Name="searchImageButton" Grid.Column="2" Source = "search.svg" >
-                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                                   Command="{Binding BottomNavbarTapCommand}"
-                                                   CommandParameter="SearchImage"
-                                                   NumberOfTapsRequired="1"/>
-                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                    </ffimageloadingsvg:SvgCachedImage>
-                    <ffimageloadingsvg:SvgCachedImage x:Name="refreshImageButton" Grid.Column="3" Source = "refresh.svg" >
-                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                                   Command="{Binding BottomNavbarTapCommand}"
-                                                   CommandParameter="RefreshImage"
-                                                   NumberOfTapsRequired="1"/>
-                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                    </ffimageloadingsvg:SvgCachedImage>
-                    
-                    <ffimageloadingsvg:SvgCachedImage x:Name="menuImageButton" Grid.Column="4" Source = "menu.svg" >
-                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                                   Command="{Binding BottomNavbarTapCommand}"
-                                                   CommandParameter="MenuImage"
-                                                   NumberOfTapsRequired="1"/>
-                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                    </ffimageloadingsvg:SvgCachedImage>
-                </Grid>
+                <controls:ShadowBoxView ShadowType="Top"
+                                        Grid.ColumnSpan="5" />
+
+                <Image Grid.Row="1" Margin="0, 10">
+                    <Image.Source>
+                        <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                         Glyph="{x:Static Icons:IconFont.ChevronLeft}"
+                                         Size="30"
+                                         Color="Black" />
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
+                                              CommandParameter="LeftImage"
+                                              NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image"
+                                     Binding="{Binding CanGoBack,Mode=Default}"
+                                     Value="True">
+                            <Setter Property="Opacity"
+                                    Value="0.75" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image"
+                                     Binding="{Binding CanGoBack, Mode=Default}"
+                                     Value="False">
+                            <Setter Property="Opacity"
+                                    Value="0.25" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+
+                <Image Grid.Column="1"
+                       Grid.Row="1"
+                       Margin="0, 10">
+                    <Image.Source>
+                        <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                         Glyph="{x:Static Icons:IconFont.ChevronRight}"
+                                         Size="30"
+                                         Color="Black" />
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
+                                              CommandParameter="RightImage"
+                                              NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image"
+                                     Binding="{Binding CanGoForward, Mode=Default}"
+                                     Value="True">
+                            <Setter Property="Opacity"
+                                    Value="0.75" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image"
+                                     Binding="{Binding CanGoForward,Mode=Default}"
+                                     Value="False">
+                            <Setter Property="Opacity"
+                                    Value="0.25" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+
+                <Image Grid.Column="2"
+                       Grid.Row="1"
+                       Margin="0, 10">
+                    <Image.Source>
+                        <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                         Glyph="{x:Static Icons:IconFont.SearchWeb}"
+                                         Size="30"
+                                         Color="Black" />
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
+                                              CommandParameter="SearchImage"
+                                              NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Grid.Column="3"
+                       Grid.Row="1"
+                       Margin="0, 10">
+                    <Image.Source>
+                        <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                         Glyph="{x:Static Icons:IconFont.Home}"
+                                         Size="30"
+                                         Color="Black" />
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
+                                              CommandParameter="RefreshImage"
+                                              NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Grid.Column="4"
+                       Grid.Row="1"
+                       Margin="0, 10">
+                    <Image.Source>
+                        <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                         Glyph="{x:Static Icons:IconFont.DotsVertical}"
+                                         Size="30"
+                                         Color="Black" />
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
+                                              CommandParameter="MenuImage"
+                                              NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
             </Grid>
 
         </StackLayout>
-
     </ContentPage.Content>
 </ContentPage>
