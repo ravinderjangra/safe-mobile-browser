@@ -32,6 +32,5 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
                     break;
             }
         }
-
     }
 }

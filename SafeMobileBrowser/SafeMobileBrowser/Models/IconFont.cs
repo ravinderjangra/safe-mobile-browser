@@ -22,5 +22,7 @@
         public const string Menu = "\uf35c";
         public const string DotsVertical = "\uf1d9";
         public const string DotsHorizontal = "\uf1d8";
+        public const string Magnify = "\uf349";
+        public const string HomeOutline = "\uf6a0";
     }
 }

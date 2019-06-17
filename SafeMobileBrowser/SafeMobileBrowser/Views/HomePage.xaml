@@ -176,7 +176,7 @@
                        Margin="0, 10">
                     <Image.Source>
                         <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
-                                         Glyph="{x:Static Icons:IconFont.SearchWeb}"
+                                         Glyph="{x:Static Icons:IconFont.Magnify}"
                                          Size="30"
                                          Color="Black" />
                     </Image.Source>
