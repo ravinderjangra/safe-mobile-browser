@@ -52,29 +52,18 @@ namespace SafeMobileBrowser.ViewModels
             }
         }
 
-        private bool _isRunning;
+        private bool _isNavigating;
 
-        public bool IsRunning
+        public bool IsNavigating
         {
-            get { return _isRunning; }
+            get { return _isNavigating; }
             set
             {
-                _isRunning = value;
+                _isNavigating = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool _isVisible;
-
-        public bool IsVisible
-        {
-            get { return _isVisible; }
-            set
-            {
-                _isVisible = value;
-                OnPropertyChanged();
-            }
-        }
 
         private bool _pageLoading;
 
@@ -109,40 +98,36 @@ namespace SafeMobileBrowser.ViewModels
             WebViewNavigatedCommand = new Command<WebNavigatedEventArgs>(OnNavigated);
         }
 
-        private void OnNavigated(WebNavigatedEventArgs obj)
+        private void OnNavigated(WebNavigatedEventArgs args)
         {
-            IsRunning = false;
-            IsVisible = false;
+            IsNavigating = false;
         }
 
-        private void OnNavigating(WebNavigatingEventArgs obj)
+        private void OnNavigating(WebNavigatingEventArgs args)
         {
             try
             {
-                string urlText = obj.Url.ToString();
-                if (urlText.StartsWith("file://"))
+                string url = args.Url.ToString();
+                if (url.StartsWith("file://"))
                 {
                     AddressbarText = string.Empty;
                 }
-                else if (urlText.StartsWith("https"))
+                else if (url.StartsWith("https"))
                 {
-                    IsRunning = true;
-                    IsVisible = true;
-                    string newurlText = urlText.Remove(0, 8);
+                    IsNavigating = true;
+                    string newurlText = url.Remove(0, 8);
                     AddressbarText = newurlText;
                 }
-                else if (urlText.StartsWith("http"))
+                else if (url.StartsWith("http"))
                 {
-                    IsRunning = true;
-                    IsVisible = true;
-                    string newurlText = urlText.Remove(0, 7);
+                    IsNavigating = true;
+                    string newurlText = url.Remove(0, 7);
                     AddressbarText = newurlText;
                 }
                 else
                 {
-                    AddressbarText = urlText;
-                    IsRunning = true;
-                    IsVisible = true;
+                    AddressbarText = url;
+                    IsNavigating = true;
                 }
             }
             catch (Exception ex)
@@ -157,23 +142,23 @@ namespace SafeMobileBrowser.ViewModels
             await AuthService.ConnectUsingHardcodedResponse();
         }
 
-        public void OnTapped(string imageButton)
+        public void OnTapped(string navigationBarIconString )
         {
-            switch (imageButton)
+            switch (navigationBarIconString)
             {
-                case "LeftImage":
+                case "Back":
                     if (CanGoBack)
-                        this.GoBackCommand.Execute(null);
+                        GoBackCommand.Execute(null);
                     break;
-                case "RightImage":
+                case "Forward":
                     if (CanGoForward)
-                        this.GoForwardCommand.Execute(null);
+                        GoForwardCommand.Execute(null);
                     break;
-                case "SearchImage":
-                    this.AddressBarFocusCommand.Execute(null);
+                case "Focus":
+                    AddressBarFocusCommand.Execute(null);
                     break;
-                case "RefreshImage":
-                    this.ReloadCommand.Execute(null);
+                case "Refresh":
+                    ReloadCommand.Execute(null);
                     break;
                 default:
                     break;

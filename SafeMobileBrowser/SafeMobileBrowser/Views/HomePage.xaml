@@ -74,8 +74,8 @@
                      Spacing="0"
                      VerticalOptions="FillAndExpand">
 
-            <controls:AdvancedProgressBar IsRunning="{Binding IsRunning}"
-                                          IsVisible="{Binding IsVisible}"
+            <controls:AdvancedProgressBar IsRunning="{Binding IsNavigating}"
+                                          IsVisible="{Binding IsNavigating}"
                                           HeightRequest="5"
                                           BackgroundColor="Transparent"
                                           x:Name="AdvancedProgressbar">
@@ -122,7 +122,7 @@
                     </Image.Source>
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
-                                              CommandParameter="LeftImage"
+                                              CommandParameter="Back"
                                               NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                     <Image.Triggers>
@@ -152,7 +152,7 @@
                     </Image.Source>
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
-                                              CommandParameter="RightImage"
+                                              CommandParameter="Forward"
                                               NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                     <Image.Triggers>
@@ -182,7 +182,7 @@
                     </Image.Source>
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
-                                              CommandParameter="SearchImage"
+                                              CommandParameter="Focus"
                                               NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                 </Image>
@@ -198,7 +198,7 @@
                     </Image.Source>
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BottomNavbarTapCommand}"
-                                              CommandParameter="RefreshImage"
+                                              CommandParameter="Refresh"
                                               NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                 </Image>

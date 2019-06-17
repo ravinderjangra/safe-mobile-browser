@@ -69,7 +69,6 @@
     <Compile Include="ControlRenderers\HybridWebViewRenderer.cs" />
     <Compile Include="ControlRenderers\SafeSchemaHandler.cs" />
     <Compile Include="ControlRenderers\ShadowBoxViewRenderer.cs" />
-    <Compile Include="GridShadowEffect.cs" />
     <Compile Include="LinkFinder.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -176,21 +175,6 @@
       <Project>{38F802A4-2178-47AB-BB72-E180CC06BB93}</Project>
       <Name>SafeMobileBrowser</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\search.svg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\left.svg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\menu.svg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\refresh.svg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\right.svg" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\notfound.html" />
