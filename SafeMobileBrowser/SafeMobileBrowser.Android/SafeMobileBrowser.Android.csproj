@@ -88,6 +88,7 @@
     <Compile Include="ControlRenderers\CustomEntryRenderer.cs" />
     <Compile Include="ControlRenderers\HybridWebViewClient.cs" />
     <Compile Include="ControlRenderers\HybridWebViewRenderer.cs" />
+    <Compile Include="ControlRenderers\ShadowBoxViewRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="PlatformServices\FileTransferService.cs" />
     <Compile Include="PlatformServices\GetAssetsFileData.cs" />
@@ -101,6 +102,7 @@
     <AndroidAsset Include="..\SafeMobileBrowser\AssetFiles\MockVault">
       <Link>Assets\MockVault</Link>
     </AndroidAsset>
+    <AndroidAsset Include="Assets\materialdesignicons-webfont.ttf" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
@@ -126,19 +128,10 @@
     <AndroidResource Include="Resources\drawable\tab_feed.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\menu.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SafeMobileBrowser\SafeMobileBrowser.csproj">
       <Project>{38F802A4-2178-47AB-BB72-E180CC06BB93}</Project>
       <Name>SafeMobileBrowser</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\pageIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />
@@ -154,6 +147,15 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\notfound.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\background_with_drawable.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\top_shadow.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\bottom_shadow.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

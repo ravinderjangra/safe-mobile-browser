@@ -1,6 +1,5 @@
 ﻿using SafeMobileBrowser.Models;
 using SafeMobileBrowser.ViewModels;
-using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,14 +14,27 @@ namespace SafeMobileBrowser.Views
         public HomePage()
         {
             InitializeComponent();
+            BindingContext = new HomePageViewModel();
+            HybridWebViewControl.Navigating += (s, e) =>
+            {
+                _viewModel.WebViewNavigatingCommand.Execute(e);
+            };
+
+            HybridWebViewControl.Navigated += (s, e) =>
+            {
+                _viewModel.WebViewNavigatedCommand.Execute(e);
+            };
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
             if (_viewModel == null)
+            {
                 _viewModel = new HomePageViewModel();
+                await _viewModel.InitilizeSessionAsync();
+            }
 
             BindingContext = _viewModel;
 
