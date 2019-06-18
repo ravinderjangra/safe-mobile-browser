@@ -1,16 +1,16 @@
-﻿using SafeMobileBrowser.Models;
+﻿using System.Collections.Generic;
+using SafeMobileBrowser.Models;
 using SafeMobileBrowser.ViewModels;
-using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace SafeMobileBrowser.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
         List<string> _websiteList;
         HomePageViewModel _viewModel;
+
         public HomePage()
         {
             InitializeComponent();
@@ -53,6 +53,7 @@ namespace SafeMobileBrowser.Views
                 _websiteList = WebsiteList.GetWebsiteList();
 
             if (ToolbarItems.Count == 0)
+            {
                 foreach (var url in _websiteList)
                 {
                     var item = new ToolbarItem
@@ -64,6 +65,7 @@ namespace SafeMobileBrowser.Views
                     item.SetBinding(MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
                     ToolbarItems.Add(item);
                 }
+            }
         }
     }
 }

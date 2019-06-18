@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Application = Android.App.Application;
 
 [assembly: Dependency(typeof(FileTransferService))]
+
 namespace SafeMobileBrowser.Droid.PlatformServices
 {
     public class FileTransferService : IFileTransferService

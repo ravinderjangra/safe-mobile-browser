@@ -1,18 +1,18 @@
-﻿using MimeMapping;
-using SafeApp;
-using SafeApp.Utilities;
-using SafeMobileBrowser.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using MimeMapping;
+using SafeApp;
+using SafeApp.Utilities;
+using SafeMobileBrowser.Models;
 
 namespace SafeMobileBrowser.WebFetchImplementation
 {
     public class WebFetch
     {
-        public static Session session;
+        private static Session session;
 
         public WebFetch()
         {
@@ -82,14 +82,13 @@ namespace SafeMobileBrowser.WebFetchImplementation
             var serviceName = string.Join(".", hostparts);
 
             // let's decompose and normalise the path
-            var path = parsedUrl.AbsolutePath == "/" ? "" : parsedUrl.AbsolutePath;
-            var parsedPath = string.IsNullOrEmpty(path) ? "" : System.Web.HttpUtility.UrlDecode(path);
+            var path = parsedUrl.AbsolutePath == "/" ? string.Empty : parsedUrl.AbsolutePath;
+            var parsedPath = string.IsNullOrEmpty(path) ? string.Empty : System.Web.HttpUtility.UrlDecode(path);
 
             var mdataInfo = await GetContainerFromPublicId(publicName, serviceName);
 
             return (mdataInfo, parsedPath);
         }
-
 
         // Helper function to read fetch the Container
         // from a public ID and service name provided
@@ -176,7 +175,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             {
                 try
                 {
-                    filePath = initialPath.Replace("/", "");
+                    filePath = initialPath.Replace("/", string.Empty);
                     (file, _) = await session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
                 }
                 catch (Exception ex)
@@ -203,7 +202,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             {
                 try
                 {
-                    filePath = $"{initialPath}/{WebFetchConstants.IndexFileName}".Replace("/", "");
+                    filePath = $"{initialPath}/{WebFetchConstants.IndexFileName}".Replace("/", string.Empty);
                     (file, _) = await session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
                 }
                 catch (Exception ex)
@@ -240,7 +239,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 else
                 {
                     var partStartIndex = (ulong)(options?.Range[0].Start > 0 ? options?.Range[0].Start : 0);
-                    var partendIndex = (ulong)0;
+                    var partendIndex = 0UL;
 
                     if (options?.Range[0].End > 0)
                     {

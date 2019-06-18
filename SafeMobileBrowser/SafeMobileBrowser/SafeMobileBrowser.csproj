@@ -49,4 +49,6 @@
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>
+  
+  <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
 </Project>

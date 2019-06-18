@@ -6,12 +6,13 @@ namespace SafeMobileBrowser.CustomAsyncCommand
 {
     public class AsyncCommand : IAsyncCommand
     {
-        public event EventHandler CanExecuteChanged;
-
-        private bool _isExecuting;
         private readonly Func<Task> _execute;
         private readonly Func<bool> _canExecute;
         private readonly IErrorHandler _errorHandler;
+
+        public event EventHandler CanExecuteChanged;
+
+        private bool _isExecuting;
 
         public AsyncCommand(
             Func<Task> execute,
@@ -73,12 +74,13 @@ namespace SafeMobileBrowser.CustomAsyncCommand
 
     public class AsyncCommand<T> : IAsyncCommand<T>
     {
-        public event EventHandler CanExecuteChanged;
-
-        private bool _isExecuting;
         private readonly Func<T, Task> _execute;
         private readonly Func<T, bool> _canExecute;
         private readonly IErrorHandler _errorHandler;
+
+        public event EventHandler CanExecuteChanged;
+
+        private bool _isExecuting;
 
         public AsyncCommand(Func<T, Task> execute, Func<T, bool> canExecute = null, IErrorHandler errorHandler = null)
         {

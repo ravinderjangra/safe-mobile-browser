@@ -1,9 +1,9 @@
-﻿using SafeApp;
-using SafeApp.Utilities;
-using SafeMobileBrowser.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SafeApp;
+using SafeApp.Utilities;
+using SafeMobileBrowser.Models;
 
 namespace SafeMobileBrowser.Helpers
 {
@@ -18,7 +18,7 @@ namespace SafeMobileBrowser.Helpers
 
         public static string GetRequestData(string url)
         {
-            return new Uri(url).PathAndQuery.Replace("/", "");
+            return new Uri(url).PathAndQuery.Replace("/", string.Empty);
         }
 
         // Generating encoded app request using appname, appid, vendor
@@ -28,7 +28,13 @@ namespace SafeMobileBrowser.Helpers
             var authReq = new AuthReq
             {
                 AppContainer = true,
-                App = new AppExchangeInfo { Id = Constants.AppId, Scope = "", Name = Constants.AppName, Vendor = Constants.Vendor },
+                App = new AppExchangeInfo
+                {
+                    Id = Constants.AppId,
+                    Scope = string.Empty,
+                    Name = Constants.AppName,
+                    Vendor = Constants.Vendor
+                },
                 Containers = new List<ContainerPermissions>()
             };
 
@@ -39,10 +45,10 @@ namespace SafeMobileBrowser.Helpers
         {
             List<ByteRange> byteRanges = new List<ByteRange>();
 
-            var BYTES = "bytes=";
-            var rangeValues = rangeString.Remove(0, BYTES.Length).Split(',');
+            var bytes = "bytes=";
+            var rangeValues = rangeString.Remove(0, bytes.Length).Split(',');
 
-            //var rangeValues = .Split(',');
+            // var rangeValues = .Split(',');
 
             foreach (var item in rangeValues)
             {
@@ -51,7 +57,7 @@ namespace SafeMobileBrowser.Helpers
 
                 if (part.Length == 2)
                 {
-                    if (part[1] == "")
+                    if (part[1] == string.Empty)
                     {
                         rangeitem.End = 0;
                     }

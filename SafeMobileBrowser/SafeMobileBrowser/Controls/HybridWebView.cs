@@ -2,20 +2,44 @@
 using System.Windows.Input;
 using Xamarin.Forms;
 
-
 namespace SafeMobileBrowser.Controls
 {
     public class HybridWebView : WebView
     {
-        public static BindableProperty GoBackCommandProperty = BindableProperty.Create(nameof(GoBackCommand), typeof(ICommand), typeof(HybridWebView), null, BindingMode.OneWayToSource);
+        public static readonly BindableProperty GoBackCommandProperty = BindableProperty.Create(
+            nameof(GoBackCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
 
-        public static BindableProperty GoForwardCommandProperty = BindableProperty.Create(nameof(GoForwardCommand), typeof(ICommand), typeof(HybridWebView), null, BindingMode.OneWayToSource);
+        public static readonly BindableProperty GoForwardCommandProperty = BindableProperty.Create(
+            nameof(GoForwardCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
 
-        public static BindableProperty ReloadCommandProperty = BindableProperty.Create(nameof(ReloadCommand), typeof(ICommand), typeof(HybridWebView), null, BindingMode.OneWayToSource);
+        public static readonly BindableProperty ReloadCommandProperty = BindableProperty.Create(
+            nameof(ReloadCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
 
-        public static BindableProperty NavigatingCommandProperty = BindableProperty.Create(nameof(NavigatingCommand), typeof(ICommand), typeof(HybridWebView), null, BindingMode.OneWayToSource);
+        public static readonly BindableProperty NavigatingCommandProperty = BindableProperty.Create(
+            nameof(NavigatingCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
 
-        public static BindableProperty NavigatedCommandProperty = BindableProperty.Create(nameof(NavigatedCommand), typeof(ICommand), typeof(HybridWebView), null, BindingMode.OneWayToSource);
+        public static readonly BindableProperty NavigatedCommandProperty = BindableProperty.Create(
+            nameof(NavigatedCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
 
         public ICommand GoBackCommand
         {
@@ -51,7 +75,7 @@ namespace SafeMobileBrowser.Controls
         {
             GoBackCommand = new Command(() => GoBack());
             GoForwardCommand = new Command(() => GoForward());
-            ReloadCommand = new Command(() => Reload());            
+            ReloadCommand = new Command(() => Reload());
         }
     }
 }

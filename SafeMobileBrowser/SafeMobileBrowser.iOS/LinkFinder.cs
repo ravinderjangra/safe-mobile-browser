@@ -22,7 +22,7 @@ namespace SafeMobileBrowser.iOS
             foreach (Match m in Regex.Matches(file, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
             {
                 string src = m.Groups[1].Value;
-                src = src.Replace("./", "");
+                src = src.Replace("./", string.Empty);
                 list.Add(new LinkItem() { Href = src, Text = src = "image" });
             }
             return list;
@@ -34,20 +34,18 @@ namespace SafeMobileBrowser.iOS
 
             // 1.
             // Find all matches in file.
-            MatchCollection m1 = Regex.Matches(file, @"(<a.*?>.*?</a>)",
-                RegexOptions.Singleline);
+            MatchCollection m1 = Regex.Matches(file, @"(<a.*?>.*?</a>)", RegexOptions.Singleline);
 
             // 2.
             // Loop over each match.
             foreach (Match m in m1)
             {
                 string value = m.Groups[1].Value;
-                LinkItem i = new LinkItem();
+                LinkItem i = default(LinkItem);
 
                 // 3.
                 // Get href attribute.
-                Match m2 = Regex.Match(value, @"href=\""(.*?)\""",
-                    RegexOptions.Singleline);
+                Match m2 = Regex.Match(value, @"href=\""(.*?)\""", RegexOptions.Singleline);
                 if (m2.Success)
                 {
                     i.Href = m2.Groups[1].Value;
@@ -55,8 +53,7 @@ namespace SafeMobileBrowser.iOS
 
                 // 4.
                 // Remove inner tags from text.
-                string t = Regex.Replace(value, @"\s*<.*?>\s*", "",
-                    RegexOptions.Singleline);
+                string t = Regex.Replace(value, @"\s*<.*?>\s*", string.Empty, RegexOptions.Singleline);
                 i.Text = t;
 
                 list.Add(i);

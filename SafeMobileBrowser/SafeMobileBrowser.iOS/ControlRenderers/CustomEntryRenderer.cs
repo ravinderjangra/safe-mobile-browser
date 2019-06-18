@@ -1,11 +1,12 @@
-﻿using SafeMobileBrowser.Controls;
+﻿using System.ComponentModel;
+using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.iOS.ControlRenderers;
-using System.ComponentModel;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(AddressBarEntry), typeof(CustomEntryRenderer))]
+
 namespace SafeMobileBrowser.iOS.ControlRenderers
 {
     public class CustomEntryRenderer : EntryRenderer

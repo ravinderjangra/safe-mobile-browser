@@ -15,6 +15,7 @@ namespace SafeMobileBrowser.Models
     public class ByteRange
     {
         public ulong Start { get; set; }
+
         public ulong End { get; set; }
     }
 }

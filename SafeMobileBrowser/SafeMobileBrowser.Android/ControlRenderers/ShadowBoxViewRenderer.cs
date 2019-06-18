@@ -4,13 +4,14 @@ using SafeMobileBrowser.Droid.ControlRenderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-
 [assembly: ExportRenderer(typeof(ShadowBoxView), typeof(ShadowBoxViewRenderer))]
+
 namespace SafeMobileBrowser.Droid.ControlRenderers
 {
     public class ShadowBoxViewRenderer : VisualElementRenderer<ShadowBoxView>
     {
-        public ShadowBoxViewRenderer(Context context) : base(context)
+        public ShadowBoxViewRenderer(Context context)
+            : base(context)
         {
         }
 

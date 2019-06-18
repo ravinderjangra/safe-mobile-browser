@@ -6,13 +6,15 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
+
 namespace SafeMobileBrowser.Droid.ControlRenderers
 {
     public class HybridWebViewRenderer : WebViewRenderer
     {
         HybridWebViewClient _webViewClient;
 
-        public HybridWebViewRenderer(Context context) : base(context)
+        public HybridWebViewRenderer(Context context)
+            : base(context)
         {
         }
 

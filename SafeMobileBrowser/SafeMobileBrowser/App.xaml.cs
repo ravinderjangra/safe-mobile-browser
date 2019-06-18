@@ -6,7 +6,8 @@ namespace SafeMobileBrowser
 {
     public partial class App : Application
     {
-        public static Session AppSession;
+        public static Session AppSession { get; set; }
+
         public App()
         {
             InitializeComponent();

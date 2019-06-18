@@ -1,8 +1,8 @@
-﻿using SafeMobileBrowser.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SafeMobileBrowser.Services;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
@@ -12,6 +12,7 @@ namespace SafeMobileBrowser.ViewModels
         public AuthenticationService AuthService => DependencyService.Get<AuthenticationService>();
 
         bool isBusy = false;
+
         public bool IsBusy
         {
             get { return isBusy; }
@@ -19,13 +20,16 @@ namespace SafeMobileBrowser.ViewModels
         }
 
         string title = string.Empty;
+
         public string Title
         {
             get { return title; }
             set { SetProperty(ref title, value); }
         }
 
-        protected bool SetProperty<T>(ref T backingStore, T value,
+        protected bool SetProperty<T>(
+            ref T backingStore,
+            T value,
             [CallerMemberName]string propertyName = "",
             Action onChanged = null)
         {
@@ -40,6 +44,7 @@ namespace SafeMobileBrowser.ViewModels
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var changed = PropertyChanged;
