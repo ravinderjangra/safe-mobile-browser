@@ -1,13 +1,13 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Content;
-using Xamarin.Forms;
-using System;
-using SafeMobileBrowser.Services;
-using SafeMobileBrowser.Helpers;
 using Android.Runtime;
 using Plugin.CurrentActivity;
+using SafeMobileBrowser.Helpers;
+using SafeMobileBrowser.Services;
+using Xamarin.Forms;
 
 namespace SafeMobileBrowser.Droid
 {
@@ -17,12 +17,11 @@ namespace SafeMobileBrowser.Droid
         Theme = "@style/MainTheme",
         MainLauncher = true,
         LaunchMode = LaunchMode.SingleTask,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation),
-        IntentFilter(
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [IntentFilter(
             new[] { Intent.ActionView },
             Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
-            DataScheme = Constants.AppId
-        )]
+            DataScheme = Constants.AppId)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         readonly AuthenticationService authenticationService = new AuthenticationService();

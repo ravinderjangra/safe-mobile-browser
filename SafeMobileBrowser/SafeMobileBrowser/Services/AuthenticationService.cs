@@ -2,17 +2,18 @@
 #if SAFE_APP_MOCK
 using SafeApp.MockAuthBindings;
 #endif
-using SafeApp.Utilities;
-using SafeMobileBrowser.Helpers;
-using SafeMobileBrowser.Services;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using SafeApp.Utilities;
+using SafeMobileBrowser.Helpers;
+using SafeMobileBrowser.Services;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(AuthenticationService))]
+
 namespace SafeMobileBrowser.Services
 {
     public class AuthenticationService
@@ -63,6 +64,7 @@ namespace SafeMobileBrowser.Services
                 throw ex;
             }
         }
+
 #endif
         public async Task ProcessAuthenticationResponseAsync(string url)
         {

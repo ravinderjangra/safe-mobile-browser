@@ -28,6 +28,5 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
         {
             throw new NotImplementedException();
         }
-
     }
 }

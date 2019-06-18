@@ -8,11 +8,13 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(AddressBarEntry), typeof(CustomEntryRenderer))]
+
 namespace SafeMobileBrowser.Droid.ControlRenderers
 {
     class CustomEntryRenderer : EntryRenderer
     {
-        public CustomEntryRenderer(Context context) : base(context)
+        public CustomEntryRenderer(Context context)
+            : base(context)
         {
         }
 

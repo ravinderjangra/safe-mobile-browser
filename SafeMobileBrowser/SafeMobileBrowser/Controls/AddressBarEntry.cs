@@ -5,7 +5,12 @@ namespace SafeMobileBrowser.Controls
 {
     public class AddressBarEntry : Entry
     {
-        public static BindableProperty AddressBarFocusCommandProperty = BindableProperty.Create(nameof(AddressBarFocusCommand), typeof(ICommand), typeof(AddressBarEntry), null, BindingMode.OneWayToSource);
+        public static readonly BindableProperty AddressBarFocusCommandProperty = BindableProperty.Create(
+            nameof(AddressBarFocusCommand),
+            typeof(ICommand),
+            typeof(AddressBarEntry),
+            null,
+            BindingMode.OneWayToSource);
 
         public ICommand AddressBarFocusCommand
         {

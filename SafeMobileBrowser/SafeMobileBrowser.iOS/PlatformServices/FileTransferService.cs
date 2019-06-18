@@ -8,6 +8,7 @@ using SafeMobileBrowser.Services;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(FileTransferService))]
+
 namespace SafeMobileBrowser.iOS.PlatformServices
 {
     public class FileTransferService : IFileTransferService

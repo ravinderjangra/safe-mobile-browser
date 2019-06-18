@@ -1,12 +1,13 @@
-﻿using Foundation;
+﻿using System.IO;
+using Foundation;
 using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.iOS.ControlRenderers;
-using System.IO;
 using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
+
 namespace SafeMobileBrowser.iOS.ControlRenderers
 {
     public class HybridWebViewRenderer : WkWebViewRenderer
@@ -26,7 +27,8 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 
         private void SetSource()
         {
-            if (NativeView == null || Element == null) return;
+            if (NativeView == null || Element == null)
+                return;
 
             var path = Path.Combine(BaseUrl, "startbrowsing.html");
             var nsFileUri = new NSUrl($"file://{path}");

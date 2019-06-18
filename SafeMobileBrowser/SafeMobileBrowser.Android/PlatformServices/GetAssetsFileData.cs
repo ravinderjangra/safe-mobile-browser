@@ -1,5 +1,5 @@
-﻿using Plugin.CurrentActivity;
-using System.IO;
+﻿using System.IO;
+using Plugin.CurrentActivity;
 
 namespace SafeMobileBrowser.Droid.PlatformServices
 {

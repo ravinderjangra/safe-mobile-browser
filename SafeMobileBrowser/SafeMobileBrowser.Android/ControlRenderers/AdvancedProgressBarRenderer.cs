@@ -6,11 +6,13 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(AdvancedProgressBar), typeof(AdvancedProgressBarRenderer))]
+
 namespace SafeMobileBrowser.Droid.ControlRenderers
 {
     public class AdvancedProgressBarRenderer : ProgressBarRenderer
     {
-        public AdvancedProgressBarRenderer(Context context) : base(context)
+        public AdvancedProgressBarRenderer(Context context)
+            : base(context)
         {
         }
 
@@ -22,7 +24,7 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             {
                 Control.ScaleY = 4;
                 UpdateProgressBar();
-            }   
+            }
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -12,11 +12,11 @@ namespace SafeMobileBrowser.Views
         public TabsRightMenuView()
         {
             InitializeComponent();
-            this.IsFullScreen = true;
-            this.WidthRequest = 300;
-            this.MenuOrientations = MenuOrientation.LeftToRight;
-            this.BackgroundColor = Color.White;
-            this.BackgroundViewColor = Color.LightSlateGray;
+            IsFullScreen = true;
+            WidthRequest = 300;
+            MenuOrientations = MenuOrientation.LeftToRight;
+            BackgroundColor = Color.White;
+            BackgroundViewColor = Color.LightSlateGray;
             BindingContext = this;
         }
     }

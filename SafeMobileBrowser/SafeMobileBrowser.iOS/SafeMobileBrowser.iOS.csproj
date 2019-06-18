@@ -69,6 +69,7 @@
     <Compile Include="ControlRenderers\HybridWebViewRenderer.cs" />
     <Compile Include="ControlRenderers\SafeSchemaHandler.cs" />
     <Compile Include="ControlRenderers\ShadowBoxViewRenderer.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LinkFinder.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -182,4 +183,5 @@
   <ItemGroup>
     <BundleResource Include="Resources\startbrowsing.html" />
   </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
 </Project>

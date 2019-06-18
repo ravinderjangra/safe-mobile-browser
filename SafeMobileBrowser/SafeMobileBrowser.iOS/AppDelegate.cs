@@ -1,7 +1,7 @@
-﻿using Foundation;
-using SafeMobileBrowser.Services;
-using System;
+﻿using System;
 using System.Diagnostics;
+using Foundation;
+using SafeMobileBrowser.Services;
 using UIKit;
 using Xamarin.Forms;
 

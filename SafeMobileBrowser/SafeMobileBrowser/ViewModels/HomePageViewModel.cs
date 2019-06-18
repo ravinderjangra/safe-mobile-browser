@@ -32,7 +32,8 @@ namespace SafeMobileBrowser.ViewModels
 
         public bool CanGoBack
         {
-            get { return _canGoBack; }
+            get => _canGoBack;
+
             set
             {
                 _canGoBack = value;
@@ -44,7 +45,8 @@ namespace SafeMobileBrowser.ViewModels
 
         public bool CanGoForward
         {
-            get { return _canGoForward; }
+            get => _canGoForward;
+
             set
             {
                 _canGoForward = value;
@@ -56,14 +58,14 @@ namespace SafeMobileBrowser.ViewModels
 
         public bool IsNavigating
         {
-            get { return _isNavigating; }
+            get => _isNavigating;
+
             set
             {
                 _isNavigating = value;
                 OnPropertyChanged();
             }
         }
-
 
         private bool _pageLoading;
 
@@ -138,11 +140,11 @@ namespace SafeMobileBrowser.ViewModels
 
         internal async Task InitilizeSessionAsync()
         {
-            //TODO: Connect using hardcoded response, provide option to authenticate using Authenticator
+            // TODO: Connect using hardcoded response, provide option to authenticate using Authenticator
             await AuthService.ConnectUsingHardcodedResponse();
         }
 
-        public void OnTapped(string navigationBarIconString )
+        public void OnTapped(string navigationBarIconString)
         {
             switch (navigationBarIconString)
             {

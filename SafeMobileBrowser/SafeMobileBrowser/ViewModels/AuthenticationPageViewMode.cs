@@ -1,8 +1,8 @@
-﻿using SafeApp;
+﻿using System;
+using System.Threading.Tasks;
+using SafeApp;
 using SafeMobileBrowser.CustomAsyncCommand;
 using SafeMobileBrowser.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace SafeMobileBrowser.ViewModels
 {
