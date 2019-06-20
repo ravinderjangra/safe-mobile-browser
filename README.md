@@ -25,9 +25,9 @@ The SAFE Mobile Browser is a mobile web browser for the SAFE Network.
 
 ## Overview
 
-The SAFE Mobile Browser is a cross-platform mobile (Android, iOS) browser build to provide web browsing experience to the users on the SAFE Network.
+The SAFE Mobile Browser is a cross-platform mobile (Android, iOS) browser, built to provide web browsing experience to the users on the SAFE Network.
 
-The app is using the [MaidSafe.SafeApp](https://www.nuget.org/packages/MaidSafe.SafeApp/) NuGet package to fetch the content from the network.
+The app currently uses the [MaidSafe.SafeApp](https://www.nuget.org/packages/MaidSafe.SafeApp/) NuGet package to fetch the content from the network.
 
 ## Features
 
