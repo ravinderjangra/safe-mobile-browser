@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace SafeMobileBrowser.Views
 {
@@ -14,7 +14,7 @@ namespace SafeMobileBrowser.Views
         public HomePage()
         {
             InitializeComponent();
-            BindingContext = new HomePageViewModel();
+
             HybridWebViewControl.Navigating += (s, e) =>
             {
                 _viewModel.WebViewNavigatingCommand.Execute(e);
@@ -32,7 +32,7 @@ namespace SafeMobileBrowser.Views
 
             if (_viewModel == null)
             {
-                _viewModel = new HomePageViewModel();
+                _viewModel = new HomePageViewModel(Navigation);
                 await _viewModel.InitilizeSessionAsync();
             }
 
@@ -45,6 +45,22 @@ namespace SafeMobileBrowser.Views
             {
                 _viewModel.PageLoadCommand.Execute(null);
             };
+
+            MessagingCenter.Subscribe<BookmarksModalPageViewModel, string>(
+                this,
+                MessageCenterConstants.BookmarkUrl,
+                (sender, args) =>
+                {
+                    _viewModel.LoadUrl(args);
+                });
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            MessagingCenter.Unsubscribe<BookmarksModalPageViewModel, string>(
+                this,
+                MessageCenterConstants.BookmarkUrl);
         }
 
         private void AddWebsiteList()
@@ -62,7 +78,7 @@ namespace SafeMobileBrowser.Views
                         Text = url,
                         CommandParameter = url
                     };
-                    item.SetBinding(MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
+                    item.SetBinding(Xamarin.Forms.MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
                     ToolbarItems.Add(item);
                 }
             }

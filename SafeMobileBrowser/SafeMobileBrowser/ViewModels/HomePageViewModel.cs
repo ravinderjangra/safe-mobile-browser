@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Rg.Plugins.Popup.Extensions;
+using SafeMobileBrowser.Views;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
@@ -24,9 +26,13 @@ namespace SafeMobileBrowser.ViewModels
 
         public ICommand ReloadCommand { get; set; }
 
+        public ICommand GoToHomePageCommand { get; set; }
+
         public ICommand WebViewNavigatingCommand { get; set; }
 
         public ICommand WebViewNavigatedCommand { get; set; }
+
+        public ICommand MenuCommand { get; set; }
 
         private bool _canGoBack;
 
@@ -91,16 +97,46 @@ namespace SafeMobileBrowser.ViewModels
             set { SetProperty(ref _addressbarText, value); }
         }
 
-        public HomePageViewModel()
+        private MenuPopUp _menuPopUp;
+
+        public INavigation Navigation { get; set; }
+
+        public HomePageViewModel(INavigation navigation)
         {
+            Navigation = navigation;
             PageLoadCommand = new Command(LoadUrl);
             ToolbarItemCommand = new Command<string>(LoadUrl);
             BottomNavbarTapCommand = new Command<string>(OnTapped);
             WebViewNavigatingCommand = new Command<WebNavigatingEventArgs>(OnNavigating);
             WebViewNavigatedCommand = new Command<WebNavigatedEventArgs>(OnNavigated);
+            GoToHomePageCommand = new Command(GoToHomePage);
+            MenuCommand = new Command(ShowPopUpMenu);
         }
 
-        private void OnNavigated(WebNavigatedEventArgs args)
+        private void GoToHomePage()
+        {
+            // Todo: Update iOS url;
+            if (Device.RuntimePlatform == Device.iOS)
+                Url = $"file:///android_asset/startbrowsing.html";
+            else
+                Url = $"file:///android_asset/startbrowsing.html";
+        }
+
+        private async void ShowPopUpMenu()
+        {
+            try
+            {
+                if (_menuPopUp == null)
+                    _menuPopUp = new MenuPopUp();
+                await Navigation.PushPopupAsync(_menuPopUp);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
+        private void OnNavigated(WebNavigatedEventArgs obj)
         {
             IsNavigating = false;
         }
@@ -141,7 +177,8 @@ namespace SafeMobileBrowser.ViewModels
         internal async Task InitilizeSessionAsync()
         {
             // TODO: Connect using hardcoded response, provide option to authenticate using Authenticator
-            await AuthService.ConnectUsingHardcodedResponse();
+            await AuthService.ConnectUsingHardcodedResponseAsync();
+            AppService = new Services.AppService();
         }
 
         public void OnTapped(string navigationBarIconString)
@@ -159,15 +196,18 @@ namespace SafeMobileBrowser.ViewModels
                 case "Focus":
                     AddressBarFocusCommand.Execute(null);
                     break;
-                case "Refresh":
-                    ReloadCommand.Execute(null);
+                case "Home":
+                    GoToHomePage();
+                    break;
+                case "Menu":
+                    ShowPopUpMenu();
                     break;
                 default:
                     break;
             }
         }
 
-        private void LoadUrl(string url)
+        public void LoadUrl(string url)
         {
             AddressbarText = url;
             LoadUrl();
