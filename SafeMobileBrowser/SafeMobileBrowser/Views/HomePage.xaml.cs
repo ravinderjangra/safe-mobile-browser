@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.ViewModels;
@@ -24,6 +25,10 @@ namespace SafeMobileBrowser.Views
             {
                 _viewModel.WebViewNavigatedCommand.Execute(e);
             };
+
+            AddressBarEntry.Focused += EntryFocused;
+            AddressBarEntry.Unfocused += EntryUnfocused;
+            AddressBarEntry.TextChanged += TextChanged;
 
             MessagingCenter.Subscribe<BookmarksModalPageViewModel, string>(
                 this,
@@ -90,6 +95,46 @@ namespace SafeMobileBrowser.Views
                     item.SetBinding(Xamarin.Forms.MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
                     ToolbarItems.Add(item);
                 }
+            }
+        }
+
+        public void ClearAddressBar(object sender, EventArgs args)
+        {
+            AddressBarEntry.Text = string.Empty;
+            AddressBarEntry.Focus();
+        }
+
+        private void TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (e.NewTextValue.Length > 0 && AddressBarEntry.IsFocused)
+            {
+                AddressBarButton.IsVisible = true;
+            }
+            else
+            {
+                AddressBarButton.IsVisible = false;
+            }
+        }
+
+        private void EntryUnfocused(object sender, FocusEventArgs e)
+        {
+            AddressBarButton.IsVisible = false;
+            AddressBarEntry.TranslateTo(0, 0, 250, Easing.CubicInOut);
+            SafeLabel.TranslateTo(0, 0, 250, Easing.CubicInOut);
+            SafeLabel.FadeTo(100, 250);
+            AddressBarEntry.WidthRequest -= SafeLabel.WidthRequest;
+        }
+
+        private void EntryFocused(object sender, FocusEventArgs e)
+        {
+            SafeLabel.FadeTo(0, 250);
+            SafeLabel.TranslateTo(-SafeLabel.Width, 0, 250, Easing.CubicIn);
+            AddressBarEntry.TranslateTo(-SafeLabel.Width, 0, 250, Easing.CubicIn);
+            AddressBarEntry.WidthRequest += SafeLabel.WidthRequest;
+            if (AddressBarEntry.Text.Length > 0)
+            {
+                AddressBarEntry.SelectionLength = AddressBarEntry.Text.Length;
+                AddressBarButton.IsVisible = true;
             }
         }
     }
