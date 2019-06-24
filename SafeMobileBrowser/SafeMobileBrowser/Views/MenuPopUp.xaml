@@ -85,18 +85,42 @@
                                              Size="30"
                                              Color="Black" />
                         </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RefreshWebViewCommand}" />
+                        </Image.GestureRecognizers>
                     </Image>
                     <Image Aspect="AspectFit"
                            HeightRequest="25"
                            HorizontalOptions="CenterAndExpand"
                            VerticalOptions="Center"
-                           WidthRequest="25">
+                           WidthRequest="25"
+                           IsVisible="{Binding CheckIfAlreadyAvailableInBookmark, Converter={d:StaticResource BooleanInverter}}">
                         <Image.Source>
                             <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
                                              Glyph="{x:Static Icons:IconFont.BookmarkOutline}"
                                              Size="30"
                                              Color="Black" />
                         </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AddBookmarkCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Image Aspect="AspectFit"
+                           HeightRequest="25"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="Center"
+                           WidthRequest="25"
+                           IsVisible="{Binding CheckIfAlreadyAvailableInBookmark}">
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static Icons:IconFont.Bookmark}"
+                                             Size="30"
+                                             Color="Black" />
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RemoveBookmarkCommand}" />
+                        </Image.GestureRecognizers>
                     </Image>
                 </StackLayout>
             </StackLayout>
