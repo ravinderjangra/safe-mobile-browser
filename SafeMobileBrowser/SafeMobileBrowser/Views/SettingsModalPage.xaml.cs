@@ -4,11 +4,11 @@ using Xamarin.Forms.Xaml;
 
 namespace SafeMobileBrowser.Views
 {
-    public partial class BrowserSettingsPage : ContentPage
+    public partial class SettingsModalPage : ContentPage
     {
-        BrowserSettingsPageViewModel _viewModel;
+        SettingsModalPageViewModel _viewModel;
 
-        public BrowserSettingsPage()
+        public SettingsModalPage()
         {
             InitializeComponent();
         }
@@ -19,7 +19,7 @@ namespace SafeMobileBrowser.Views
 
             if (_viewModel == null)
             {
-                _viewModel = new BrowserSettingsPageViewModel(Navigation);
+                _viewModel = new SettingsModalPageViewModel(Navigation);
             }
 
             BindingContext = _viewModel;
