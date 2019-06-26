@@ -157,6 +157,7 @@ namespace SafeMobileBrowser.Services
             {
                 Debug.WriteLine(ex.Message);
                 MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
+                throw ex;
             }
         }
 #endif
