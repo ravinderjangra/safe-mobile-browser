@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Acr.UserDialogs;
 using Rg.Plugins.Popup.Extensions;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
@@ -122,6 +123,8 @@ namespace SafeMobileBrowser.ViewModels
             WebViewNavigatedCommand = new Command<WebNavigatedEventArgs>(OnNavigated);
             GoToHomePageCommand = new Command(GoToHomePage);
             MenuCommand = new Command(ShowPopUpMenu);
+            if (AppService == null)
+                AppService = new AppService();
         }
 
         private void GoToHomePage()
@@ -184,9 +187,18 @@ namespace SafeMobileBrowser.ViewModels
 
         internal async Task InitilizeSessionAsync()
         {
-            // TODO: Connect using hardcoded response, provide option to authenticate using Authenticator
-            await AuthService.ConnectUsingHardcodedResponseAsync();
-            AppService = new AppService();
+            try
+            {
+                using (UserDialogs.Instance.Loading("Connecting to SAFE Network"))
+                {
+                    await AuthService.ConnectUsingHardcodedResponseAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await App.Current.MainPage.DisplayAlert("Connection Failed", "Unable to connect to the SAFE network. Try updating your IP Address on invite server.", "OK");
+            }
         }
 
         public void OnTapped(string navigationBarIconString)
@@ -213,15 +225,22 @@ namespace SafeMobileBrowser.ViewModels
             }
         }
 
-        public void LoadUrl(string url = null)
+        public async void LoadUrl(string url = null)
         {
-            if (url != null)
-                AddressbarText = url;
-
-            if (Device.RuntimePlatform == Device.iOS)
-                Url = $"safe://{AddressbarText}";
+            if (App.AppSession == null)
+            {
+                await InitilizeSessionAsync();
+            }
             else
-                Url = $"https://{AddressbarText}";
+            {
+                if (url != null)
+                    AddressbarText = url;
+
+                if (Device.RuntimePlatform == Device.iOS)
+                    Url = $"safe://{AddressbarText}";
+                else
+                    Url = $"https://{AddressbarText}";
+            }
         }
     }
 }
