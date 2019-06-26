@@ -24,7 +24,7 @@ namespace SafeMobileBrowser.ViewModels
 
             set
             {
-                SetProperty(ref _selectedBookmarkItem, value);
+                RaiseAndUpdate(ref _selectedBookmarkItem, value);
                 OpenBookmarkedPage();
             }
         }
@@ -34,10 +34,7 @@ namespace SafeMobileBrowser.ViewModels
         public ObservableCollection<string> Bookmarks
         {
             get => _bookmarks;
-            set
-            {
-                SetProperty(ref _bookmarks, value);
-            }
+            set => RaiseAndUpdate(ref _bookmarks, value);
         }
 
         public BookmarksModalPageViewModel(INavigation navigation)

@@ -48,12 +48,7 @@ namespace SafeMobileBrowser.ViewModels
         public bool CanGoBack
         {
             get => _canGoBack;
-
-            set
-            {
-                _canGoBack = value;
-                OnPropertyChanged();
-            }
+            set => RaiseAndUpdate(ref _canGoBack, value);
         }
 
         private bool _canGoForward;
@@ -61,12 +56,7 @@ namespace SafeMobileBrowser.ViewModels
         public bool CanGoForward
         {
             get => _canGoForward;
-
-            set
-            {
-                _canGoForward = value;
-                OnPropertyChanged();
-            }
+            set => RaiseAndUpdate(ref _canGoForward, value);
         }
 
         private bool _isNavigating;
@@ -74,20 +64,15 @@ namespace SafeMobileBrowser.ViewModels
         public bool IsNavigating
         {
             get => _isNavigating;
-
-            set
-            {
-                _isNavigating = value;
-                OnPropertyChanged();
-            }
+            set => RaiseAndUpdate(ref _isNavigating, value);
         }
 
         private bool _pageLoading;
 
         public bool IsPageLoading
         {
-            get { return _pageLoading; }
-            set { SetProperty(ref _pageLoading, value); }
+            get => _pageLoading;
+            set => RaiseAndUpdate(ref _pageLoading, value);
         }
 
         private string _url;
@@ -95,8 +80,7 @@ namespace SafeMobileBrowser.ViewModels
         public string Url
         {
             get => _url;
-
-            set => SetProperty(ref _url, value);
+            set => RaiseAndUpdate(ref _url, value);
         }
 
         private string _addressbarText;
@@ -106,7 +90,7 @@ namespace SafeMobileBrowser.ViewModels
             get => _addressbarText;
             set
             {
-                SetProperty(ref _addressbarText, value);
+                RaiseAndUpdate(ref _addressbarText, value);
                 var address = string.IsNullOrWhiteSpace(value);
                 if (!address)
                 {
@@ -118,7 +102,7 @@ namespace SafeMobileBrowser.ViewModels
                     CurrentUrl = CurrentTitle = value;
                     CanGoToHomePage = false;
                 }
-                OnPropertyChanged(nameof(CanGoToHomePage));
+                Raise(nameof(CanGoToHomePage));
             }
         }
 

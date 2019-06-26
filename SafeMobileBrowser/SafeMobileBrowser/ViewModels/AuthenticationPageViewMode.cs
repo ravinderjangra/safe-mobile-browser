@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SafeApp;
-using SafeMobileBrowser.CustomAsyncCommand;
+using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
 
 namespace SafeMobileBrowser.ViewModels
@@ -15,14 +15,14 @@ namespace SafeMobileBrowser.ViewModels
         public string ProgressText
         {
             get { return _progressText; }
-            set { SetProperty(ref _progressText, value); }
+            set { RaiseAndUpdate(ref _progressText, value); }
         }
 
         public string StoredResponse { get; private set; }
 
         public string AuthenticationButtonText { get; set; }
 
-        public IAsyncCommand AuthenticateCommand { get; private set; }
+        public AsyncCommand AuthenticateCommand { get; private set; }
 
         public AuthenticationPageViewMode()
         {

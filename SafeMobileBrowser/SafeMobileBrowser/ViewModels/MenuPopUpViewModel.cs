@@ -26,7 +26,7 @@ namespace SafeMobileBrowser.ViewModels
         public bool CheckIfAlreadyAvailableInBookmark
         {
             get => _checkIfBookmarked;
-            set => SetProperty(ref _checkIfBookmarked, value);
+            set => RaiseAndUpdate(ref _checkIfBookmarked, value);
         }
 
         public ICommand RefreshWebViewCommand { get; set; }
@@ -41,7 +41,7 @@ namespace SafeMobileBrowser.ViewModels
 
             set
             {
-                SetProperty(ref _popMenuItems, value);
+                RaiseAndUpdate(ref _popMenuItems, value);
             }
         }
 
@@ -53,7 +53,7 @@ namespace SafeMobileBrowser.ViewModels
 
             set
             {
-                SetProperty(ref _reloadMenuItem, value);
+                RaiseAndUpdate(ref _reloadMenuItem, value);
             }
         }
 
@@ -65,7 +65,7 @@ namespace SafeMobileBrowser.ViewModels
 
             set
             {
-                SetProperty(ref _bookmarkMenuItem, value);
+                RaiseAndUpdate(ref _bookmarkMenuItem, value);
             }
         }
 
@@ -77,7 +77,7 @@ namespace SafeMobileBrowser.ViewModels
 
             set
             {
-                SetProperty(ref _selectedPopMenuItem, value);
+                RaiseAndUpdate(ref _selectedPopMenuItem, value);
                 if (value != null)
                 {
                     OnPopupMenuSelection();

@@ -64,7 +64,7 @@ namespace SafeMobileBrowser.Views
                 {
                     await Application.Current.MainPage.DisplayAlert("Authentication Failed", "Unable to authenticate", "OK");
                     _viewModel.IsBusy = false;
-                    _viewModel.AuthenticateCommand.ForceCanExecute();
+                    _viewModel.AuthenticateCommand.ChangeCanExecute();
                 });
         }
 

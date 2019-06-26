@@ -1,6 +1,6 @@
 ﻿namespace SafeMobileBrowser.Models
 {
-    public class PopUpMenuItem : ObservableObject
+    public class PopUpMenuItem : BaseNotifyPropertyChanged
     {
         public string MenuItemTitle { get; set; }
 
@@ -11,7 +11,7 @@
             get => _menuItemIcon;
             set
             {
-                SetProperty(ref _menuItemIcon, value);
+                RaiseAndUpdate(ref _menuItemIcon, value);
             }
         }
 
@@ -23,7 +23,7 @@
 
             set
             {
-                SetProperty(ref _isEnabled, value);
+                RaiseAndUpdate(ref _isEnabled, value);
             }
         }
     }
