@@ -48,7 +48,7 @@ namespace SafeMobileBrowser.ViewModels
         {
             try
             {
-                await BookmarkManager.DeleteBookmarks(bookmark.ToString());
+                await BookmarkService.DeleteBookmarks(bookmark.ToString());
                 Bookmarks.Remove((string)bookmark);
             }
             catch (Exception ex)
@@ -72,10 +72,10 @@ namespace SafeMobileBrowser.ViewModels
             if (!AppService.IsAccessContainerMDataInfoAvailable)
             {
                 var mdInfo = await AppService.GetAccessContainerMdataInfoAsync();
-                BookmarkManager.SetMdInfo(mdInfo);
+                BookmarkService.SetMdInfo(mdInfo);
             }
-            await BookmarkManager.FetchBookmarks();
-            Bookmarks = new ObservableCollection<string>(BookmarkManager.RetrieveBookmarks());
+            await BookmarkService.FetchBookmarks();
+            Bookmarks = new ObservableCollection<string>(BookmarkService.RetrieveBookmarks());
         }
 
         private async Task GoBackToHomePage()

@@ -12,11 +12,11 @@ namespace SafeMobileBrowser.WebFetchImplementation
 {
     public class WebFetch
     {
-        private static Session session;
+        private readonly Session _session;
 
-        public WebFetch()
+        public WebFetch(Session session)
         {
-            session = App.AppSession;
+            _session = session;
         }
 
         public async Task<WebFetchResponse> FetchAsync(string url, WebFetchOptions options = null)
@@ -41,15 +41,20 @@ namespace SafeMobileBrowser.WebFetchImplementation
             catch (WebFetchException ex)
             {
                 Logger.Error(ex);
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
+        /// <summary>
+        /// Generate path to fetch resource from the SAFE Network.
+        /// </summary>
+        /// <param name="path">path from URL</param>
+        /// <returns>Final path to get resource</returns>
         private static string CreateFinalPath(string path)
         {
             string finalPath;
@@ -71,7 +76,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// </summary>
         /// <param name="url">Requested resource URL</param>
         /// <returns>MdInfo and Path</returns>
-        public static async Task<(MDataInfo, string)> WebFetchHelper(string url)
+        private async Task<(MDataInfo, string)> WebFetchHelper(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new WebFetchException(WebFetchConstants.NullUrl, WebFetchConstants.NullUrlMessage);
@@ -100,7 +105,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// <param name="pubName">Requested public name</param>
         /// <param name="serviceName">Requested service name</param>
         /// <returns>MDataInfo for the service MData</returns>
-        public static async Task<MDataInfo> GetContainerFromPublicId(string pubName, string serviceName)
+        private async Task<MDataInfo> GetContainerFromPublicId(string pubName, string serviceName)
         {
             (List<byte>, ulong) serviceInfo = (default(List<byte>), default(ulong));
             try
@@ -112,7 +117,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                     TypeTag = WebFetchConstants.DNSTagType,
                     Name = address.ToArray()
                 };
-                serviceInfo = await session.MData.GetValueAsync(
+                serviceInfo = await _session.MData.GetValueAsync(
                     servicesContainer,
                     (string.IsNullOrWhiteSpace(serviceName) ? WebFetchConstants.DefaultSerive : serviceName).ToUtfBytes());
             }
@@ -127,7 +132,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                     case WebFetchConstants.NoSuchEntry:
                         throw new WebFetchException(WebFetchConstants.NoSuchEntry, WebFetchConstants.NoSuchEntryMessage);
                     default:
-                        throw ex;
+                        throw;
                 }
             }
 
@@ -141,7 +146,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             MDataInfo serviceMd;
             try
             {
-                serviceMd = await session.MDataInfoActions.DeserialiseAsync(serviceInfo.Item1);
+                serviceMd = await _session.MDataInfoActions.DeserialiseAsync(serviceInfo.Item1);
             }
             catch (Exception ex)
             {
@@ -163,7 +168,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// <param name="fileMdInfo">File MdInfo</param>
         /// <param name="initialPath">Path</param>
         /// <returns>WebFile</returns>
-        public static async Task<WebFile> TryDifferentPaths(MDataInfo fileMdInfo, string initialPath)
+        private async Task<WebFile> TryDifferentPaths(MDataInfo fileMdInfo, string initialPath)
         {
             void HandleNFSFetchException(FfiException exception)
             {
@@ -177,7 +182,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             try
             {
                 filePath = initialPath;
-                (file, _) = await session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
+                (file, _) = await _session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
             }
             catch (Exception ex)
             {
@@ -190,7 +195,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 try
                 {
                     filePath = initialPath.Replace("/", string.Empty);
-                    (file, _) = await session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
+                    (file, _) = await _session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
                 }
                 catch (Exception ex)
                 {
@@ -204,7 +209,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 try
                 {
                     filePath = $"{initialPath}/{WebFetchConstants.IndexFileName}";
-                    (file, _) = await session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
+                    (file, _) = await _session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
                 }
                 catch (Exception ex)
                 {
@@ -217,7 +222,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 try
                 {
                     filePath = $"{initialPath}/{WebFetchConstants.IndexFileName}".Replace("/", string.Empty);
-                    (file, _) = await session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
+                    (file, _) = await _session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
                 }
                 catch (Exception ex)
                 {
@@ -241,19 +246,19 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// <param name="openedFile">Open file</param>
         /// <param name="options">WebFetch options (ex. range to read)</param>
         /// <returns>Data as List<byte>, startIndex, endIndex, and size</returns>
-        public static async Task<(List<byte>, ulong, ulong, ulong)> ReadContentFromFile(
+        private async Task<(List<byte>, ulong, ulong, ulong)> ReadContentFromFile(
             MDataInfo fileMdInfo,
             WebFile openedFile,
             WebFetchOptions options = null)
         {
             try
             {
-                var filehandle = await session.NFS.FileOpenAsync(fileMdInfo, openedFile.File, SafeApp.Misc.NFS.OpenMode.Read);
-                var filesize = await session.NFS.FileSizeAsync(filehandle);
+                var filehandle = await _session.NFS.FileOpenAsync(fileMdInfo, openedFile.File, SafeApp.Misc.NFS.OpenMode.Read);
+                var filesize = await _session.NFS.FileSizeAsync(filehandle);
 
                 if (options == null)
                 {
-                    var filedata = await session.NFS.FileReadAsync(filehandle, 0, filesize - 1);
+                    var filedata = await _session.NFS.FileReadAsync(filehandle, 0, filesize - 1);
                     return (filedata, 0, filesize - 1, filesize);
                 }
                 else
@@ -271,7 +276,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                     }
 
                     var partSize = partendIndex - partStartIndex + 1;
-                    var filedata = await session.NFS.FileReadAsync(filehandle, partStartIndex, partSize);
+                    var filedata = await _session.NFS.FileReadAsync(filehandle, partStartIndex, partSize);
                     return (filedata, partStartIndex, partendIndex, partSize);
                 }
             }

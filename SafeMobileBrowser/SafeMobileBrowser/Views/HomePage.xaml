@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="SafeMobileBrowser.Views.HomePage"
-             xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
-             BackgroundColor="White"
-             xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
-             Padding="0">
-
+<local:BaseContentPage x:Class="SafeMobileBrowser.Views.HomePage"
+                       xmlns="http://xamarin.com/schemas/2014/forms"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:local="clr-namespace:SafeMobileBrowser.Views"
+                       xmlns:vm="clr-namespace:SafeMobileBrowser.ViewModels;assembly=SafeMobileBrowser"
+                       xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
+                       x:TypeArguments="vm:HomePageViewModel"
+                       BackgroundColor="White"
+                       xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
+                       Padding="0">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Image"
@@ -220,4 +222,4 @@
             </Grid>
         </StackLayout>
     </ContentPage.Content>
-</ContentPage>
+</local:BaseContentPage>

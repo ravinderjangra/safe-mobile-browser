@@ -5,7 +5,7 @@ using Xamarin.Essentials;
 
 namespace SafeMobileBrowser.Services
 {
-    internal class CredentialCacheService
+    internal static class CredentialCacheService
     {
         private const string AuthRspKey = "UnregisteredAuthResponse";
 

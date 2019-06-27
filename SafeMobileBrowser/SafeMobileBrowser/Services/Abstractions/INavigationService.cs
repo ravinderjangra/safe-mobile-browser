@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Rg.Plugins.Popup.Pages;
 using SafeMobileBrowser.ViewModels;
 
 namespace SafeMobileBrowser.Services
@@ -32,12 +33,16 @@ namespace SafeMobileBrowser.Services
         /// <returns>The Task.</returns>
         Task PopModalAsync();
 
+        Task PopPopupAsync(bool animate);
+
         /// <summary>
         /// Pops all but the root page of the navigation stack.
         /// </summary>
         /// <returns>The Task.</returns>
         /// <param name="animate">If set to <c>true</c> animate.</param>
         Task PopToRootAsync(bool animate);
+
+        Task PushPopUpAsync(PopupPage popupPage);
 
         /// <summary>
         /// Pushs the specified view model onto the navigation stack.

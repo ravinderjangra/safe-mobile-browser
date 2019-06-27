@@ -8,9 +8,9 @@ namespace SafeMobileBrowser.ViewModels
 {
     public class BaseViewModel : BaseNotifyPropertyChanged, IDisposable
     {
-        public static BookmarkManager BookmarkManager { get; set; }
+        public BookmarkService BookmarkService => ServiceContainer.Resolve<BookmarkService>();
 
-        public AppService AppService => DependencyService.Resolve<AppService>();
+        public AppService AppService => ServiceContainer.Resolve<AppService>();
 
         public AuthenticationService AuthService => DependencyService.Get<AuthenticationService>();
 

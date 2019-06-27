@@ -70,12 +70,11 @@ namespace SafeMobileBrowser.ViewModels
                 if (StoredResponse == null)
                 {
                     ProgressText = "Requesting authentication for authenticator app";
-                    await AuthenticationService.RequestNonMockAuthenticationAsync(true);
+                    await AuthService.RequestNonMockAuthenticationAsync(true);
                 }
                 else
                 {
                     ProgressText = "Estaiblishing session using cached response";
-                    var authServicec = new AuthenticationService();
                     await AuthService.ConnectUsingStoredSerialisedConfiguration(StoredResponse);
                 }
 #endif

@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using SafeApp.Utilities;
 using SafeMobileBrowser.Helpers;
-using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
 using Xamarin.Forms;
 
@@ -50,7 +49,7 @@ namespace SafeMobileBrowser.Services
             }
         }
 #else
-        public static async Task<(uint, string)> GenerateEncodedAuthReqAsync()
+        public async Task<(uint, string)> GenerateEncodedAuthReqAsync()
         {
             // Create an AuthReq
             var authReq = new AuthReq
@@ -70,7 +69,7 @@ namespace SafeMobileBrowser.Services
             return await Session.EncodeAuthReqAsync(authReq);
         }
 
-        public static async Task RequestNonMockAuthenticationAsync(bool isUnregistered = false)
+        public async Task RequestNonMockAuthenticationAsync(bool isUnregistered = false)
         {
             try
             {
@@ -92,7 +91,7 @@ namespace SafeMobileBrowser.Services
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
         }
 
@@ -112,14 +111,11 @@ namespace SafeMobileBrowser.Services
                         MessagingCenter.Send(this, MessageCenterConstants.Authenticated, encodedResponse);
                     }
                 }
-                else if (decodedResponseType == typeof(AuthIpcMsg))
+                else if (decodedResponseType == typeof(AuthIpcMsg) && decodeResponse is AuthIpcMsg ipcMsg)
                 {
-                    if (decodeResponse is AuthIpcMsg ipcMsg)
-                    {
-                        Session session = await Session.AppRegisteredAsync(Constants.AppId, ipcMsg.AuthGranted);
-                        AppService.InitialiseSession(session);
-                        BookmarkManager.InitialiseSession(session);
-                    }
+                    Session session = await Session.AppRegisteredAsync(Constants.AppId, ipcMsg.AuthGranted);
+                    ServiceContainer.Resolve<AppService>().InitialiseSession(session);
+                    ServiceContainer.Resolve<BookmarkService>().SetSession(session);
                 }
             }
             catch (Exception ex)
@@ -153,14 +149,14 @@ namespace SafeMobileBrowser.Services
                 }
                 else
                 {
-                    throw new NullReferenceException("Null serialised configuration");
+                    throw new ArgumentNullException(encodedResponse);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
-                throw ex;
+                throw;
             }
         }
 #endif

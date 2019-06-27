@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
-using Rg.Plugins.Popup.Extensions;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
@@ -12,15 +11,13 @@ using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
-    public class HomePageViewModel : BaseViewModel
+    public class HomePageViewModel : BaseNavigationViewModel
     {
         public static string CurrentUrl { get; private set; }
 
         public static string CurrentTitle { get; private set; }
 
         private readonly string _baseUrl = DependencyService.Get<IPlatformService>().BaseUrl;
-
-        public bool IsSessionAvailable => App.AppSession != null ? true : false;
 
         public ICommand PageLoadCommand { get; private set; }
 
@@ -109,17 +106,20 @@ namespace SafeMobileBrowser.ViewModels
 
         private MenuPopUp _menuPopUp;
 
-        public INavigation Navigation { get; set; }
-
-        public HomePageViewModel(INavigation navigation)
+        public HomePageViewModel()
         {
-            Navigation = navigation;
             PageLoadCommand = new Command<string>(LoadUrl);
             BottomNavbarTapCommand = new Command<string>(OnTapped);
             WebViewNavigatingCommand = new Command<WebNavigatingEventArgs>(OnNavigating);
             WebViewNavigatedCommand = new Command<WebNavigatedEventArgs>(OnNavigated);
             GoToHomePageCommand = new Command(GoToHomePage);
             MenuCommand = new AsyncCommand(ShowPopUpMenu);
+        }
+
+        public override async Task InitAsync()
+        {
+            await base.InitAsync();
+            await InitilizeSessionAsync();
         }
 
         private void GoToHomePage()
@@ -134,7 +134,7 @@ namespace SafeMobileBrowser.ViewModels
             {
                 if (_menuPopUp == null)
                     _menuPopUp = new MenuPopUp();
-                await Navigation.PushPopupAsync(_menuPopUp);
+                await Navigation.PushPopUpAsync(_menuPopUp);
             }
             catch (Exception ex)
             {
@@ -184,9 +184,12 @@ namespace SafeMobileBrowser.ViewModels
         {
             try
             {
-                using (UserDialogs.Instance.Loading("Connecting to SAFE Network"))
+                if (!AppService.IsSessionAvailable)
                 {
-                    await AuthService.ConnectUsingHardcodedResponseAsync();
+                    using (UserDialogs.Instance.Loading("Connecting to SAFE Network"))
+                    {
+                        await AuthService.ConnectUsingHardcodedResponseAsync();
+                    }
                 }
             }
             catch (Exception ex)

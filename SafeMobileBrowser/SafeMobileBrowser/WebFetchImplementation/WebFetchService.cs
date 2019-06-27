@@ -5,9 +5,9 @@ using SafeMobileBrowser.Models;
 
 namespace SafeMobileBrowser.WebFetchImplementation
 {
-    public class WebFetchService
+    public static class WebFetchService
     {
-        private static readonly WebFetch webFetch = new WebFetch();
+        private static readonly WebFetch webFetch = new WebFetch(App.AppSession);
 
         public static async Task<WebFetchResponse> FetchResourceAsync(string url, WebFetchOptions options = null)
         {
@@ -18,12 +18,12 @@ namespace SafeMobileBrowser.WebFetchImplementation
             catch (WebFetchException ex)
             {
                 Logger.Error(ex);
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                throw ex;
+                throw;
             }
         }
     }

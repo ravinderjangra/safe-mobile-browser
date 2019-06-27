@@ -8,30 +8,27 @@ using Newtonsoft.Json.Linq;
 using SafeApp;
 using SafeApp.Utilities;
 using SafeMobileBrowser.Helpers;
+using SafeMobileBrowser.Services;
+using Xamarin.Forms;
 
-namespace SafeMobileBrowser.Models
+[assembly: Dependency(typeof(BookmarkService))]
+
+namespace SafeMobileBrowser.Services
 {
-    public class BookmarkManager
+    public class BookmarkService
     {
-        private static MDataInfo _accesscontainerMdinfo;
-        private static Session _session;
-        private static List<string> bookmarksList;
+        private Session _session;
+        private MDataInfo _accesscontainerMdinfo;
+        private List<string> bookmarksList;
 
-        public static void InitialiseSession(Session session)
-        {
-            try
-            {
-                _session = session;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-        }
-
-        public BookmarkManager()
+        public BookmarkService()
         {
             bookmarksList = new List<string>();
+        }
+
+        public void SetSession(Session session)
+        {
+            _session = session;
         }
 
         public void SetMdInfo(MDataInfo mdinfo)
@@ -125,7 +122,7 @@ namespace SafeMobileBrowser.Models
                     var browserState = JObject.Parse(decryptedValue);
                     var bookmarks = (JArray)browserState["bookmarks"];
 
-                    var bookmarkToDelete = bookmarks.Where(b => b["url"].ToString().Equals(bookmark)).FirstOrDefault();
+                    var bookmarkToDelete = bookmarks.FirstOrDefault(b => b["url"].ToString().Equals(bookmark));
 
                     if (bookmarkToDelete != null)
                     {

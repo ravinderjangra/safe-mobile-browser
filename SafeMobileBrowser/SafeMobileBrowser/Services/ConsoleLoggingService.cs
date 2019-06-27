@@ -6,15 +6,15 @@ namespace SafeMobileBrowser.Services
     public class ConsoleLoggingService : ILoggingService
     {
         /// <inheritdoc />
-        public virtual void Log(LogType type, string message)
+        public virtual void Log(LogType logType, string message)
         {
-            WriteToConsole(type, message);
+            WriteToConsole(logType, message);
         }
 
         /// <inheritdoc />
-        public virtual void Log(LogType type, string message, Exception exception)
+        public virtual void Log(LogType logType, string message, Exception exception)
         {
-            WriteToConsole(type, message + "\n" + GetExceptionDetails(exception));
+            WriteToConsole(logType, message + "\n" + GetExceptionDetails(exception));
         }
 
         protected virtual void WriteToConsole(LogType type, string message)

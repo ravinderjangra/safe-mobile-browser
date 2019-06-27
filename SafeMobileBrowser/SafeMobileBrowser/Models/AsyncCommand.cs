@@ -42,7 +42,7 @@ namespace SafeMobileBrowser.Models
         public bool CanExecute(object parameter)
         {
             if (_task == null)
-                return _canExecute == null ? true : _canExecute(parameter);
+                return _canExecute == null || _canExecute(parameter);
 
             return _canExecute(parameter) && _task.IsCompleted;
         }

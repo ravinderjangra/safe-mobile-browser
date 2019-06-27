@@ -5,10 +5,8 @@ using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
-    public class SettingsModalPageViewModel : BaseViewModel
+    public class SettingsModalPageViewModel : BaseNavigationViewModel
     {
-        private INavigation _navigation;
-
         public string ApplicationVersion => AppInfo.VersionString;
 
         public AsyncCommand FaqCommand { get; }
@@ -17,9 +15,8 @@ namespace SafeMobileBrowser.ViewModels
 
         public AsyncCommand GoBackCommand { get; }
 
-        public SettingsModalPageViewModel(INavigation navigation)
+        public SettingsModalPageViewModel()
         {
-            _navigation = navigation;
             GoBackCommand = new AsyncCommand(GoBackToHomePageAsync);
             FaqCommand = new AsyncCommand(ShowNotImplementedDialogAsync);
             PrivacyInfoCommand = new AsyncCommand(ShowNotImplementedDialogAsync);
@@ -32,7 +29,7 @@ namespace SafeMobileBrowser.ViewModels
 
         private async Task GoBackToHomePageAsync()
         {
-            await _navigation.PopModalAsync();
+            await Navigation.PopModalAsync();
         }
     }
 }
