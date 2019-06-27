@@ -3,10 +3,10 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                        xmlns:local="clr-namespace:SafeMobileBrowser.Views"
                        xmlns:vm="clr-namespace:SafeMobileBrowser.ViewModels;assembly=SafeMobileBrowser"
-                       xmlns:XamEffects="clr-namespace:XamEffects;assembly=XamEffects"
-                       xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
-                       xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
                        x:TypeArguments="vm:SettingsModalPageViewModel"
+                       xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
+                       xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
+                       xmlns:XamEffects="clr-namespace:XamEffects;assembly=XamEffects"
                        x:Class="SafeMobileBrowser.Views.SettingsModalPage">
     <ContentPage.Resources>
         <ResourceDictionary>

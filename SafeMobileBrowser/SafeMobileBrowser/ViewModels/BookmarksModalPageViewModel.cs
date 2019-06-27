@@ -7,13 +7,11 @@ using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
-    public class BookmarksModalPageViewModel : BaseViewModel
+    public class BookmarksModalPageViewModel : BaseNavigationViewModel
     {
         public AsyncCommand GoBackCommand { get; set; }
 
         public AsyncCommand DeleteBookmarkCommand { get; set; }
-
-        public INavigation Navigation { get; set; }
 
         private string _selectedBookmarkItem;
 
@@ -36,9 +34,8 @@ namespace SafeMobileBrowser.ViewModels
             set => RaiseAndUpdate(ref _bookmarks, value);
         }
 
-        public BookmarksModalPageViewModel(INavigation navigation)
+        public BookmarksModalPageViewModel()
         {
-            Navigation = navigation;
             Bookmarks = new ObservableCollection<string>();
             GoBackCommand = new AsyncCommand(GoBackToHomePage);
             DeleteBookmarkCommand = new AsyncCommand(RemoveBookmark);

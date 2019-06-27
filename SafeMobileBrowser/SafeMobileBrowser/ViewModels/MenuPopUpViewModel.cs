@@ -8,7 +8,6 @@ using Rg.Plugins.Popup.Extensions;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
-using SafeMobileBrowser.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -16,7 +15,8 @@ namespace SafeMobileBrowser.ViewModels
 {
     public class MenuPopUpViewModel : BaseNavigationViewModel
     {
-        BookmarksModalPage _bookmarksModalPage;
+        BookmarksModalPageViewModel _bookmarksModalPageViewModel;
+        SettingsModalPageViewModel _settingsModalPageViewModel;
 
         public AsyncCommand RefreshWebViewCommand { get; set; }
 
@@ -181,16 +181,16 @@ namespace SafeMobileBrowser.ViewModels
                 switch (selectedMenuItemTitle)
                 {
                     case "Settings":
-                        var settingsViewModel = new SettingsModalPageViewModel();
-                        await Navigation.PushModalAsync(settingsViewModel);
+                        if (_settingsModalPageViewModel == null)
+                            _settingsModalPageViewModel = new SettingsModalPageViewModel();
+                        await Navigation.PushModalAsync(_settingsModalPageViewModel);
                         break;
                     case "Bookmarks":
                         if (AppService.IsSessionAvailable)
                         {
-                            if (_bookmarksModalPage == null)
-                                _bookmarksModalPage = new BookmarksModalPage();
-                            var bookmarksViewModel = new SettingsModalPageViewModel();
-                            await Navigation.PushModalAsync(bookmarksViewModel);
+                            if (_bookmarksModalPageViewModel == null)
+                                _bookmarksModalPageViewModel = new BookmarksModalPageViewModel();
+                            await Navigation.PushModalAsync(_bookmarksModalPageViewModel);
                         }
                         else
                         {
