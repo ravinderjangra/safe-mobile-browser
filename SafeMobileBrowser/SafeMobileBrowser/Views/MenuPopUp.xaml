@@ -26,12 +26,7 @@
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
                         <VisualState x:Name="Normal" />
-                        <VisualState x:Name="Disabled">
-                            <VisualState.Setters>
-                                <Setter Property="Opacity"
-                                        Value="0.25" />
-                            </VisualState.Setters>
-                        </VisualState>
+                        <VisualState x:Name="Disabled" />
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor"
@@ -41,6 +36,14 @@
                     </VisualStateGroup>
                 </VisualStateGroupList>
             </Setter>
+            <Style.Triggers>
+                <Trigger TargetType="Grid"
+                         Property="IsEnabled"
+                         Value="False">
+                    <Setter Property="Opacity"
+                            Value="0.25" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="Label"
                x:Key="PopupMenuItemLabelStyle">

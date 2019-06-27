@@ -101,7 +101,7 @@ namespace SafeMobileBrowser.Services
             try
             {
                 MessagingCenter.Send(this, MessageCenterConstants.ProcessingAuthResponse);
-                var encodedResponse = RequestHelpers.GetRequestData(url);
+                var encodedResponse = UrlFormat.GetRequestData(url);
                 var decodeResponse = await Session.DecodeIpcMessageAsync(encodedResponse);
                 var decodedResponseType = decodeResponse.GetType();
                 if (decodedResponseType == typeof(UnregisteredIpcMsg))

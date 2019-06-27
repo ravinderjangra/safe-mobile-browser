@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
+using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 
 namespace SafeMobileBrowser.WebFetchImplementation
@@ -17,12 +17,12 @@ namespace SafeMobileBrowser.WebFetchImplementation
             }
             catch (WebFetchException ex)
             {
-                Debug.WriteLine("Error: " + ex.Message);
+                Logger.Error(ex);
                 throw ex;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error: " + ex.Message);
+                Logger.Error(ex);
                 throw ex;
             }
         }

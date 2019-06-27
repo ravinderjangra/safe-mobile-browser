@@ -103,7 +103,7 @@ namespace SafeMobileBrowser.Views
                         Text = url,
                         CommandParameter = url
                     };
-                    item.SetBinding(MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
+                    item.SetBinding(MenuItem.CommandProperty, new Binding("PageLoadCommand"));
                     ToolbarItems.Add(item);
                 }
             }

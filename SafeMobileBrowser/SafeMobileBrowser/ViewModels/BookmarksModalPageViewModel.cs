@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using Xamarin.Forms;
@@ -10,9 +9,9 @@ namespace SafeMobileBrowser.ViewModels
 {
     public class BookmarksModalPageViewModel : BaseViewModel
     {
-        public ICommand GoBackCommand { get; set; }
+        public AsyncCommand GoBackCommand { get; set; }
 
-        public ICommand DeleteBookmarkCommand { get; set; }
+        public AsyncCommand DeleteBookmarkCommand { get; set; }
 
         public INavigation Navigation { get; set; }
 
@@ -40,13 +39,9 @@ namespace SafeMobileBrowser.ViewModels
         public BookmarksModalPageViewModel(INavigation navigation)
         {
             Navigation = navigation;
-            GoBackCommand = new Command(GoBackToHomePage);
-            DeleteBookmarkCommand = new Command(async (object obj) =>
-            {
-                await RemoveBookmark(obj);
-            });
-            if (Bookmarks == null)
-                Bookmarks = new ObservableCollection<string>();
+            Bookmarks = new ObservableCollection<string>();
+            GoBackCommand = new AsyncCommand(GoBackToHomePage);
+            DeleteBookmarkCommand = new AsyncCommand(RemoveBookmark);
         }
 
         private async Task RemoveBookmark(object bookmark)
@@ -58,6 +53,7 @@ namespace SafeMobileBrowser.ViewModels
             }
             catch (Exception ex)
             {
+                Logger.Error(ex);
                 throw ex;
             }
         }
@@ -65,7 +61,10 @@ namespace SafeMobileBrowser.ViewModels
         public async void OpenBookmarkedPage()
         {
             await Navigation.PopModalAsync();
-            MessagingCenter.Send<BookmarksModalPageViewModel, string>(this, MessageCenterConstants.BookmarkUrl, SelectedBookmarkItem.Replace("safe://", string.Empty));
+            MessagingCenter.Send<BookmarksModalPageViewModel, string>(
+                this,
+                MessageCenterConstants.BookmarkUrl,
+                SelectedBookmarkItem.Replace("safe://", string.Empty));
         }
 
         public async Task GetBookmarks()
@@ -79,7 +78,7 @@ namespace SafeMobileBrowser.ViewModels
             Bookmarks = new ObservableCollection<string>(BookmarkManager.RetrieveBookmarks());
         }
 
-        private async void GoBackToHomePage()
+        private async Task GoBackToHomePage()
         {
             await Navigation.PopModalAsync();
         }

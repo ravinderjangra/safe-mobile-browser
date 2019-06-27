@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
 using Rg.Plugins.Popup.Extensions;
 using SafeMobileBrowser.Helpers;
+using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
 using SafeMobileBrowser.Views;
 using Xamarin.Forms;
@@ -18,13 +18,11 @@ namespace SafeMobileBrowser.ViewModels
 
         public static string CurrentTitle { get; private set; }
 
-        private string _baseUrl = DependencyService.Get<IPlatformService>().BaseUrl;
+        private readonly string _baseUrl = DependencyService.Get<IPlatformService>().BaseUrl;
 
         public bool IsSessionAvailable => App.AppSession != null ? true : false;
 
         public ICommand PageLoadCommand { get; private set; }
-
-        public ICommand ToolbarItemCommand { get; private set; }
 
         public Command BottomNavbarTapCommand { get; set; }
 
@@ -42,7 +40,7 @@ namespace SafeMobileBrowser.ViewModels
 
         public ICommand WebViewNavigatedCommand { get; set; }
 
-        public ICommand MenuCommand { get; set; }
+        public AsyncCommand MenuCommand { get; set; }
 
         private bool _canGoBack;
 
@@ -117,14 +115,11 @@ namespace SafeMobileBrowser.ViewModels
         {
             Navigation = navigation;
             PageLoadCommand = new Command<string>(LoadUrl);
-            ToolbarItemCommand = new Command<string>(LoadUrl);
             BottomNavbarTapCommand = new Command<string>(OnTapped);
             WebViewNavigatingCommand = new Command<WebNavigatingEventArgs>(OnNavigating);
             WebViewNavigatedCommand = new Command<WebNavigatedEventArgs>(OnNavigated);
             GoToHomePageCommand = new Command(GoToHomePage);
-            MenuCommand = new Command(ShowPopUpMenu);
-            if (AppService == null)
-                AppService = new AppService();
+            MenuCommand = new AsyncCommand(ShowPopUpMenu);
         }
 
         private void GoToHomePage()
@@ -133,7 +128,7 @@ namespace SafeMobileBrowser.ViewModels
             Url = homePageUrl;
         }
 
-        private async void ShowPopUpMenu()
+        private async Task ShowPopUpMenu()
         {
             try
             {
@@ -143,7 +138,7 @@ namespace SafeMobileBrowser.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -218,7 +213,7 @@ namespace SafeMobileBrowser.ViewModels
                     GoToHomePage();
                     break;
                 case "Menu":
-                    ShowPopUpMenu();
+                    MenuCommand.Execute(null);
                     break;
                 default:
                     break;

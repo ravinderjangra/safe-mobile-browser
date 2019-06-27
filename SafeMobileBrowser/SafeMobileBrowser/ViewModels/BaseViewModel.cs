@@ -10,7 +10,7 @@ namespace SafeMobileBrowser.ViewModels
     {
         public static BookmarkManager BookmarkManager { get; set; }
 
-        public static AppService AppService { get; set; }
+        public AppService AppService => DependencyService.Resolve<AppService>();
 
         public AuthenticationService AuthService => DependencyService.Get<AuthenticationService>();
 

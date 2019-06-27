@@ -66,13 +66,14 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                Logger.Error(ex);
 
                 if (ex.InnerException != null)
                 {
                     var exception = ex.InnerException as WebFetchException;
-                    Debug.WriteLine("Error Code: " + exception.ErrorCode);
-                    Debug.WriteLine("Error Message: " + exception.Message);
+
+                    Logger.Info("Error Code: " + exception.ErrorCode);
+                    Logger.Info("Error Message: " + exception.Message);
 
                     if (exception.ErrorCode == WebFetchConstants.NoSuchData ||
                         exception.ErrorCode == WebFetchConstants.NoSuchEntry ||

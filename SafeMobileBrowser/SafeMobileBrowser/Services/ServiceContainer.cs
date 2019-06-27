@@ -64,9 +64,7 @@ namespace SafeMobileBrowser.Services
         {
             // Non-scoped services
             {
-                Lazy<object> service;
-
-                if (services.TryGetValue(type, out service))
+                if (services.TryGetValue(type, out Lazy<object> service))
                     return service.Value;
 
                 if (nullIsAcceptable)

@@ -7,7 +7,7 @@ namespace SafeMobileBrowser.Models
     public class AsyncCommand : ICommand
     {
         private readonly Func<object, bool> _canExecute;
-        private Func<object, Task> _action;
+        private readonly Func<object, Task> _action;
         private Task _task;
 
         public AsyncCommand(Func<object, Task> action)

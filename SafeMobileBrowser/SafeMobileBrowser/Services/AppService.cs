@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using SafeApp;
 using SafeApp.Utilities;
 using SafeMobileBrowser.Helpers;
+using SafeMobileBrowser.Services;
+using Xamarin.Forms;
+
+[assembly: Dependency(typeof(AppService))]
 
 namespace SafeMobileBrowser.Services
 {
@@ -26,7 +29,7 @@ namespace SafeMobileBrowser.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Logger.Error(ex);
             }
         }
 
@@ -38,11 +41,11 @@ namespace SafeMobileBrowser.Services
             }
             catch (FfiException ex)
             {
-                Debug.WriteLine("Error : " + ex.Message);
+                Logger.Error(ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error : " + ex.Message);
+                Logger.Error(ex);
                 throw;
             }
             return _accessContainerMdinfo;

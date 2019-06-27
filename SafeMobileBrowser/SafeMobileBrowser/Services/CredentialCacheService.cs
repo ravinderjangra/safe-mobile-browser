@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SafeMobileBrowser.Helpers;
 using Xamarin.Essentials;
 
 namespace SafeMobileBrowser.Services
@@ -14,9 +15,9 @@ namespace SafeMobileBrowser.Services
             {
                 SecureStorage.RemoveAll();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignore acct not existing
+                Logger.Error(ex);
             }
         }
 

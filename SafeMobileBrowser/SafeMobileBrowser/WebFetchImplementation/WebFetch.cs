@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MimeMapping;
 using SafeApp;
 using SafeApp.Utilities;
+using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 
 namespace SafeMobileBrowser.WebFetchImplementation
@@ -21,10 +21,9 @@ namespace SafeMobileBrowser.WebFetchImplementation
 
         public async Task<WebFetchResponse> FetchAsync(string url, WebFetchOptions options = null)
         {
-            var response = new WebFetchResponse();
-
             try
             {
+                var response = new WebFetchResponse();
                 var (serviceMd, parsedPath) = await WebFetchHelper(url);
                 var path = CreateFinalPath(parsedPath);
                 var file = await TryDifferentPaths(serviceMd, path);
@@ -41,12 +40,12 @@ namespace SafeMobileBrowser.WebFetchImplementation
             }
             catch (WebFetchException ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                Logger.Error(ex);
                 throw ex;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                Logger.Error(ex);
                 throw ex;
             }
         }
@@ -61,13 +60,17 @@ namespace SafeMobileBrowser.WebFetchImplementation
             else
                 finalPath = path;
 
-            Debug.WriteLine($"Input path: {path}");
-            Debug.WriteLine($"final path: {finalPath}");
+            Logger.Info($"Input path: {path}");
+            Logger.Info($"final path: {finalPath}");
 
             return finalPath;
         }
 
-        // WebFetch helper function to fetch a resource from the network
+        /// <summary>
+        /// WebFetch helper function to fetch a resource from the network.
+        /// </summary>
+        /// <param name="url">Requested resource URL</param>
+        /// <returns>MdInfo and Path</returns>
         public static async Task<(MDataInfo, string)> WebFetchHelper(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -90,8 +93,13 @@ namespace SafeMobileBrowser.WebFetchImplementation
             return (mdataInfo, parsedPath);
         }
 
-        // Helper function to read fetch the Container
-        // from a public ID and service name provided
+        /// <summary>
+        /// Helper function to fetch the Container
+        /// from a public ID and service name provided.
+        /// </summary>
+        /// <param name="pubName">Requested public name</param>
+        /// <param name="serviceName">Requested service name</param>
+        /// <returns>MDataInfo for the service MData</returns>
         public static async Task<MDataInfo> GetContainerFromPublicId(string pubName, string serviceName)
         {
             (List<byte>, ulong) serviceInfo = (default(List<byte>), default(ulong));
@@ -110,7 +118,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             }
             catch (FfiException ex)
             {
-                Debug.WriteLine(ex.Message);
+                Logger.Error(ex);
                 switch (ex.ErrorCode)
                 {
                     // there is no container stored at the location
@@ -137,7 +145,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Logger.Error(ex);
 
                 serviceMd = new MDataInfo
                 {
@@ -148,12 +156,18 @@ namespace SafeMobileBrowser.WebFetchImplementation
             return serviceMd;
         }
 
-        // private Helper function to try private different paths private to find and
-        // fetch the index file from a web site container
+        /// <summary>
+        /// Helper function to try private different paths private to find and
+        /// fetch the index file from a web site container.
+        /// </summary>
+        /// <param name="fileMdInfo">File MdInfo</param>
+        /// <param name="initialPath">Path</param>
+        /// <returns>WebFile</returns>
         public static async Task<WebFile> TryDifferentPaths(MDataInfo fileMdInfo, string initialPath)
         {
             void HandleNFSFetchException(FfiException exception)
             {
+                Logger.Error(exception);
                 if (exception.ErrorCode != WebFetchConstants.FileNotFound)
                     throw exception;
             }
@@ -219,8 +233,14 @@ namespace SafeMobileBrowser.WebFetchImplementation
             return new WebFile { File = file.Value, MimeType = mimeType };
         }
 
-        // Helper function to read the file's content, and return an
-        // http compliant response based on the mime-type and options provided
+        /// <summary>
+        /// Helper function to read the file's content, and return an
+        /// http compliant response based on the mime-type and options provided
+        /// </summary>
+        /// <param name="fileMdInfo">Opened file's MdInfo</param>
+        /// <param name="openedFile">Open file</param>
+        /// <param name="options">WebFetch options (ex. range to read)</param>
+        /// <returns>Data as List<byte>, startIndex, endIndex, and size</returns>
         public static async Task<(List<byte>, ulong, ulong, ulong)> ReadContentFromFile(
             MDataInfo fileMdInfo,
             WebFile openedFile,
@@ -257,7 +277,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Logger.Error(ex);
             }
             return (null, 0, 0, 0);
         }
