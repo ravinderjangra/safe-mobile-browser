@@ -7,7 +7,7 @@ using SafeMobileBrowser.Models;
 
 namespace SafeMobileBrowser.Helpers
 {
-    public class RequestHelpers
+    public static class RequestHelpers
     {
         // Generating encoded app request using appname, appid, vendor
         public static async Task<(uint, string)> GenerateEncodedAppRequestAsync()
@@ -35,8 +35,6 @@ namespace SafeMobileBrowser.Helpers
 
             var bytes = "bytes=";
             var rangeValues = rangeString.Remove(0, bytes.Length).Split(',');
-
-            // var rangeValues = .Split(',');
 
             foreach (var item in rangeValues)
             {
