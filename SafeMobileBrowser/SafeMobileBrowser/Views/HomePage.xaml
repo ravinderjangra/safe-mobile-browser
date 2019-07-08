@@ -4,7 +4,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
              BackgroundColor="White"
+             xmlns:XamEffect="clr-namespace:XamEffects;assembly=XamEffects"
+             xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
              Padding="0">
+
     <NavigationPage.TitleView>
         <StackLayout x:Name="stackLayout"
                      Padding="10,3"
@@ -12,36 +15,14 @@
                      Orientation="Horizontal"
                      VerticalOptions="Start">
 
-            <!--<Frame x:Name="TabCountFrame"
-                   Padding="0"
-                   BackgroundColor="#515151"
-                   CornerRadius="2"
-                   HasShadow="False"
-                   HeightRequest="25"
-                   VerticalOptions="Center"
-                   WidthRequest="25">
-                <Frame Margin="2"
-                       Padding="4,0,4,4"
-                       BackgroundColor="White"
-                       CornerRadius="2"
-                       HasShadow="False">
-                    <Label BackgroundColor="Transparent"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           Text="5"
-                           TextColor="Black"
-                           VerticalOptions="Start" />
-                </Frame>
-            </Frame>-->
-
             <Frame Padding="5,2"
                    BackgroundColor="#F1F1F1"
-                   CornerRadius="20"
+                   CornerRadius="10"
                    HasShadow="False"
                    HorizontalOptions="FillAndExpand">
-                <Grid Padding="5,2"
+                <Grid Padding="5,1"
                       HeightRequest="30"
-                      ColumnSpacing="1"
+                      ColumnSpacing="0"
                       HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -49,7 +30,8 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Label BackgroundColor="Transparent"
+                    <Label x:Name="SafeLabel"
+                           BackgroundColor="Transparent"
                            FontSize="14"
                            Text="safe://"
                            TextColor="DarkGreen"
@@ -58,26 +40,37 @@
                     <controls:AddressBarEntry x:Name="AddressBarEntry"
                                               Grid.Column="1"
                                               FontSize="14"
+                                              Margin="-3,0,0,0"
                                               HorizontalOptions="FillAndExpand"
                                               Placeholder="enter url"
                                               PlaceholderColor="DarkGray"
                                               VerticalOptions="Center"
-                                              Text="{Binding AddressbarText}"/>
+                                              IsSpellCheckEnabled="False"
+                                              IsTextPredictionEnabled="False"
+                                              Text="{Binding AddressbarText}"
+                                              AddressBarFocusCommand="{Binding AddressBarFocusCommand, Mode=OneWayToSource}" />
 
                     <Image x:Name="AddressBarButton"
+                           IsVisible="False"
                            Grid.Column="2"
-                           HeightRequest="15"
-                           HorizontalOptions="End"
-                           Source="refresh" />
+                           HeightRequest="20"
+                           HorizontalOptions="End">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ClearAddressBar" />
+                        </Image.GestureRecognizers>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static Icons:IconFont.Close}"
+                                             Size="30"
+                                             Color="Black" />
+                        </Image.Source>
+                    </Image>
                 </Grid>
             </Frame>
 
-            <!--<Image x:Name="SettingsButton"
-                   HeightRequest="15"
-                   Source="menu" />-->
-
         </StackLayout>
     </NavigationPage.TitleView>
+
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand"
                      Margin="0"
@@ -85,24 +78,124 @@
                      Spacing="0"
                      VerticalOptions="FillAndExpand">
 
-            <controls:AdvancedProgressBar IsRunning="False"
-                                          IsVisible="False"
+            <controls:AdvancedProgressBar IsRunning="{Binding IsNavigating}"
+                                          IsVisible="{Binding IsNavigating}"
                                           HeightRequest="5"
-                                          BackgroundColor="Transparent">
-                <controls:AdvancedProgressBar.Triggers>
-                    <DataTrigger TargetType="controls:AdvancedProgressBar"
-                                 Binding="{Binding Source={x:Reference HybridWebViewControl}, Path=IsLoading}"
-                                 Value="True">
-                        <Setter Property="IsRunning" Value="True" />
-                        <Setter Property="IsVisible" Value="True" />
-                    </DataTrigger>
-                </controls:AdvancedProgressBar.Triggers>
+                                          BackgroundColor="Transparent"
+                                          x:Name="AdvancedProgressbar">
             </controls:AdvancedProgressBar>
-            
+
             <controls:HybridWebView x:Name="HybridWebViewControl"
                                     HorizontalOptions="FillAndExpand"
                                     VerticalOptions="FillAndExpand"
-                                    Uri="{Binding Url}"/>
+                                    CanGoBack="{Binding CanGoBack}"
+                                    CanGoForward="{Binding CanGoForward}"
+                                    GoBackCommand="{Binding GoBackCommand, Mode=OneWayToSource}"
+                                    GoForwardCommand="{Binding GoForwardCommand, Mode=OneWayToSource}"
+                                    ReloadCommand="{Binding ReloadCommand, Mode=OneWayToSource}"
+                                    Source="{Binding Url, Mode=TwoWay}" />
+
+            <Grid BackgroundColor="Transparent"
+                  RowSpacing="0"
+                  HeightRequest="55"
+                  ColumnSpacing="0"
+                  Margin="0,-6,0,0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <controls:ShadowBoxView ShadowType="Top"
+                                        Grid.ColumnSpan="5" />
+
+                <XamEffect:BorderView Grid.Row="1"
+                                      IsEnabled="{Binding CanGoBack}"
+                                      XamEffect:TouchEffect.Color="LightGray"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
+                                      XamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
+                                      XamEffect:Commands.TapParameter="Back">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static Icons:IconFont.ChevronLeft}"
+                                             Size="30"
+                                             Color="Black" />
+                        </Image.Source>
+                    </Image>
+                </XamEffect:BorderView>
+
+                <XamEffect:BorderView Grid.Column="1"
+                                      Grid.Row="1"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
+                                      IsEnabled="{Binding CanGoForward}"
+                                      XamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
+                                      XamEffect:Commands.TapParameter="Forward"
+                                      XamEffect:TouchEffect.Color="LightGray">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static Icons:IconFont.ChevronRight}"
+                                             Size="30"
+                                             Color="Black" />
+                        </Image.Source>
+                    </Image>
+                </XamEffect:BorderView>
+
+                <XamEffect:BorderView Grid.Column="2"
+                                      Grid.Row="1"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
+                                      XamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
+                                      XamEffect:Commands.TapParameter="Focus">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static Icons:IconFont.Magnify}"
+                                             Size="30"
+                                             Color="Black" />
+                        </Image.Source>
+                    </Image>
+                </XamEffect:BorderView>
+
+                <XamEffect:BorderView Grid.Column="3"
+                                      Grid.Row="1"
+                                      IsEnabled="{Binding CanGoToHomePage}"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
+                                      XamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
+                                      XamEffect:Commands.TapParameter="Home">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static Icons:IconFont.Home}"
+                                             Size="30"
+                                             Color="Black" />
+                        </Image.Source>
+                    </Image>
+                </XamEffect:BorderView>
+
+                <XamEffect:BorderView Grid.Column="4"
+                                      Grid.Row="1"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
+                                      XamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
+                                      XamEffect:Commands.TapParameter="Menu">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static Icons:IconFont.DotsVertical}"
+                                             Size="30"
+                                             Color="Black" />
+                        </Image.Source>
+                    </Image>
+                </XamEffect:BorderView>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

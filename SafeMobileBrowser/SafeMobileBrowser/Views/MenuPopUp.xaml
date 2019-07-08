@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 mc:Ignorable="d"
+                 x:Class="SafeMobileBrowser.Views.MenuPopUp"
+                 xmlns:XamEffect="clr-namespace:XamEffects;assembly=XamEffects"
+                 BackgroundColor="Transparent"
+                 HasSystemPadding="True">
+    
+    <ContentPage.Resources>
+        <Style TargetType="Grid"
+               x:Key="PopupMenuItemGridStyle">
+            <Setter Property="Opacity"
+                    Value="0.75" />
+            <Setter Property="Padding"
+                    Value="25, 5" />
+            <Setter Property="HeightRequest"
+                    Value="40" />
+            <Setter Property="RowSpacing"
+                    Value="0" />
+            <Setter Property="ColumnSpacing"
+                    Value="10" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity"
+                                        Value="0.25" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="#F6F6F6" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Label"
+               x:Key="PopupMenuItemLabelStyle">
+            <Setter Property="TextColor"
+                    Value="Black" />
+            <Setter Property="FontSize"
+                    Value="Medium" />
+            <Setter Property="VerticalOptions"
+                    Value="Center" />
+        </Style>
+        <Style TargetType="Image"
+               x:Key="PopupMenuItemIconStyle">
+            <Setter Property="HeightRequest"
+                    Value="20" />
+            <Setter Property="WidthRequest"
+                    Value="20" />
+            <Setter Property="Aspect"
+                    Value="AspectFit" />
+            <Setter Property="VerticalOptions"
+                    Value="Center" />
+        </Style>
+        <Style x:Key="PopUpBottomMenubarIconFrameStyle"
+               TargetType="XamEffect:BorderView"
+               BasedOn="{StaticResource BottomMenubarIconFrameStyle}">
+            <Setter Property="WidthRequest"
+                    Value="80" />
+            <Setter Property="Margin"
+                    Value="0" />
+            <Setter Property="HorizontalOptions"
+                    Value="CenterAndExpand" />
+        </Style>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Frame CornerRadius="10"
+               Padding="0, 10, 0, 0"
+               BackgroundColor="White"
+               HeightRequest="260"
+               WidthRequest="220"
+               VerticalOptions="EndAndExpand"
+               HorizontalOptions="EndAndExpand">
+            <StackLayout Margin="0"
+                         Spacing="0">
+                <CollectionView x:Name="MenuPopUpCollection"
+                                Margin="0"
+                                ItemsSource="{Binding PopMenuItems}"
+                                SelectedItem="{Binding SelectedPopMenuItem, Mode=TwoWay}"
+                                SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Style="{StaticResource PopupMenuItemGridStyle}"
+                                  IsEnabled="{Binding IsEnabled}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="5*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Style="{StaticResource PopupMenuItemIconStyle}">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                                         Glyph="{Binding MenuItemIcon}"
+                                                         Size="30"
+                                                         Color="Black" />
+                                    </Image.Source>
+                                </Image>
+                                <Label Grid.Column="1"
+                                       Style="{StaticResource PopupMenuItemLabelStyle}"
+                                       Text="{Binding MenuItemTitle}" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <BoxView HeightRequest="0.5"
+                         BackgroundColor="LightGray" />
+                <StackLayout Orientation="Horizontal"
+                             Padding="10"
+                             HeightRequest="40">
+
+                    <XamEffect:BorderView IsEnabled="{Binding ReloadMenuItem.IsEnabled}"
+                                          XamEffect:TouchEffect.Color="LightGray"
+                                          Style="{StaticResource PopUpBottomMenubarIconFrameStyle}"
+                                          XamEffect:Commands.Tap="{Binding RefreshWebViewCommand}"
+                                          Margin="0"
+                                          WidthRequest="80"
+                                          HorizontalOptions="CenterAndExpand">
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                                 Glyph="{Binding ReloadMenuItem.MenuItemIcon}"
+                                                 Size="25"
+                                                 Color="Black" />
+                            </Image.Source>
+                        </Image>
+                    </XamEffect:BorderView>
+
+                    <XamEffect:BorderView IsEnabled="{Binding BookmarkMenuItem.IsEnabled}"
+                                          XamEffect:TouchEffect.Color="LightGray"
+                                          Style="{StaticResource PopUpBottomMenubarIconFrameStyle}"
+                                          XamEffect:Commands.Tap="{Binding ManageBookmarkCommand}">
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                                 Glyph="{Binding BookmarkMenuItem.MenuItemIcon}"
+                                                 Size="25"
+                                                 Color="Black" />
+                            </Image.Source>
+                        </Image>
+                    </XamEffect:BorderView>
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+    </ContentPage.Content>
+</pages:PopupPage>

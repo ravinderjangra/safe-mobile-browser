@@ -1,53 +1,80 @@
-﻿using System;
+﻿using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.Controls
 {
-    public class HybridWebView : View
+    public class HybridWebView : WebView
     {
-        private Action<string> action;
-
-        public static readonly BindableProperty UriProperty = BindableProperty.Create(
-            nameof(Uri),
-            typeof(string),
+        public static readonly BindableProperty GoBackCommandProperty = BindableProperty.Create(
+            nameof(GoBackCommand),
+            typeof(ICommand),
             typeof(HybridWebView),
-            default(string));
+            null,
+            BindingMode.OneWayToSource);
 
-        public static readonly BindableProperty IsLoadingProperty = BindableProperty.Create(
-            nameof(IsLoading),
-            typeof(bool),
+        public static readonly BindableProperty GoForwardCommandProperty = BindableProperty.Create(
+            nameof(GoForwardCommand),
+            typeof(ICommand),
             typeof(HybridWebView),
-            default(bool));
+            null,
+            BindingMode.OneWayToSource);
 
-        public bool IsLoading
+        public static readonly BindableProperty ReloadCommandProperty = BindableProperty.Create(
+            nameof(ReloadCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty NavigatingCommandProperty = BindableProperty.Create(
+            nameof(NavigatingCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty NavigatedCommandProperty = BindableProperty.Create(
+            nameof(NavigatedCommand),
+            typeof(ICommand),
+            typeof(HybridWebView),
+            null,
+            BindingMode.OneWayToSource);
+
+        public ICommand GoBackCommand
         {
-            get { return (bool)GetValue(IsLoadingProperty); }
-            set { SetValue(IsLoadingProperty, value); }
+            get { return (ICommand)GetValue(GoBackCommandProperty); }
+            set { SetValue(GoBackCommandProperty, value); }
         }
 
-        public string Uri
+        public ICommand GoForwardCommand
         {
-            get { return (string)GetValue(UriProperty); }
-            set { SetValue(UriProperty, value); }
+            get { return (ICommand)GetValue(GoForwardCommandProperty); }
+            set { SetValue(GoForwardCommandProperty, value); }
         }
 
-        public void RegisterAction(Action<string> callback)
+        public ICommand ReloadCommand
         {
-            action = callback;
+            get { return (ICommand)GetValue(ReloadCommandProperty); }
+            set { SetValue(ReloadCommandProperty, value); }
         }
 
-        public void Cleanup()
+        public ICommand NavigatingCommand
         {
-            action = null;
+            get { return (ICommand)GetValue(NavigatedCommandProperty); }
+            set { SetValue(NavigatedCommandProperty, value); }
         }
 
-        public void InvokeAction(string data)
+        public ICommand NavigatedCommand
         {
-            if (action == null || data == null)
-            {
-                return;
-            }
-            action.Invoke(data);
+            get { return (ICommand)GetValue(NavigatedCommandProperty); }
+            set { SetValue(NavigatedCommandProperty, value); }
+        }
+
+        public HybridWebView()
+        {
+            GoBackCommand = new Command(() => GoBack());
+            GoForwardCommand = new Command(() => GoForward());
+            ReloadCommand = new Command(() => Reload());
         }
     }
 }

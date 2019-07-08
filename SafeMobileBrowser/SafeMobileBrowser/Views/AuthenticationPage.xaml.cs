@@ -1,16 +1,15 @@
 ﻿using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using SafeMobileBrowser.ViewModels;
-using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace SafeMobileBrowser.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AuthenticationPage : ContentPage
     {
         AuthenticationPageViewMode _viewModel;
+
         public AuthenticationPage()
         {
             InitializeComponent();
@@ -25,27 +24,42 @@ namespace SafeMobileBrowser.Views
 
             BindingContext = _viewModel;
 
-            MessagingCenter.Subscribe<AuthenticationService, string>(this, MessageCenterConstants.Authenticated,
-                async (sender, serializedconfig) =>
+            MessagingCenter.Subscribe<AuthenticationService, string>(
+                this,
+                MessageCenterConstants.Authenticated,
+                async (sender, encodedResponse) =>
                 {
                     _viewModel.ProgressText = "Authentication successful";
-                    var storeResponse = await DisplayAlert("Store authentication response",
+                    var storeResponse = await DisplayAlert(
+                        "Store authentication response",
                         "Do you want to store auth response for future use.",
                         "Yes",
                         "No");
                     if (storeResponse)
                     {
-                        await CredentialCacheService.Store(serializedconfig);
+                        await CredentialCacheService.Store(encodedResponse);
                     }
                     Application.Current.MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White };
                 });
-            MessagingCenter.Subscribe<AuthenticationService>(this, MessageCenterConstants.Authenticated,
+
+            MessagingCenter.Subscribe<AuthenticationService>(
+                this,
+                MessageCenterConstants.Authenticated,
                 (sender) => Application.Current.MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White });
-            MessagingCenter.Subscribe<AuthenticationPageViewMode>(this, MessageCenterConstants.Authenticated,
+
+            MessagingCenter.Subscribe<AuthenticationPageViewMode>(
+                this,
+                MessageCenterConstants.Authenticated,
                 (sender) => Application.Current.MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White });
-            MessagingCenter.Subscribe<AuthenticationService>(this, MessageCenterConstants.ProcessingAuthResponse,
+
+            MessagingCenter.Subscribe<AuthenticationService>(
+                this,
+                MessageCenterConstants.ProcessingAuthResponse,
                 (sender) => _viewModel.ProgressText = "Process authentication response");
-            MessagingCenter.Subscribe<AuthenticationService>(this, MessageCenterConstants.AuthenticationFailed,
+
+            MessagingCenter.Subscribe<AuthenticationService>(
+                this,
+                MessageCenterConstants.AuthenticationFailed,
                 async (sender) =>
                 {
                     await Application.Current.MainPage.DisplayAlert("Authentication Failed", "Unable to authenticate", "OK");

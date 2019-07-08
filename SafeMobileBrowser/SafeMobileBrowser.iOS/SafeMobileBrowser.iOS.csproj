@@ -67,19 +67,19 @@
   <ItemGroup>
     <Compile Include="ControlRenderers\CustomEntryRenderer.cs" />
     <Compile Include="ControlRenderers\HybridWebViewRenderer.cs" />
-    <Compile Include="LinkFinder.cs" />
+    <Compile Include="ControlRenderers\SafeSchemaHandler.cs" />
+    <Compile Include="ControlRenderers\ShadowBoxViewRenderer.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="..\SafeMobileBrowser\AssetFiles\log.toml">
       <Link>log.toml</Link>
     </None>
-    <None Include="..\SafeMobileBrowser\AssetFiles\MockVault">
-      <Link>MockVault</Link>
-    </None>
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
-    <Compile Include="PlatformServices\FileTransferService.cs" />
+    <Compile Include="PlatformServices\PlatformService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <BundleResource Include="Resources\materialdesignicons-webfont.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -124,15 +124,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon20.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <BundleResource Include="Resources\tab_about.png" />
-    <BundleResource Include="Resources\tab_about%402x.png" />
-    <BundleResource Include="Resources\tab_about%403x.png" />
-    <BundleResource Include="Resources\tab_feed.png" />
-    <BundleResource Include="Resources\tab_feed%402x.png" />
-    <BundleResource Include="Resources\tab_feed%403x.png" />
-    <BundleResource Include="Resources\xamarin_logo.png" />
-    <BundleResource Include="Resources\xamarin_logo%402x.png" />
-    <BundleResource Include="Resources\xamarin_logo%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
@@ -143,11 +134,11 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs">
+      <Version>7.0.4</Version>
+    </PackageReference>
     <PackageReference Include="MaidSafe.SafeApp">
       <Version>0.2.1</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>1.14.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
       <Version>1.14.0</Version>
@@ -155,8 +146,8 @@
     <PackageReference Include="MimeMapping">
       <Version>1.0.1.12</Version>
     </PackageReference>
-    <PackageReference Include="SlideOverKit">
-      <Version>2.1.6.2</Version>
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>1.1.5.188</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.1.0</Version>
@@ -164,6 +155,9 @@
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.250467-pre7" />
     <PackageReference Include="Xamarin.Forms.Visual.Material">
       <Version>4.0.0.250467-pre7</Version>
+    </PackageReference>
+    <PackageReference Include="XamEffects">
+      <Version>1.6.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -174,9 +168,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\menu.png" />
+    <BundleResource Include="Resources\safenetworklogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\refresh.png" />
+    <BundleResource Include="..\SafeMobileBrowser\AssetFiles\index.html">
+      <Link>Resources\index.html</Link>
+    </BundleResource>
   </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
 </Project>

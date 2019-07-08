@@ -1,37 +1,102 @@
-﻿using SafeMobileBrowser.Models;
-using SafeMobileBrowser.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using SafeMobileBrowser.Helpers;
+using SafeMobileBrowser.Models;
+using SafeMobileBrowser.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace SafeMobileBrowser.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
         List<string> _websiteList;
         HomePageViewModel _viewModel;
+
         public HomePage()
         {
             InitializeComponent();
+
+            HybridWebViewControl.Navigating += (s, e) =>
+            {
+                _viewModel.WebViewNavigatingCommand.Execute(e);
+            };
+
+            HybridWebViewControl.Navigated += (s, e) =>
+            {
+                _viewModel.WebViewNavigatedCommand.Execute(e);
+            };
+
+            AddressBarEntry.Focused += EntryFocused;
+            AddressBarEntry.Unfocused += EntryUnfocused;
+            AddressBarEntry.TextChanged += TextChanged;
+
+            MessagingCenter.Subscribe<BookmarksModalPageViewModel, string>(
+                this,
+                MessageCenterConstants.BookmarkUrl,
+                (sender, args) =>
+                {
+                    _viewModel.LoadUrl(args);
+                });
+            MessagingCenter.Subscribe<MenuPopUpViewModel>(
+                this,
+                MessageCenterConstants.ReloadMessage,
+                (sender) =>
+                {
+                    _viewModel.IsNavigating = true;
+                    _viewModel.ReloadCommand.Execute(null);
+                });
+            MessagingCenter.Subscribe<HomePageViewModel>(
+               this,
+               MessageCenterConstants.ResetHomePage,
+               sender =>
+               {
+                   HybridWebViewControl.EvaluateJavaScriptAsync("javascript: resetHomePage()");
+               });
+            MessagingCenter.Subscribe<HomePageViewModel>(
+                this,
+                MessageCenterConstants.GoToHomePage,
+                (sender) =>
+                {
+                    HybridWebViewControl.Source = $"{_viewModel.BaseUrl}index.html";
+                });
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
             if (_viewModel == null)
-                _viewModel = new HomePageViewModel();
+            {
+                _viewModel = new HomePageViewModel(Navigation);
+                BindingContext = _viewModel;
+            }
 
-            BindingContext = _viewModel;
+            if (App.AppSession == null)
+                await _viewModel.InitilizeSessionAsync();
 
-            InitilizeTapGestures();
-            AddWebsiteList();
+            if (Device.RuntimePlatform == Device.Android)
+                AddWebsiteList();
+
             AddressBarEntry.Completed += (s, e) =>
             {
                 _viewModel.PageLoadCommand.Execute(null);
             };
+        }
+
+        ~HomePage()
+        {
+            MessagingCenter.Unsubscribe<HomePageViewModel>(
+                this,
+                MessageCenterConstants.GoToHomePage);
+            MessagingCenter.Unsubscribe<BookmarksModalPageViewModel, string>(
+                this,
+                MessageCenterConstants.BookmarkUrl);
+            MessagingCenter.Unsubscribe<MenuPopUpViewModel>(
+                this,
+                MessageCenterConstants.ReloadMessage);
+            MessagingCenter.Unsubscribe<HomePageViewModel>(
+                this,
+                MessageCenterConstants.ResetHomePage);
         }
 
         private void AddWebsiteList()
@@ -40,6 +105,7 @@ namespace SafeMobileBrowser.Views
                 _websiteList = WebsiteList.GetWebsiteList();
 
             if (ToolbarItems.Count == 0)
+            {
                 foreach (var url in _websiteList)
                 {
                     var item = new ToolbarItem
@@ -51,37 +117,47 @@ namespace SafeMobileBrowser.Views
                     item.SetBinding(MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
                     ToolbarItems.Add(item);
                 }
+            }
         }
 
-        private void InitilizeTapGestures()
+        public void ClearAddressBar(object sender, EventArgs args)
         {
-            //var tabCountFrameTapGestureRecognizer = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
-            //tabCountFrameTapGestureRecognizer.Tapped += (s, e) =>
-            //{
-            //    if (this.SlideMenu.IsShown)
-            //    {
-            //        this.HideMenu();
-            //    }
-            //    else
-            //    {
-            //        this.ShowMenu();
-            //    }
-            //};
-            //TabCountFrame.GestureRecognizers.Add(tabCountFrameTapGestureRecognizer);
+            AddressBarEntry.Text = string.Empty;
+            AddressBarEntry.Focus();
+        }
 
-            //var refreshTapGestureRecognizer = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
-            //refreshTapGestureRecognizer.Tapped += (s, e) =>
-            //{
+        private void TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (e.NewTextValue.Length > 0 && AddressBarEntry.IsFocused)
+            {
+                AddressBarButton.IsVisible = true;
+            }
+            else
+            {
+                AddressBarButton.IsVisible = false;
+            }
+        }
 
-            //};
-            //AddressBarButton.GestureRecognizers.Add(refreshTapGestureRecognizer);
+        private void EntryUnfocused(object sender, FocusEventArgs e)
+        {
+            AddressBarButton.IsVisible = false;
+            AddressBarEntry.TranslateTo(0, 0, 250, Easing.CubicInOut);
+            SafeLabel.TranslateTo(0, 0, 250, Easing.CubicInOut);
+            SafeLabel.FadeTo(100, 250);
+            AddressBarEntry.WidthRequest -= SafeLabel.WidthRequest;
+        }
 
-            //var menuTapGestureRecognizer = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
-            //menuTapGestureRecognizer.Tapped += (s, e) =>
-            //{
-
-            //};
-            //SettingsButton.GestureRecognizers.Add(menuTapGestureRecognizer);
+        private void EntryFocused(object sender, FocusEventArgs e)
+        {
+            SafeLabel.FadeTo(0, 250);
+            SafeLabel.TranslateTo(-SafeLabel.Width, 0, 250, Easing.CubicIn);
+            AddressBarEntry.TranslateTo(-SafeLabel.Width, 0, 250, Easing.CubicIn);
+            AddressBarEntry.WidthRequest += SafeLabel.WidthRequest;
+            if (AddressBarEntry.Text.Length > 0)
+            {
+                AddressBarEntry.SelectionLength = AddressBarEntry.Text.Length;
+                AddressBarButton.IsVisible = true;
+            }
         }
     }
 }

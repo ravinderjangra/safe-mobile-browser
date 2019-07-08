@@ -1,17 +1,36 @@
 ﻿using SafeApp;
 using SafeMobileBrowser.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser
 {
     public partial class App : Application
     {
-        public static Session AppSession;
+        public static Session AppSession { get; set; }
+
+        public static bool IsConnectedToInternet { get; set; }
+
         public App()
         {
             InitializeComponent();
 
-            MainPage = new AuthenticationPage();
+            MainPage = new NavigationPage(new HomePage()) { BarBackgroundColor = Color.White };
+            IsConnectedToInternet = Connectivity.NetworkAccess == NetworkAccess.Internet;
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+        }
+
+        void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            if (e.NetworkAccess == NetworkAccess.Internet)
+            {
+                IsConnectedToInternet = true;
+                AppSession.ReconnectAsync();
+            }
+            else
+            {
+                IsConnectedToInternet = false;
+            }
         }
 
         protected override void OnStart()

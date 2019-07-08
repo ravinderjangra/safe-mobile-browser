@@ -11,19 +11,25 @@ namespace SafeMobileBrowser.WebFetchImplementation
         {
         }
 
-        public WebFetchException(string message) : base(message)
+        public WebFetchException(string message)
+            : base(message)
         {
         }
 
-        public WebFetchException(string message, Exception inner) : base(message, inner)
+        public WebFetchException(string message, Exception inner)
+            : base(message, inner)
         {
         }
 
-        public WebFetchException(SerializationInfo info, StreamingContext context) : base(info, context) { }
-
-        public WebFetchException(int ErrorCode, string message) : base(message)
+        public WebFetchException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
-            this.ErrorCode = ErrorCode;
+        }
+
+        public WebFetchException(int errorCode, string message)
+            : base(message)
+        {
+            ErrorCode = errorCode;
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿using SafeApp;
-using SafeMobileBrowser.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using SafeApp;
+using SafeMobileBrowser.Models;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.Services
 {
-    public class DeviceServices
+    public static class DeviceServices
     {
         public static async Task TransferAssetFiles()
         {
@@ -16,12 +16,6 @@ namespace SafeMobileBrowser.Services
             {
                 var files = new List<AssetFileTransferModel>
                 {
-                    //TODO: Update code to transfer the mockvault file
-                    //new AssetFileTransferModel()
-                    //{
-                    //    FileName = "MockVault",
-                    //    TransferLocation = Xamarin.Essentials.FileSystem.CacheDirectory
-                    //},
                     new AssetFileTransferModel()
                     {
                         FileName = "log.toml",
@@ -29,7 +23,7 @@ namespace SafeMobileBrowser.Services
                     }
                 };
 
-                var fileTransferService = DependencyService.Get<IFileTransferService>();
+                var fileTransferService = DependencyService.Get<IPlatformService>();
                 await fileTransferService.TransferAssetsAsync(files);
                 await Session.SetAdditionalSearchPathAsync(fileTransferService.ConfigFilesPath);
                 await Session.InitLoggingAsync();

@@ -1,7 +1,7 @@
-﻿using Foundation;
-using SafeMobileBrowser.Services;
-using System;
+﻿using System;
 using System.Diagnostics;
+using Foundation;
+using SafeMobileBrowser.Services;
 using UIKit;
 using Xamarin.Forms;
 
@@ -14,11 +14,11 @@ namespace SafeMobileBrowser.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            Forms.SetFlags("CollectionView_Experimental");
+            Rg.Plugins.Popup.Popup.Init();
+            XamEffects.iOS.Effects.Init();
             global::Xamarin.Forms.Forms.Init();
-            global::Xamarin.Forms.FormsMaterial.Init();
-
             LoadApplication(new App());
-
             return base.FinishedLaunching(app, options);
         }
 
