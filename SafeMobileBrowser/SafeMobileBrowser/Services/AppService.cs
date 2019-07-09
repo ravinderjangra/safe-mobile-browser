@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using SafeApp;
 using SafeApp.Utilities;
@@ -13,25 +12,16 @@ namespace SafeMobileBrowser.Services
 {
     public class AppService
     {
-        private static MDataInfo _accessContainerMdinfo;
-        private static Session _session;
+        private Session _session;
+        private MDataInfo _accessContainerMdinfo;
 
-        public Session Session => _session;
+        public bool IsSessionAvailable => _session != null;
 
-        public bool IsSessionAvailable => _session == null ? false : true;
+        public bool IsAccessContainerMDataInfoAvailable => !_accessContainerMdinfo.Equals(default(MDataInfo));
 
-        public bool IsAccessContainerMDataInfoAvailable => _accessContainerMdinfo.Equals(default(MDataInfo)) ? false : true;
-
-        public static void InitialiseSession(Session session)
+        public void InitialiseSession(Session session)
         {
-            try
-            {
-                _session = session;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
+            _session = session;
         }
 
         public async Task<MDataInfo> GetAccessContainerMdataInfoAsync()
@@ -42,11 +32,11 @@ namespace SafeMobileBrowser.Services
             }
             catch (FfiException ex)
             {
-                Debug.WriteLine("Error : " + ex.Message);
+                Logger.Error(ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error : " + ex.Message);
+                Logger.Error(ex);
                 throw;
             }
             return _accessContainerMdinfo;

@@ -198,4 +198,4 @@
             </Grid>
         </StackLayout>
     </ContentPage.Content>
-</ContentPage>
+</local:BaseContentPage>

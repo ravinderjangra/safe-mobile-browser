@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace SafeMobileBrowser.Views
 {
-    public partial class HomePage : ContentPage
+    public partial class HomePage : BaseContentPage<HomePageViewModel>
     {
         List<string> _websiteList;
         HomePageViewModel _viewModel;
@@ -29,6 +29,7 @@ namespace SafeMobileBrowser.Views
             AddressBarEntry.Focused += EntryFocused;
             AddressBarEntry.Unfocused += EntryUnfocused;
             AddressBarEntry.TextChanged += TextChanged;
+            AddressBarEntry.Completed += AddressBarEntryCompleted;
 
             MessagingCenter.Subscribe<BookmarksModalPageViewModel, string>(
                 this,
@@ -61,26 +62,17 @@ namespace SafeMobileBrowser.Views
                 });
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
             if (_viewModel == null)
             {
-                _viewModel = new HomePageViewModel(Navigation);
-                BindingContext = _viewModel;
+                _viewModel = (HomePageViewModel)BindingContext;
             }
-
-            if (App.AppSession == null)
-                await _viewModel.InitilizeSessionAsync();
 
             if (Device.RuntimePlatform == Device.Android)
                 AddWebsiteList();
-
-            AddressBarEntry.Completed += (s, e) =>
-            {
-                _viewModel.PageLoadCommand.Execute(null);
-            };
         }
 
         ~HomePage()
@@ -114,10 +106,15 @@ namespace SafeMobileBrowser.Views
                         Text = url,
                         CommandParameter = url
                     };
-                    item.SetBinding(MenuItem.CommandProperty, new Binding("ToolbarItemCommand"));
+                    item.SetBinding(MenuItem.CommandProperty, new Binding("PageLoadCommand"));
                     ToolbarItems.Add(item);
                 }
             }
+        }
+
+        private void AddressBarEntryCompleted(object sender, EventArgs e)
+        {
+            _viewModel.PageLoadCommand.Execute(null);
         }
 
         public void ClearAddressBar(object sender, EventArgs args)

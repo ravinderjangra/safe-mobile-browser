@@ -3,15 +3,15 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
-using Rg.Plugins.Popup.Extensions;
 using SafeMobileBrowser.Helpers;
+using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
 using SafeMobileBrowser.Views;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
-    public class HomePageViewModel : BaseViewModel
+    public class HomePageViewModel : BaseNavigationViewModel
     {
         public static string CurrentUrl { get; private set; }
 
@@ -22,8 +22,6 @@ namespace SafeMobileBrowser.ViewModels
         public bool IsSessionAvailable => App.AppSession != null;
 
         public ICommand PageLoadCommand { get; private set; }
-
-        public ICommand ToolbarItemCommand { get; private set; }
 
         public Command BottomNavbarTapCommand { get; set; }
 
@@ -41,19 +39,14 @@ namespace SafeMobileBrowser.ViewModels
 
         public ICommand WebViewNavigatedCommand { get; set; }
 
-        public ICommand MenuCommand { get; set; }
+        public AsyncCommand MenuCommand { get; set; }
 
         private bool _canGoBack;
 
         public bool CanGoBack
         {
             get => _canGoBack;
-
-            set
-            {
-                _canGoBack = value;
-                OnPropertyChanged();
-            }
+            set => RaiseAndUpdate(ref _canGoBack, value);
         }
 
         private bool _canGoForward;
@@ -61,12 +54,7 @@ namespace SafeMobileBrowser.ViewModels
         public bool CanGoForward
         {
             get => _canGoForward;
-
-            set
-            {
-                _canGoForward = value;
-                OnPropertyChanged();
-            }
+            set => RaiseAndUpdate(ref _canGoForward, value);
         }
 
         private bool _isNavigating;
@@ -74,20 +62,15 @@ namespace SafeMobileBrowser.ViewModels
         public bool IsNavigating
         {
             get => _isNavigating;
-
-            set
-            {
-                _isNavigating = value;
-                OnPropertyChanged();
-            }
+            set => RaiseAndUpdate(ref _isNavigating, value);
         }
 
         private bool _pageLoading;
 
         public bool IsPageLoading
         {
-            get { return _pageLoading; }
-            set { SetProperty(ref _pageLoading, value); }
+            get => _pageLoading;
+            set => RaiseAndUpdate(ref _pageLoading, value);
         }
 
         private string _url;
@@ -95,8 +78,7 @@ namespace SafeMobileBrowser.ViewModels
         public string Url
         {
             get => _url;
-
-            set => SetProperty(ref _url, value);
+            set => RaiseAndUpdate(ref _url, value);
         }
 
         private string _addressbarText;
@@ -106,7 +88,7 @@ namespace SafeMobileBrowser.ViewModels
             get => _addressbarText;
             set
             {
-                SetProperty(ref _addressbarText, value);
+                RaiseAndUpdate(ref _addressbarText, value);
                 var address = string.IsNullOrWhiteSpace(value);
                 if (!address)
                 {
@@ -118,7 +100,7 @@ namespace SafeMobileBrowser.ViewModels
                     CurrentUrl = CurrentTitle = value;
                     CanGoToHomePage = false;
                 }
-                OnPropertyChanged(nameof(CanGoToHomePage));
+                Raise(nameof(CanGoToHomePage));
             }
         }
 
@@ -126,13 +108,9 @@ namespace SafeMobileBrowser.ViewModels
 
         private MenuPopUp _menuPopUp;
 
-        public INavigation Navigation { get; set; }
-
-        public HomePageViewModel(INavigation navigation)
+        public HomePageViewModel()
         {
-            Navigation = navigation;
             PageLoadCommand = new Command<string>(LoadUrl);
-            ToolbarItemCommand = new Command<string>(LoadUrl);
             BottomNavbarTapCommand = new Command<string>(OnTapped);
             WebViewNavigatingCommand = new Command<WebNavigatingEventArgs>(OnNavigating);
             WebViewNavigatedCommand = new Command<WebNavigatedEventArgs>(OnNavigated);
@@ -145,17 +123,17 @@ namespace SafeMobileBrowser.ViewModels
             MessagingCenter.Send(this, MessageCenterConstants.GoToHomePage);
         }
 
-        private async void ShowPopUpMenu()
+        private async Task ShowPopUpMenu()
         {
             try
             {
                 if (_menuPopUp == null)
                     _menuPopUp = new MenuPopUp();
-                await Navigation.PushPopupAsync(_menuPopUp);
+                await Navigation.PushPopUpAsync(_menuPopUp);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -198,9 +176,12 @@ namespace SafeMobileBrowser.ViewModels
         {
             try
             {
-                using (UserDialogs.Instance.Loading("Connecting to SAFE Network"))
+                if (!AppService.IsSessionAvailable)
                 {
-                    await AuthService.ConnectUsingHardcodedResponseAsync();
+                    using (UserDialogs.Instance.Loading("Connecting to SAFE Network"))
+                    {
+                        await AuthService.ConnectUsingHardcodedResponseAsync();
+                    }
                 }
             }
             catch (Exception ex)
@@ -229,7 +210,7 @@ namespace SafeMobileBrowser.ViewModels
                     GoToHomePage();
                     break;
                 case "Menu":
-                    ShowPopUpMenu();
+                    MenuCommand.Execute(null);
                     break;
                 default:
                     break;

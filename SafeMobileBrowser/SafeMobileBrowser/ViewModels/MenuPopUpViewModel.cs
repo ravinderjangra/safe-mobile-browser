@@ -9,41 +9,34 @@ using Rg.Plugins.Popup.Extensions;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
-using SafeMobileBrowser.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
-    public class MenuPopUpViewModel : BaseViewModel
+    public class MenuPopUpViewModel : BaseNavigationViewModel
     {
-        BookmarksModalPage _bookmarksModalPage;
-        SettingsModalPage _settingsModalPage;
+        BookmarksModalPageViewModel _bookmarksModalPageViewModel;
+        SettingsModalPageViewModel _settingsModalPageViewModel;
 
-        public INavigation Navigation { get; set; }
+        public AsyncCommand RefreshWebViewCommand { get; set; }
+
+        public AsyncCommand ManageBookmarkCommand { get; set; }
 
         private bool _checkIfBookmarked;
 
         public bool CheckIfAlreadyAvailableInBookmark
         {
             get => _checkIfBookmarked;
-            set => SetProperty(ref _checkIfBookmarked, value);
+            set => RaiseAndUpdate(ref _checkIfBookmarked, value);
         }
-
-        public ICommand RefreshWebViewCommand { get; set; }
-
-        public ICommand ManageBookmarkCommand { get; set; }
 
         private ObservableCollection<PopUpMenuItem> _popMenuItems;
 
         public ObservableCollection<PopUpMenuItem> PopMenuItems
         {
             get => _popMenuItems;
-
-            set
-            {
-                SetProperty(ref _popMenuItems, value);
-            }
+            set => RaiseAndUpdate(ref _popMenuItems, value);
         }
 
         private PopUpMenuItem _reloadMenuItem;
@@ -51,11 +44,7 @@ namespace SafeMobileBrowser.ViewModels
         public PopUpMenuItem ReloadMenuItem
         {
             get => _reloadMenuItem;
-
-            set
-            {
-                SetProperty(ref _reloadMenuItem, value);
-            }
+            set => RaiseAndUpdate(ref _reloadMenuItem, value);
         }
 
         private PopUpMenuItem _bookmarkMenuItem;
@@ -63,11 +52,7 @@ namespace SafeMobileBrowser.ViewModels
         public PopUpMenuItem BookmarkMenuItem
         {
             get => _bookmarkMenuItem;
-
-            set
-            {
-                SetProperty(ref _bookmarkMenuItem, value);
-            }
+            set => RaiseAndUpdate(ref _bookmarkMenuItem, value);
         }
 
         private PopUpMenuItem _selectedPopMenuItem;
@@ -78,7 +63,7 @@ namespace SafeMobileBrowser.ViewModels
 
             set
             {
-                SetProperty(ref _selectedPopMenuItem, value);
+                RaiseAndUpdate(ref _selectedPopMenuItem, value);
                 if (value != null)
                 {
                     OnPopupMenuSelection();
@@ -86,7 +71,7 @@ namespace SafeMobileBrowser.ViewModels
             }
         }
 
-        public MenuPopUpViewModel(INavigation navigation)
+        public MenuPopUpViewModel()
         {
             Navigation = navigation;
             RefreshWebViewCommand = new Command(RefreshWebView);
@@ -94,7 +79,7 @@ namespace SafeMobileBrowser.ViewModels
             InitaliseMenuItems();
         }
 
-        private void AddOrRemoveBookmark()
+        private async Task AddOrRemoveBookmarkAsync()
         {
             if (!App.IsConnectedToInternet)
             {
@@ -102,16 +87,12 @@ namespace SafeMobileBrowser.ViewModels
                 return;
             }
             if (CheckIfAlreadyAvailableInBookmark)
-            {
-                RemoveBookmark();
-            }
+                await RemoveBookmarkAsync();
             else
-            {
-                AddBookmarkToSAFE();
-            }
+                await AddBookmarkToSAFEAsync();
         }
 
-        private void RemoveBookmark()
+        private async Task RemoveBookmarkAsync()
         {
             var currentUrl = HomePageViewModel.CurrentUrl.Replace("https", "safe");
             if (!string.IsNullOrWhiteSpace(currentUrl) && AppService.IsSessionAvailable)
@@ -133,13 +114,10 @@ namespace SafeMobileBrowser.ViewModels
                     }
                 });
             }
-            Task.Run(async () =>
-            {
-                await Navigation.PopPopupAsync();
-            });
+            await Navigation.PopPopupAsync(true);
         }
 
-        private void AddBookmarkToSAFE()
+        private async Task AddBookmarkToSAFEAsync()
         {
             var currentUrl = HomePageViewModel.CurrentUrl;
             if (!string.IsNullOrWhiteSpace(currentUrl) && AppService.IsSessionAvailable)
@@ -161,10 +139,7 @@ namespace SafeMobileBrowser.ViewModels
                     }
                 });
             }
-            Task.Run(async () =>
-            {
-                await Navigation.PopPopupAsync();
-            });
+            await Navigation.PopPopupAsync(true);
         }
 
         internal void UpdateMenuItemsStatus()
@@ -205,7 +180,7 @@ namespace SafeMobileBrowser.ViewModels
             if (AppService.IsSessionAvailable && !string.IsNullOrWhiteSpace(HomePageViewModel.CurrentUrl))
             {
                 var currentUrl = HomePageViewModel.CurrentUrl.Replace("https", "safe");
-                CheckIfAlreadyAvailableInBookmark = BookmarkManager.CheckIfBookmarkAvailable(currentUrl);
+                CheckIfAlreadyAvailableInBookmark = BookmarkService.CheckIfBookmarkAvailable(currentUrl);
             }
             else
             {
@@ -213,7 +188,7 @@ namespace SafeMobileBrowser.ViewModels
             }
         }
 
-        private void RefreshWebView(object obj)
+        private async Task RefreshWebViewAsync(object obj)
         {
             if (!App.IsConnectedToInternet)
             {
@@ -227,10 +202,7 @@ namespace SafeMobileBrowser.ViewModels
                     this,
                     MessageCenterConstants.ReloadMessage);
             }
-            Task.Run(async () =>
-            {
-                await Navigation.PopPopupAsync();
-            });
+            await Navigation.PopPopupAsync(true);
         }
 
         internal void InitaliseMenuItems()
@@ -255,16 +227,16 @@ namespace SafeMobileBrowser.ViewModels
                 switch (selectedMenuItemTitle)
                 {
                     case "Settings":
-                        if (_settingsModalPage == null)
-                            _settingsModalPage = new SettingsModalPage();
-                        await Navigation.PushModalAsync(_settingsModalPage);
+                        if (_settingsModalPageViewModel == null)
+                            _settingsModalPageViewModel = new SettingsModalPageViewModel();
+                        await Navigation.PushModalAsync(_settingsModalPageViewModel);
                         break;
                     case "Bookmarks":
                         if (AppService.IsSessionAvailable)
                         {
-                            if (_bookmarksModalPage == null)
-                                _bookmarksModalPage = new BookmarksModalPage();
-                            await Navigation.PushModalAsync(_bookmarksModalPage);
+                            if (_bookmarksModalPageViewModel == null)
+                                _bookmarksModalPageViewModel = new BookmarksModalPageViewModel();
+                            await Navigation.PushModalAsync(_bookmarksModalPageViewModel);
                         }
                         else
                         {
@@ -293,6 +265,7 @@ namespace SafeMobileBrowser.ViewModels
             }
             catch (Exception ex)
             {
+                Logger.Error(ex);
                 MessagingCenter.Send(
                     this,
                     MessageCenterConstants.DisplayAlertMessage,
@@ -300,8 +273,8 @@ namespace SafeMobileBrowser.ViewModels
                 Debug.WriteLine(ex);
             }
 
-            // Todo: delay in popup. Needs refactoring
-            await Navigation.PopPopupAsync();
+            // TODO: delay in popup. Needs refactoring
+            await Navigation.PopPopupAsync(true);
             SelectedPopMenuItem = null;
         }
     }

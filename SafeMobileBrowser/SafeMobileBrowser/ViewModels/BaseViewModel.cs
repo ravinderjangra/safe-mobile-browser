@@ -1,10 +1,12 @@
-﻿using SafeMobileBrowser.Models;
+﻿using System;
+using System.Threading.Tasks;
+using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
-    public class BaseViewModel : ObservableObject
+    public class BaseViewModel : BaseNotifyPropertyChanged, IDisposable
     {
         public BookmarkManager BookmarkManager => DependencyService.Get<BookmarkManager>();
 
@@ -12,12 +14,30 @@ namespace SafeMobileBrowser.ViewModels
 
         public AuthenticationService AuthService => DependencyService.Get<AuthenticationService>();
 
-        bool isBusy = false;
+        bool _isBusy;
 
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            get => _isBusy;
+            set
+            {
+                RaiseAndUpdate(ref _isBusy, value);
+                Raise(nameof(IsNotBusy));
+            }
+        }
+
+        public bool IsNotBusy => !IsBusy;
+
+        public virtual Task InitAsync() => Task.FromResult(true);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
         }
     }
 }

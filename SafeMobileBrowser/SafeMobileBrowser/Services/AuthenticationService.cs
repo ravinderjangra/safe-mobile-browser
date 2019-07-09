@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using SafeApp.Utilities;
 using SafeMobileBrowser.Helpers;
-using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
 using Xamarin.Forms;
 
@@ -51,7 +50,7 @@ namespace SafeMobileBrowser.Services
             }
         }
 #else
-        public static async Task<(uint, string)> GenerateEncodedAuthReqAsync()
+        public async Task<(uint, string)> GenerateEncodedAuthReqAsync()
         {
             // Create an AuthReq
             var authReq = new AuthReq
@@ -71,7 +70,7 @@ namespace SafeMobileBrowser.Services
             return await Session.EncodeAuthReqAsync(authReq);
         }
 
-        public static async Task RequestNonMockAuthenticationAsync(bool isUnregistered = false)
+        public async Task RequestNonMockAuthenticationAsync(bool isUnregistered = false)
         {
             try
             {
@@ -93,7 +92,7 @@ namespace SafeMobileBrowser.Services
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
         }
 
@@ -102,7 +101,7 @@ namespace SafeMobileBrowser.Services
             try
             {
                 MessagingCenter.Send(this, MessageCenterConstants.ProcessingAuthResponse);
-                var encodedResponse = RequestHelpers.GetRequestData(url);
+                var encodedResponse = UrlFormat.GetRequestData(url);
                 var decodeResponse = await Session.DecodeIpcMessageAsync(encodedResponse);
                 var decodedResponseType = decodeResponse.GetType();
                 if (decodedResponseType == typeof(UnregisteredIpcMsg))
@@ -113,7 +112,7 @@ namespace SafeMobileBrowser.Services
                         MessagingCenter.Send(this, MessageCenterConstants.Authenticated, encodedResponse);
                     }
                 }
-                else if (decodedResponseType == typeof(AuthIpcMsg))
+                else if (decodedResponseType == typeof(AuthIpcMsg) && decodeResponse is AuthIpcMsg ipcMsg)
                 {
                     if (decodeResponse is AuthIpcMsg ipcMsg)
                     {
@@ -165,14 +164,14 @@ namespace SafeMobileBrowser.Services
                 }
                 else
                 {
-                    throw new NullReferenceException("Null serialised configuration");
+                    throw new ArgumentNullException(encodedResponse);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
-                throw ex;
+                throw;
             }
         }
 #endif

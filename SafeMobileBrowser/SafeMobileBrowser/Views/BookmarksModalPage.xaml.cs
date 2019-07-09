@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace SafeMobileBrowser.Views
 {
-    public partial class BookmarksModalPage : ContentPage
+    public partial class BookmarksModalPage : BaseContentPage<BookmarksModalPageViewModel>
     {
         BookmarksModalPageViewModel _viewModel;
 
@@ -18,10 +18,10 @@ namespace SafeMobileBrowser.Views
 
             if (_viewModel == null)
             {
-                _viewModel = new BookmarksModalPageViewModel(Navigation);
+                _viewModel = (BookmarksModalPageViewModel)BindingContext;
             }
+
             await _viewModel.GetBookmarks();
-            BindingContext = _viewModel;
         }
     }
 }

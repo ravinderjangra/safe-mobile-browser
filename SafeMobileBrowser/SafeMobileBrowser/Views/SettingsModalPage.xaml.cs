@@ -1,13 +1,9 @@
 ﻿using SafeMobileBrowser.ViewModels;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace SafeMobileBrowser.Views
 {
-    public partial class SettingsModalPage : ContentPage
+    public partial class SettingsModalPage : BaseContentPage<SettingsModalPageViewModel>
     {
-        SettingsModalPageViewModel _viewModel;
-
         public SettingsModalPage()
         {
             InitializeComponent();

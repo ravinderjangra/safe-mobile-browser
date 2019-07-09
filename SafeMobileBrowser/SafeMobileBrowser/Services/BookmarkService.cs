@@ -13,29 +13,24 @@ using Xamarin.Forms;
 
 [assembly: Dependency(typeof(BookmarkManager))]
 
-namespace SafeMobileBrowser.Models
+[assembly: Dependency(typeof(BookmarkService))]
+
+namespace SafeMobileBrowser.Services
 {
-    public class BookmarkManager
+    public class BookmarkService
     {
-        private static MDataInfo _accesscontainerMdinfo;
-        private static Session _session;
-        private static List<string> bookmarksList;
+        private Session _session;
+        private MDataInfo _accesscontainerMdinfo;
+        private List<string> bookmarksList;
 
-        public static void InitialiseSession(Session session)
-        {
-            try
-            {
-                _session = session;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-        }
-
-        public BookmarkManager()
+        public BookmarkService()
         {
             bookmarksList = new List<string>();
+        }
+
+        public void SetSession(Session session)
+        {
+            _session = session;
         }
 
         public void SetMdInfo(MDataInfo mdinfo)

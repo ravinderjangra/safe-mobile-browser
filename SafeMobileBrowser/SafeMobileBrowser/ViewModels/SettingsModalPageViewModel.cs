@@ -1,38 +1,35 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using SafeMobileBrowser.Models;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.ViewModels
 {
-    public class SettingsModalPageViewModel : BaseViewModel
+    public class SettingsModalPageViewModel : BaseNavigationViewModel
     {
-        public ICommand FaqCommand { get; }
-
-        public ICommand PrivacyInfoCommand { get; }
-
         public string ApplicationVersion => AppInfo.VersionString;
 
-        public ICommand GoBackCommand { get; set; }
+        public AsyncCommand FaqCommand { get; }
 
-        private INavigation _navigation;
+        public AsyncCommand PrivacyInfoCommand { get; }
 
-        public SettingsModalPageViewModel(INavigation navigation)
+        public AsyncCommand GoBackCommand { get; }
+
+        public SettingsModalPageViewModel()
         {
-            _navigation = navigation;
-            GoBackCommand = new Command(GoBackToHomePage);
-            FaqCommand = new Command(ShowNotImplementedDialog);
-
-            PrivacyInfoCommand = new Command(ShowNotImplementedDialog);
+            GoBackCommand = new AsyncCommand(GoBackToHomePageAsync);
+            FaqCommand = new AsyncCommand(ShowNotImplementedDialogAsync);
+            PrivacyInfoCommand = new AsyncCommand(ShowNotImplementedDialogAsync);
         }
 
-        private void ShowNotImplementedDialog()
+        private async Task ShowNotImplementedDialogAsync()
         {
-            Application.Current.MainPage.DisplayAlert("Feature", "This feature not available yet.", "OK");
+            await Application.Current.MainPage.DisplayAlert("Feature", "This feature not available yet.", "OK");
         }
 
-        private async void GoBackToHomePage()
+        private async Task GoBackToHomePageAsync()
         {
-            await _navigation.PopModalAsync();
+            await Navigation.PopModalAsync();
         }
     }
 }

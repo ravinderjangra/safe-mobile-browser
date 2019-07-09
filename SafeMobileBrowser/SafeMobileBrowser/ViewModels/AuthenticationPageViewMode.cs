@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SafeApp;
-using SafeMobileBrowser.CustomAsyncCommand;
+using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
 
 namespace SafeMobileBrowser.ViewModels
@@ -15,14 +15,14 @@ namespace SafeMobileBrowser.ViewModels
         public string ProgressText
         {
             get { return _progressText; }
-            set { SetProperty(ref _progressText, value); }
+            set { RaiseAndUpdate(ref _progressText, value); }
         }
 
         public string StoredResponse { get; private set; }
 
         public string AuthenticationButtonText { get; set; }
 
-        public IAsyncCommand AuthenticateCommand { get; private set; }
+        public AsyncCommand AuthenticateCommand { get; private set; }
 
         public AuthenticationPageViewMode()
         {
@@ -70,12 +70,11 @@ namespace SafeMobileBrowser.ViewModels
                 if (StoredResponse == null)
                 {
                     ProgressText = "Requesting authentication for authenticator app";
-                    await AuthenticationService.RequestNonMockAuthenticationAsync(true);
+                    await AuthService.RequestNonMockAuthenticationAsync(true);
                 }
                 else
                 {
                     ProgressText = "Estaiblishing session using cached response";
-                    var authServicec = new AuthenticationService();
                     await AuthService.ConnectUsingStoredSerialisedConfiguration(StoredResponse);
                 }
 #endif

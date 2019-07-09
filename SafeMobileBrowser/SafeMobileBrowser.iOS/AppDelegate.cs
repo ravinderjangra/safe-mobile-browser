@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using Foundation;
+using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using UIKit;
 using Xamarin.Forms;
@@ -30,11 +30,11 @@ namespace SafeMobileBrowser.iOS
                   try
                   {
                       await authenticationService.ProcessAuthenticationResponseAsync(url.ToString());
-                      Debug.WriteLine("IPC Msg Handling Completed");
+                      Logger.Info("IPC Msg Handling Completed");
                   }
                   catch (Exception ex)
                   {
-                      Debug.WriteLine($"Error: {ex.Message}");
+                      Logger.Error($"Error: {ex.Message}");
                   }
               });
             return true;

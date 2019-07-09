@@ -27,7 +27,7 @@ namespace SafeMobileBrowser.Views
 
             if (_viewModel == null)
             {
-                _viewModel = new MenuPopUpViewModel(Navigation);
+                _viewModel = new MenuPopUpViewModel();
                 BindingContext = _viewModel;
             }
             _viewModel.UpdateMenuItemsStatus();
