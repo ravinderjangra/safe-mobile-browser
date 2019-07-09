@@ -8,7 +8,7 @@ The SAFE Mobile Browser is a mobile web browser for the SAFE Network.
 
 |CI service|Platform|Status|
 |---|---|---|
-|Azure DevOps|MacOS| [![Build status](https://dev.azure.com/maidsafe/SafeApp/_apis/build/status/SafeApp-Mobile-CI)](https://dev.azure.com/MaidSafeProjects/SafeMobileBrowser/_build/latest?definitionId=22) |
+|Azure DevOps|MacOS| [![Build Status](https://dev.azure.com/maidsafe/SafeMobileBrowser/_apis/build/status/SafeMobileBrowser-%20Mobile%20-%20CI?branchName=master)](https://dev.azure.com/maidsafe/SafeMobileBrowser/_build/latest?definitionId=13&branchName=master) |
 
 ## Table of Contents
 
