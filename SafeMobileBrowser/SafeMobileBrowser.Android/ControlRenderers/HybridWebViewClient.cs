@@ -9,7 +9,6 @@ using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.WebFetchImplementation;
 using Xamarin.Forms.Platform.Android;
-using AWeb = Android.Webkit;
 
 namespace SafeMobileBrowser.Droid.ControlRenderers
 {
@@ -23,21 +22,35 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             _renderer = new WeakReference<HybridWebViewRenderer>(renderer);
         }
 
-        public override WebResourceResponse ShouldInterceptRequest(AWeb.WebView view, IWebResourceRequest request)
+        public override bool ShouldOverrideUrlLoading(WebView view, IWebResourceRequest request)
+        {
+            if (request.Url.ToString().Contains("safe"))
+            {
+                view.LoadUrl(request.Url.ToString().Replace("safe://", "https:"));
+                return true;
+            }
+            return base.ShouldOverrideUrlLoading(view, request);
+        }
+
+        public override WebResourceResponse ShouldInterceptRequest(WebView view, IWebResourceRequest request)
         {
             try
             {
                 Logger.Info($"Requested Url: {request.Url.ToString()}");
-                var headers = request.RequestHeaders;
-                if (request.Url.Scheme.ToLower().Contains("http") && !request.Url.ToString().ToLower().Contains("favicon"))
+                var urlToFetch = request.Url.ToString();
+                var isHttpRequest = request.Url.Scheme == "https";
+                if (isHttpRequest && !urlToFetch.Contains("favicon"))
                 {
-                    if (headers.ContainsKey("Range"))
+                    var requestHeaders = request.RequestHeaders;
+
+                    if (requestHeaders.ContainsKey("Range"))
                     {
                         var options = new WebFetchOptions
                         {
-                            Range = RequestHelpers.RangeStringToArray(headers["Range"])
+                            Range = RequestHelpers.RangeStringToArray(requestHeaders["Range"])
                         };
-                        var saferesponse = WebFetchService.FetchResourceAsync(request.Url.ToString(), options).Result;
+
+                        var saferesponse = WebFetchService.FetchResourceAsync(urlToFetch, options).Result;
                         Stream stream = new MemoryStream(saferesponse.Data);
 
                         // var contentType = "video/mp4";
@@ -57,7 +70,7 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
                     }
                     else
                     {
-                        var saferesponse = WebFetchService.FetchResourceAsync(request.Url.ToString()).Result;
+                        var saferesponse = WebFetchService.FetchResourceAsync(urlToFetch).Result;
                         Stream stream = new MemoryStream(saferesponse.Data);
                         WebResourceResponse response = new WebResourceResponse(saferesponse.MimeType, "UTF-8", stream);
                         return response;
