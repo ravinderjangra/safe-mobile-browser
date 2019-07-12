@@ -69,6 +69,7 @@ namespace SafeMobileBrowser.ViewModels
                 SetProperty(ref _selectedPopMenuItem, value);
                 if (value != null)
                 {
+                    Navigation.PopPopupAsync();
                     OnPopupMenuSelection();
                 }
             }
@@ -282,9 +283,6 @@ namespace SafeMobileBrowser.ViewModels
                     MessageCenterConstants.DisplayAlertMessage,
                     ex.Message);
             }
-
-            // TODO: delay in popup. Needs refactoring
-            await Navigation.PopPopupAsync();
             SelectedPopMenuItem = null;
         }
     }
