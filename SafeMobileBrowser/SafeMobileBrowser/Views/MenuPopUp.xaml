@@ -8,6 +8,7 @@
                  x:Class="SafeMobileBrowser.Views.MenuPopUp"
                  xmlns:XamEffect="clr-namespace:XamEffects;assembly=XamEffects"
                  BackgroundColor="Transparent"
+                 x:Name="MenuPopUpPage"
                  HasSystemPadding="True">
 
     <ContentPage.Resources>
@@ -66,15 +67,14 @@
                HorizontalOptions="EndAndExpand">
             <StackLayout Margin="0"
                          Spacing="0">
-                <CollectionView x:Name="MenuPopUpCollection"
-                                Margin="0"
-                                ItemsSource="{Binding PopMenuItems}"
-                                SelectedItem="{Binding SelectedPopMenuItem, Mode=TwoWay}"
-                                SelectionMode="Single">
-                    <CollectionView.ItemTemplate>
+                <StackLayout BindableLayout.ItemsSource="{Binding PopMenuItems}">
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <Grid Style="{StaticResource PopupMenuItemGridStyle}"
-                                  IsEnabled="{Binding IsEnabled}">
+                                  IsEnabled="{Binding IsEnabled}"
+                                  XamEffect:Commands.Tap="{Binding Source={x:Reference MenuPopUpPage}, Path=BindingContext.PopupMenuItemTappedCommand}"
+                                  XamEffect:Commands.TapParameter="{Binding MenuItemTitle}"
+                                  XamEffect:TouchEffect.Color="LightGray">
                                 <Grid.Triggers>
                                     <DataTrigger TargetType="Grid"
                                                  x:Name="trigger"
@@ -101,13 +101,13 @@
                                        Text="{Binding MenuItemTitle}" />
                             </Grid>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
                 <BoxView HeightRequest="0.5"
                          BackgroundColor="LightGray" />
                 <StackLayout Orientation="Horizontal"
                              Padding="10"
-                             HeightRequest="40">
+                             HeightRequest="30">
 
                     <XamEffect:BorderView IsEnabled="{Binding ReloadMenuItem.IsEnabled}"
                                           XamEffect:TouchEffect.Color="LightGray"
