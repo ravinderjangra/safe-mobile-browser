@@ -31,10 +31,5 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
                 Control.SetPadding(Control.PaddingLeft, 0, Control.PaddingRight, 0);
             }
         }
-
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            base.OnElementPropertyChanged(sender, e);
-        }
     }
 }

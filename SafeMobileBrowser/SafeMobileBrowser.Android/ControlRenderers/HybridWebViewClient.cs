@@ -27,8 +27,9 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             if (request.Url.ToString().Contains("safe"))
             {
                 view.LoadUrl(request.Url.ToString().Replace("safe://", "https:"));
+                return true;
             }
-            return true;
+            return base.ShouldOverrideUrlLoading(view, request);
         }
 
         public override WebResourceResponse ShouldInterceptRequest(WebView view, IWebResourceRequest request)
