@@ -234,7 +234,7 @@ namespace SafeMobileBrowser.ViewModels
 
         public async void LoadUrl(string url = null)
         {
-            url = url?.Trim() ?? AddressbarText.Trim();
+            url = url?.Trim().ToLower() ?? AddressbarText.Trim().ToLower();
 
             if (string.IsNullOrWhiteSpace(url))
                 return;

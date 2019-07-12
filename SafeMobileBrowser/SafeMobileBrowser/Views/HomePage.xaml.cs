@@ -114,6 +114,7 @@ namespace SafeMobileBrowser.Views
 
         public void ClearAddressBar(object sender, EventArgs args)
         {
+            AddressBarEntry.Unfocus();
             AddressBarEntry.Text = string.Empty;
             AddressBarEntry.Focus();
         }
