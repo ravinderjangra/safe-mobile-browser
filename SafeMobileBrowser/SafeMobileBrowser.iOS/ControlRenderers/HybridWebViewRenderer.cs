@@ -30,7 +30,7 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
             if (NativeView == null || Element == null)
                 return;
 
-            var path = Path.Combine(BaseUrl, "startbrowsing.html");
+            var path = Path.Combine(BaseUrl, "index.html");
             var nsFileUri = new NSUrl($"file://{path}");
             var nsBaseUri = new NSUrl($"file://{BaseUrl}");
 

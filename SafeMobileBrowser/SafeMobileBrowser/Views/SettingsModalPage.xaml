@@ -6,8 +6,10 @@
              xmlns:XamEffects="clr-namespace:XamEffects;assembly=XamEffects"
              xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
              mc:Ignorable="d"
-             x:Class="SafeMobileBrowser.Views.SettingsModalPage">
+             x:Class="SafeMobileBrowser.Views.SettingsModalPage"
+             ios:Page.UseSafeArea="true">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TitleStyle" TargetType="Label">
