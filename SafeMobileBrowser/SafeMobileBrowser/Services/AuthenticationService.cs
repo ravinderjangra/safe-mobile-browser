@@ -127,15 +127,14 @@ namespace SafeMobileBrowser.Services
                         }
                     }
                 }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("Authentication", $"Request not granted", "OK");
-                }
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                await Application.Current.MainPage.DisplayAlert("Error", $"Description: {ex.Message}", "OK");
+                if (ex.Message.Contains("AuthDenied"))
+                    await Application.Current.MainPage.DisplayAlert("Authentication", $"Request not granted", "OK");
+                else
+                    await Application.Current.MainPage.DisplayAlert("Authentication", "Authentication Failed", "OK");
                 MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
             }
         }
