@@ -39,7 +39,12 @@ namespace SafeMobileBrowser.Models
 
         public void SetMdInfo(MDataInfo mdinfo)
         {
-            _accesscontainerMdinfo = mdinfo;
+            // _accesscontainerMdinfo = mdinfo;
+
+            Task.Run(async () =>
+            {
+                _accesscontainerMdinfo = await _session.MDataInfoActions.RandomPublicAsync(1501);
+            });
         }
 
         private async void ReconnectBookmarkSession()
@@ -82,6 +87,31 @@ namespace SafeMobileBrowser.Models
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("103"))
+                {
+                    var userHandle = await _session.MDataEntries.NewAsync();
+                    var permissionHandle = await _session.MDataPermissions.NewAsync();
+                    PermissionSet permissionSet = new PermissionSet
+                    {
+                        Insert = true,
+                        ManagePermissions = true,
+                        Read = true,
+                        Delete = true,
+                        Update = true
+                    };
+                    await _session.MDataPermissions.InsertAsync(permissionHandle, userHandle, permissionSet);
+                    var encryptedKey = await _session.MDataInfoActions.EncryptEntryKeyAsync(_accesscontainerMdinfo, Constants.AppStateMdEntryKey.ToUtfBytes());
+                    JArray jArray = new JArray();
+                    JObject browserState = new JObject();
+                    browserState.Add("tabs");
+                    browserState.Add("ui");
+                    browserState["bookmarks"] = jArray;
+                    var newbrowserState = JsonConvert.SerializeObject(browserState);
+                    var encryptedValue = await _session.MDataInfoActions.EncryptEntryValueAsync(_accesscontainerMdinfo, newbrowserState.ToUtfBytes());
+                    await _session.MDataEntries.InsertAsync(userHandle, encryptedKey, encryptedValue);
+                    await _session.MData.PutAsync(_accesscontainerMdinfo, permissionHandle, userHandle);
+                }
+
                 Logger.Error(ex);
                 throw;
             }
