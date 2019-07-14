@@ -4,10 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
              xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
              mc:Ignorable="d"
              x:Name="BookmarkModalPage"
-             x:Class="SafeMobileBrowser.Views.BookmarksModalPage">
+             x:Class="SafeMobileBrowser.Views.BookmarksModalPage"
+             ios:Page.UseSafeArea="true">
     <ContentPage.Resources>
         <Style TargetType="StackLayout">
             <Setter Property="VisualStateManager.VisualStateGroups">
