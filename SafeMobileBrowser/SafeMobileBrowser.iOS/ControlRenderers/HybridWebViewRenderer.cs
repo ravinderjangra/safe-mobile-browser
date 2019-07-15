@@ -12,6 +12,18 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 {
     public class HybridWebViewRenderer : WkWebViewRenderer
     {
+        public static WKWebViewConfiguration GetHybridWKWebViewConfiguration()
+        {
+            var config = new WKWebViewConfiguration();
+            config.SetUrlSchemeHandler(new SafeSchemaHandler(), "safe");
+            return config;
+        }
+
+        public HybridWebViewRenderer()
+            : base(GetHybridWKWebViewConfiguration())
+        {
+        }
+
         public static string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
@@ -20,7 +32,6 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 
             if (NativeView != null)
             {
-                ((WKWebView)NativeView).Configuration.SetUrlSchemeHandler(new SafeSchemaHandler(), "safe");
                 SetSource();
             }
         }
