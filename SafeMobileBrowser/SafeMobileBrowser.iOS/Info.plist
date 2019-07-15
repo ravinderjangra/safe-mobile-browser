@@ -23,7 +23,7 @@
 		<string>safe-auth</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>8.0</string>
+	<string>11.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>SAFE Browser</string>
 	<key>CFBundleIdentifier</key>
@@ -46,6 +46,16 @@
 				<string>net.maidsafe.mobilebrowser</string>
 			</array>
 			<key>CFBundleTypeRole</key>
+			<string>None</string>
+		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>net.maidsafe.safe-browser</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>SafeBrowserUrl</string>
+			<key>CFBundleURLTypes</key>
 			<string>None</string>
 		</dict>
 	</array>
