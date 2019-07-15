@@ -85,16 +85,13 @@
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="15, 10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4*" />
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
+                        <StackLayout Padding="15, 10" Orientation="Horizontal">
                             <Label Text="{Binding}"
-                                   Style="{StaticResource BookmarkUrlStyle}">
+                                   Style="{StaticResource BookmarkUrlStyle}"
+                                   HorizontalOptions="StartAndExpand">
                             </Label>
-                            <Image Grid.Column="1"
-                                   Style="{StaticResource BookmarkRemoveIconStyle}">
+                            <Image Style="{StaticResource BookmarkRemoveIconStyle}"
+                                   HorizontalOptions="End">
                                 <Image.Source>
                                     <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
                                                      Glyph="{x:Static Icons:IconFont.Delete}"
@@ -106,7 +103,7 @@
                                                           CommandParameter="{Binding}" />
                                 </Image.GestureRecognizers>
                             </Image>
-                        </Grid>
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
