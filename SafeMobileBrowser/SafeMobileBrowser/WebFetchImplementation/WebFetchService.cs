@@ -39,7 +39,8 @@ namespace SafeMobileBrowser.WebFetchImplementation
 
                 return new WebFetchResponse
                 {
-                    Data = Encoding.ASCII.GetBytes(htmlString)
+                    Data = Encoding.ASCII.GetBytes(htmlString),
+                    MimeType = "text/html"
                 };
             }
             catch (FfiException ex)
@@ -60,7 +61,8 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 }
                 return new WebFetchResponse
                 {
-                    Data = Encoding.ASCII.GetBytes(htmlString)
+                    Data = Encoding.ASCII.GetBytes(htmlString),
+                    MimeType = "text/html"
                 };
             }
             catch (Exception ex)

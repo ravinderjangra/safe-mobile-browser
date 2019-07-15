@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Foundation;
+using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.WebFetchImplementation;
@@ -18,8 +19,7 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
                 var urlToFetch = urlSchemeTask.Request.Url.ToString();
                 if (!urlToFetch.Contains("favicon"))
                 {
-                    var task = WebFetchService.FetchResourceAsync(urlToFetch);
-                    var saferesponse = task.WaitAndUnwrapException();
+                    var saferesponse = AsyncContext.Run(() => WebFetchService.FetchResourceAsync(urlToFetch));
                     var stream = new MemoryStream(saferesponse.Data);
                     var response = new NSUrlResponse(urlSchemeTask.Request.Url, saferesponse.MimeType, (nint)stream.Length, null);
                     urlSchemeTask.DidReceiveResponse(response);
