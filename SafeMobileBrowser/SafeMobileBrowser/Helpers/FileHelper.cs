@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using SafeApp;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SafeMobileBrowser.Helpers
 {
-    public static class FileTransferHelper
+    public static class FileHelper
     {
         public static async Task TransferAssetFiles()
         {
@@ -33,6 +35,17 @@ namespace SafeMobileBrowser.Helpers
             {
                 Logger.Info("Assets transfer failed");
                 Logger.Error(ex);
+            }
+        }
+
+        public static async Task<string> ReadAssetFileContentAsync(string fileName)
+        {
+            using (var stream = await FileSystem.OpenAppPackageFileAsync(fileName))
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    return await reader.ReadToEndAsync();
+                }
             }
         }
     }

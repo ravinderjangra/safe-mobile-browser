@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Android.Webkit;
-using SafeApp.Utilities;
-using SafeMobileBrowser.Droid.PlatformServices;
+using Nito.AsyncEx.Synchronous;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
 using SafeMobileBrowser.WebFetchImplementation;
@@ -50,29 +48,26 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
                             Range = RequestHelpers.RangeStringToArray(requestHeaders["Range"])
                         };
 
-                        var saferesponse = WebFetchService.FetchResourceAsync(urlToFetch, options).Result;
-                        Stream stream = new MemoryStream(saferesponse.Data);
+                        var task = WebFetchService.FetchResourceAsync(urlToFetch, options);
+                        var saferesponse = task.WaitAndUnwrapException();
 
-                        // var contentType = "video/mp4";
-                        // var contentLength = saferesponse.Data.Length;
-                        // var contentStart = options?.Range[0].Start;
-                        // var contentEnd = options?.Range[0].End > 0 ? options?.Range[0].End : contentLength - 1;
-                        WebResourceResponse response = new WebResourceResponse(saferesponse.MimeType, "UTF-8", stream);
+                        var stream = new MemoryStream(saferesponse.Data);
+                        var response = new WebResourceResponse(saferesponse.MimeType, "UTF-8", stream);
                         response.SetStatusCodeAndReasonPhrase(206, "Partial Content");
                         response.ResponseHeaders = new Dictionary<string, string>
-                        {
-                            { "Accept-Ranges", "bytes" },
-                            { "content-type", saferesponse.MimeType },
-                            { "Content-Range", saferesponse.Headers["Content-Range"] },
-                            { "Content-Length", saferesponse.Headers["Content-Length"] },
-                        };
+                            {
+                                { "Accept-Ranges", "bytes" },
+                                { "content-type", saferesponse.MimeType },
+                                { "Content-Range", saferesponse.Headers["Content-Range"] },
+                                { "Content-Length", saferesponse.Headers["Content-Length"] },
+                            };
                         return response;
                     }
                     else
                     {
                         var saferesponse = WebFetchService.FetchResourceAsync(urlToFetch).Result;
-                        Stream stream = new MemoryStream(saferesponse.Data);
-                        WebResourceResponse response = new WebResourceResponse(saferesponse.MimeType, "UTF-8", stream);
+                        var stream = new MemoryStream(saferesponse.Data);
+                        var response = new WebResourceResponse(saferesponse.MimeType, "UTF-8", stream);
                         return response;
                     }
                 }
@@ -83,49 +78,15 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
 
                 if (ex.InnerException != null)
                 {
-                    var htmlString = GetAssetsFileData.ReadHtmlFile("index.html");
-
-                    if (ex.InnerException is WebFetchException)
+                    using (var stream = new MemoryStream())
                     {
-                        var webFetchException = ex.InnerException as WebFetchException;
-                        if (webFetchException.ErrorCode == WebFetchConstants.NoSuchData ||
-                        webFetchException.ErrorCode == WebFetchConstants.NoSuchEntry ||
-                        webFetchException.ErrorCode == WebFetchConstants.NoSuchPublicName ||
-                        webFetchException.ErrorCode == WebFetchConstants.NoSuchServiceName)
-                        {
-                            htmlString = ReplaceHtmlStringContent(htmlString, "ErrorHeading", "Page not found");
-                            htmlString = ReplaceHtmlStringContent(htmlString, "ErrorMessage", webFetchException.Message);
-                        }
+                        var response = new WebResourceResponse("text/html", "UTF-8", stream);
+                        response.SetStatusCodeAndReasonPhrase(404, "Not Found");
+                        return response;
                     }
-                    else if (ex.InnerException is FfiException)
-                    {
-                        var ffiException = ex.InnerException as FfiException;
-                        if (ffiException.ErrorCode == -11 &&
-                            Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.Internet)
-                        {
-                            htmlString = ReplaceHtmlStringContent(htmlString, "ErrorHeading", "No internet access");
-                            htmlString = ReplaceHtmlStringContent(htmlString, "ErrorMessage", "Please connect to the internet");
-                        }
-                        else
-                        {
-                            htmlString = ReplaceHtmlStringContent(htmlString, "ErrorHeading", "Error occured");
-                            htmlString = ReplaceHtmlStringContent(htmlString, "ErrorMessage", ffiException.Message);
-                        }
-                    }
-
-                    byte[] byteArray = Encoding.ASCII.GetBytes(htmlString);
-                    MemoryStream stream = new MemoryStream(byteArray);
-                    var response = new WebResourceResponse("text/html", "UTF-8", stream);
-                    return response;
                 }
             }
             return base.ShouldInterceptRequest(view, request);
-        }
-
-        string ReplaceHtmlStringContent(string htmlString, string find, string replaceString)
-        {
-            int index = htmlString.IndexOf(find);
-            return htmlString.Remove(index, find.Length).Insert(index, replaceString);
         }
     }
 }
