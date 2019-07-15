@@ -34,6 +34,8 @@ namespace SafeMobileBrowser.ViewModels
 
         public ICommand ManageBookmarkCommand { get; set; }
 
+        public ICommand PopupMenuItemTappedCommand { get; set; }
+
         private ObservableCollection<PopUpMenuItem> _popMenuItems;
 
         public ObservableCollection<PopUpMenuItem> PopMenuItems
@@ -58,28 +60,12 @@ namespace SafeMobileBrowser.ViewModels
             set => SetProperty(ref _bookmarkMenuItem, value);
         }
 
-        private PopUpMenuItem _selectedPopMenuItem;
-
-        public PopUpMenuItem SelectedPopMenuItem
-        {
-            get => _selectedPopMenuItem;
-
-            set
-            {
-                SetProperty(ref _selectedPopMenuItem, value);
-                if (value != null)
-                {
-                    Navigation.PopPopupAsync();
-                    OnPopupMenuSelection();
-                }
-            }
-        }
-
         public MenuPopUpViewModel(INavigation navigation)
         {
             Navigation = navigation;
             RefreshWebViewCommand = new Command(RefreshWebView);
             ManageBookmarkCommand = new Command(AddOrRemoveBookmark);
+            PopupMenuItemTappedCommand = new Command<string>(OnPopupMenuSelection);
             InitaliseMenuItems();
         }
 
@@ -231,11 +217,19 @@ namespace SafeMobileBrowser.ViewModels
             BookmarkMenuItem = new PopUpMenuItem { MenuItemTitle = "Bookmark", MenuItemIcon = IconFont.BookmarkOutline };
         }
 
-        private async void OnPopupMenuSelection()
+        private async void OnPopupMenuSelection(string selectedMenuItemTitle)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await OnPopupMenuItemSelection(selectedMenuItemTitle);
+            });
+            await Navigation.PopPopupAsync(false);
+        }
+
+        private async Task OnPopupMenuItemSelection(string selectedMenuItemTitle)
         {
             try
             {
-                var selectedMenuItemTitle = SelectedPopMenuItem.MenuItemTitle;
                 switch (selectedMenuItemTitle)
                 {
                     case "Settings":
@@ -271,8 +265,6 @@ namespace SafeMobileBrowser.ViewModels
                             });
                         }
                         break;
-                    default:
-                        break;
                 }
             }
             catch (Exception ex)
@@ -283,7 +275,6 @@ namespace SafeMobileBrowser.ViewModels
                     MessageCenterConstants.DisplayAlertMessage,
                     ex.Message);
             }
-            SelectedPopMenuItem = null;
         }
     }
 }
