@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.PrefersHomeIndicatorAutoHidden="true"
              xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
              mc:Ignorable="d"
              x:Name="BookmarkModalPage"

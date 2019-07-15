@@ -7,6 +7,7 @@
              xmlns:Icons="clr-namespace:SafeMobileBrowser.Models"
              xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.PrefersHomeIndicatorAutoHidden="true"
              mc:Ignorable="d"
              x:Class="SafeMobileBrowser.Views.SettingsModalPage"
              ios:Page.UseSafeArea="true">
