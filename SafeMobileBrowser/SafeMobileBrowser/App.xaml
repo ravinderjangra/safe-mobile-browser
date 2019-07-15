@@ -9,20 +9,13 @@
         <!--Global Styles-->
         <Color x:Key="PrimaryColor">#0078D7</Color>
         <Color x:Key="SecondaryColor">#FFB900</Color>
-        <Color x:Key="TertiaryColor">#00A4EF</Color>
-        <Color x:Key="QuaternaryColor">#7FBA00</Color>
-        <Color x:Key="QuinaryColor">#F25022</Color>
-        
-        <Color x:Key="PrimaryTextColor">#ffffff</Color>
-        <Color x:Key="SecondaryTextColor">#ffffff</Color>
-        <Color x:Key="TertiaryTextColor">#ffffff</Color>
-        <Color x:Key="QuaternaryTextColor">#ffffff</Color>
-        <Color x:Key="QuinaryTextColor">#ffffff</Color>
-        
-        <Color x:Key="TextColor">#1d1d1d</Color>
 
-        <Color x:Key="DarkRedColor">#D32F2F</Color>
-        <Color x:Key="LightRedColor">#FFCDD2</Color>
+        <Color x:Key="PrimaryTextColor">#ffffff</Color>
+        <Color x:Key="SecondaryTextColor">#1d1d1d</Color>
+
+        <Color x:Key="ModalPageTitleIconColor">#1d1d1d</Color>
+        <Color x:Key="NavigationIconColor">#000000</Color>
+        <Color x:Key="BookmarkDeleteIconColor">#555555</Color>
 
         <Color x:Key="GreySnowLightColor">#eeeeee</Color>
         <Color x:Key="GreySmokeLightColor">#c2c1c1</Color>
@@ -30,30 +23,52 @@
         <Color x:Key="GreySmokeDarkColor">#555555</Color>
         <Color x:Key="GreySnowMediumColor">#e4e4e4</Color>
 
+        <Style TargetType="StackLayout"
+               x:Key="ModalPageTitleView">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="Spacing"
+                    Value="20" />
+            <Setter Property="Padding"
+                    Value="20, 10" />
+            <Setter Property="HeightRequest"
+                    Value="34" />
+        </Style>
+
+        <Style x:Key="ModalPageTitleLabelStyle"
+               TargetType="Label">
+            <Setter Property="VerticalOptions"
+                    Value="Center" />
+            <Setter Property="FontSize"
+                    Value="20" />
+            <Setter Property="TextColor"
+                    Value="{StaticResource SecondaryTextColor}" />
+        </Style>
+
         <!-- CONVERTERS -->
         <converters:BytesToImageConverter x:Key="BytesToImage" />
         <converters:InverseBoolConverter x:Key="BooleanInverter" />
 
         <!-- SIZES -->
         <OnPlatform x:Key="SmallSize"
-                        x:TypeArguments="x:Double"
-                        Android="12"
-                        iOS="14" />
+                    x:TypeArguments="x:Double"
+                    Android="12"
+                    iOS="14" />
 
         <OnPlatform x:Key="MediumSize"
-                        x:TypeArguments="x:Double"
-                        Android="14"
-                        iOS="16" />
+                    x:TypeArguments="x:Double"
+                    Android="14"
+                    iOS="16" />
 
         <OnPlatform x:Key="LargeSize"
-                        x:TypeArguments="x:Double"
-                        Android="16"
-                        iOS="18" />
+                    x:TypeArguments="x:Double"
+                    Android="16"
+                    iOS="18" />
 
         <OnPlatform x:Key="ExtraLargeSize"
-                        x:TypeArguments="x:Double"
-                        Android="18"
-                        iOS="20" />
+                    x:TypeArguments="x:Double"
+                    Android="18"
+                    iOS="20" />
 
         <OnPlatform x:Key="MaterialFontFamily"
                     x:TypeArguments="x:String">
@@ -62,7 +77,7 @@
             <On Platform="Android"
                 Value="materialdesignicons-webfont.ttf#Material Design Icons" />
         </OnPlatform>
-        
+
         <!-- Control Styles -->
         <Style TargetType="NavigationPage">
             <Setter Property="BarBackgroundColor"
@@ -70,12 +85,12 @@
             <Setter Property="BarTextColor"
                     Value="{StaticResource PrimaryTextColor}" />
         </Style>
-        
+
         <OnPlatform x:Key="FrameCornerRadius"
                     x:TypeArguments="x:Double"
                     iOS="10"
-                    Android="25"/>
-        
+                    Android="25" />
+
         <Style TargetType="XamEffect:BorderView"
                x:Key="BottomMenubarIconFrameStyle">
             <Setter Property="XamEffect:TouchEffect.Color"

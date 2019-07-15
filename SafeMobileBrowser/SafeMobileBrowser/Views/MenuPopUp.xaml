@@ -93,7 +93,7 @@
                                         <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
                                                          Glyph="{Binding MenuItemIcon}"
                                                          Size="30"
-                                                         Color="Black" />
+                                                         Color="{StaticResource NavigationIconColor}" />
                                     </Image.Source>
                                 </Image>
                                 <Label Grid.Column="1"
@@ -121,7 +121,7 @@
                                 <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
                                                  Glyph="{Binding ReloadMenuItem.MenuItemIcon}"
                                                  Size="25"
-                                                 Color="Black" />
+                                                 Color="{StaticResource NavigationIconColor}" />
                             </Image.Source>
                         </Image>
                     </XamEffect:BorderView>
@@ -135,7 +135,7 @@
                                 <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
                                                  Glyph="{Binding BookmarkMenuItem.MenuItemIcon}"
                                                  Size="25"
-                                                 Color="Black" />
+                                                 Color="{StaticResource NavigationIconColor}" />
                             </Image.Source>
                         </Image>
                     </XamEffect:BorderView>

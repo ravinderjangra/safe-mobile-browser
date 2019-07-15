@@ -28,7 +28,8 @@ namespace SafeMobileBrowser.ViewModels
             set
             {
                 SetProperty(ref _selectedBookmarkItem, value);
-                OpenBookmarkedPage();
+                if (value != null)
+                    OpenBookmarkedPage();
             }
         }
 
@@ -75,11 +76,10 @@ namespace SafeMobileBrowser.ViewModels
 
         public async void OpenBookmarkedPage()
         {
+            var urlToOpen = SelectedBookmarkItem.Replace("safe://", string.Empty);
+            MessagingCenter.Send(this, MessageCenterConstants.BookmarkUrl, urlToOpen);
+            SelectedBookmarkItem = null;
             await Navigation.PopModalAsync();
-            MessagingCenter.Send(
-                this,
-                MessageCenterConstants.BookmarkUrl,
-                SelectedBookmarkItem.Replace("safe://", string.Empty));
         }
 
         public async Task GetBookmarks()
