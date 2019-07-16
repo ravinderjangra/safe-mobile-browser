@@ -17,7 +17,7 @@ namespace SafeMobileBrowser.Droid.PlatformServices
     {
         public string ConfigFilesPath => Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 
-        public string BaseUrl => "file:///android_asset/";
+        public string BaseUrl => "file:///android_asset";
 
         public Task<bool> OpenUri(string uri)
         {
