@@ -126,7 +126,7 @@ namespace SafeMobileBrowser.ViewModels
 
         private void GoToHomePage()
         {
-            Url = $"{BaseUrl}index.html";
+            Url = $"{BaseUrl}/index.html";
         }
 
         private async void ShowPopUpMenu()
