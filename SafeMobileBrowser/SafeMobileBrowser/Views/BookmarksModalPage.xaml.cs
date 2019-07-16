@@ -23,5 +23,16 @@ namespace SafeMobileBrowser.Views
             await _viewModel.GetBookmarks();
             BindingContext = _viewModel;
         }
+
+        protected override void OnDisappearing()
+        {
+            // This will remove the exisitng items from the collectionview.
+            // Once we have next XF version we can remove this.
+            BindingContext = null;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                BindingContext = _viewModel;
+            });
+        }
     }
 }

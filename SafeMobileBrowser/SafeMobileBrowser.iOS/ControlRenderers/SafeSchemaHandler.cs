@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Foundation;
+using Nito.AsyncEx;
+using Nito.AsyncEx.Synchronous;
+using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.WebFetchImplementation;
 using WebKit;
 
@@ -12,15 +14,31 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
         [Export("webView:startURLSchemeTask:")]
         public void StartUrlSchemeTask(WKWebView webView, IWKUrlSchemeTask urlSchemeTask)
         {
-            Task.Run(async () =>
+            try
             {
-                var saferesponse = await WebFetchService.FetchResourceAsync(urlSchemeTask.Request.Url.ToString());
-                Stream stream = new MemoryStream(saferesponse.Data);
-                var response = new NSUrlResponse(urlSchemeTask.Request.Url, saferesponse.MimeType, (nint)stream.Length, null);
-                urlSchemeTask.DidReceiveResponse(response);
-                urlSchemeTask.DidReceiveData(NSData.FromStream(stream));
-                urlSchemeTask.DidFinish();
-            }).Wait();
+                var urlToFetch = urlSchemeTask.Request.Url.ToString();
+                if (!urlToFetch.Contains("favicon"))
+                {
+                    var saferesponse = AsyncContext.Run(() => WebFetchService.FetchResourceAsync(urlToFetch));
+                    var stream = new MemoryStream(saferesponse.Data);
+                    var response = new NSUrlResponse(urlSchemeTask.Request.Url, saferesponse.MimeType, (nint)stream.Length, null);
+                    urlSchemeTask.DidReceiveResponse(response);
+                    urlSchemeTask.DidReceiveData(NSData.FromStream(stream));
+                    urlSchemeTask.DidFinish();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                if (ex.InnerException != null)
+                {
+                    var stream = new MemoryStream();
+                    var response = new NSUrlResponse(urlSchemeTask.Request.Url, "text/html", 0, null);
+                    urlSchemeTask.DidReceiveResponse(response);
+                    urlSchemeTask.DidReceiveData(NSData.FromStream(stream));
+                    urlSchemeTask.DidFinish();
+                }
+            }
         }
 
         [Export("webView:stopURLSchemeTask:")]

@@ -77,7 +77,6 @@
                                   XamEffect:TouchEffect.Color="LightGray">
                                 <Grid.Triggers>
                                     <DataTrigger TargetType="Grid"
-                                                 x:Name="trigger"
                                                  Binding="{Binding IsEnabled}"
                                                  Value="false">
                                         <Setter Property="Opacity"

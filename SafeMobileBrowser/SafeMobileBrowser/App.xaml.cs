@@ -25,7 +25,7 @@ namespace SafeMobileBrowser
             if (e.NetworkAccess == NetworkAccess.Internet)
             {
                 IsConnectedToInternet = true;
-                AppSession.ReconnectAsync();
+                AppSession?.ReconnectAsync();
             }
             else
             {
