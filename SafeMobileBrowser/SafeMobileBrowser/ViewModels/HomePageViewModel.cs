@@ -153,24 +153,7 @@ namespace SafeMobileBrowser.ViewModels
             try
             {
                 string url = args.Url.ToString();
-                if (url.StartsWith("file://"))
-                {
-                    AddressbarText = string.Empty;
-                }
-                else if (url.StartsWith("https"))
-                {
-                    string newurlText = url.Remove(0, 8).TrimEnd('/');
-                    AddressbarText = newurlText;
-                }
-                else if (url.StartsWith("http"))
-                {
-                    string newurlText = url.Remove(0, 7).TrimEnd('/');
-                    AddressbarText = newurlText;
-                }
-                else
-                {
-                    AddressbarText = url;
-                }
+                SetAddressBarText(url);
             }
             catch (Exception ex)
             {
@@ -199,10 +182,25 @@ namespace SafeMobileBrowser.ViewModels
             if (string.IsNullOrWhiteSpace(AddressbarText))
             {
                 var currentSourceUrl = ((UrlWebViewSource)Url).Url;
-                if (currentSourceUrl.Contains("file://"))
-                    AddressbarText = string.Empty;
-                else
-                    AddressbarText = currentSourceUrl.Remove(0, 8).TrimEnd('/');
+                SetAddressBarText(currentSourceUrl);
+            }
+        }
+
+        internal void SetAddressBarText(string url)
+        {
+            if (url.StartsWith("file://"))
+            {
+                AddressbarText = string.Empty;
+            }
+            else if (url.StartsWith("safe://"))
+            {
+                string newurlText = url.Replace("safe://", string.Empty).TrimEnd('/');
+                AddressbarText = newurlText;
+            }
+            else if (url.StartsWith("https://"))
+            {
+                string newurlText = url.Replace("https://", string.Empty).TrimEnd('/');
+                AddressbarText = newurlText;
             }
         }
 

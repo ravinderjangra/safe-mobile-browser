@@ -88,7 +88,7 @@ namespace SafeMobileBrowser.ViewModels
 
         private void RemoveBookmark()
         {
-            var currentUrl = HomePageViewModel.CurrentUrl.Replace("https", "safe");
+            var currentUrl = HomePageViewModel.CurrentUrl;
             if (!string.IsNullOrWhiteSpace(currentUrl) && AppService.IsSessionAvailable)
             {
                 Task.Run(async () =>
@@ -120,7 +120,7 @@ namespace SafeMobileBrowser.ViewModels
                 {
                     try
                     {
-                        await BookmarkManager.AddBookmark(currentUrl.Replace("https", "safe"));
+                        await BookmarkManager.AddBookmark(currentUrl);
                         UserDialogs.Instance.Toast("Bookmark added successfully", _toastTimeSpan);
                         CheckIsBookmarkAvailable();
                     }
@@ -174,7 +174,7 @@ namespace SafeMobileBrowser.ViewModels
         {
             if (AppService.IsSessionAvailable && !string.IsNullOrWhiteSpace(HomePageViewModel.CurrentUrl))
             {
-                var currentUrl = HomePageViewModel.CurrentUrl.Replace("https", "safe");
+                var currentUrl = HomePageViewModel.CurrentUrl;
                 CheckIfAlreadyAvailableInBookmark = BookmarkManager.CheckIfBookmarkAvailable(currentUrl);
             }
             else
