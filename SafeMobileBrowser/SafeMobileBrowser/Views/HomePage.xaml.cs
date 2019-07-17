@@ -30,6 +30,10 @@ namespace SafeMobileBrowser.Views
             AddressBarEntry.Focused += EntryFocused;
             AddressBarEntry.Unfocused += EntryUnfocused;
             AddressBarEntry.TextChanged += TextChanged;
+            AddressBarEntry.Completed += (s, e) =>
+            {
+                _viewModel.PageLoadCommand.Execute(null);
+            };
 
             MessagingCenter.Subscribe<BookmarksModalPageViewModel, string>(
                 this,
@@ -49,9 +53,16 @@ namespace SafeMobileBrowser.Views
             MessagingCenter.Subscribe<HomePageViewModel>(
                this,
                MessageCenterConstants.ResetHomePage,
-               sender =>
+               async sender =>
                {
-                   HybridWebViewControl.EvaluateJavaScriptAsync("javascript: resetHomePage()");
+                   HybridWebViewControl.Source = $"{_viewModel.BaseUrl}/index.html";
+                   await Device.InvokeOnMainThreadAsync(async () =>
+                   {
+                       await HybridWebViewControl.EvaluateJavaScriptAsync("javascript: ChangePageContent" +
+                           "('Failed'," +
+                           "'Not connect to the SAFE Network', " +
+                           "true)");
+                   });
                });
         }
 
@@ -77,11 +88,6 @@ namespace SafeMobileBrowser.Views
             if (Device.RuntimePlatform == Device.Android)
                 AddWebsiteList();
 #endif
-
-            AddressBarEntry.Completed += (s, e) =>
-            {
-                _viewModel.PageLoadCommand.Execute(null);
-            };
         }
 
         ~HomePage()
