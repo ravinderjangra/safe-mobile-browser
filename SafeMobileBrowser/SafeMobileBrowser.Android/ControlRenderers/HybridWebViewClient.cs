@@ -22,12 +22,11 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
 
         public override bool ShouldOverrideUrlLoading(WebView view, IWebResourceRequest request)
         {
-            if (request.Url.ToString().Contains("safe"))
-            {
-                view.LoadUrl(request.Url.ToString().Replace("safe://", "https:"));
-                return true;
-            }
-            return base.ShouldOverrideUrlLoading(view, request);
+            if (!request.Url.ToString().Contains("safe"))
+                return base.ShouldOverrideUrlLoading(view, request);
+
+            view.LoadUrl(request.Url.ToString().Replace("safe://", "https:"));
+            return true;
         }
 
         public override WebResourceResponse ShouldInterceptRequest(WebView view, IWebResourceRequest request)
@@ -43,24 +42,40 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
 
                     if (requestHeaders.ContainsKey("Range"))
                     {
-                        var options = new WebFetchOptions
+                        Logger.Info("Request Header");
+                        foreach (var key in requestHeaders.Keys)
                         {
-                            Range = RequestHelpers.RangeStringToArray(requestHeaders["Range"])
+                            Logger.Info($"Key: {key}, Value: {requestHeaders[key]}");
+                        }
+
+                        var webFetchOptions = new WebFetchOptions()
+                        {
+                            RangeHeader = RequestHelpers.GetRangeFromHeaderRangeValue(requestHeaders["Range"])
                         };
 
-                        var task = WebFetchService.FetchResourceAsync(urlToFetch, options);
+                        var task = WebFetchService.FetchResourceAsync(urlToFetch, webFetchOptions);
                         var safeResponse = task.WaitAndUnwrapException();
 
                         var stream = new MemoryStream(safeResponse.Data);
                         var response = new WebResourceResponse(safeResponse.MimeType, "UTF-8", stream);
                         response.SetStatusCodeAndReasonPhrase(206, "Partial Content");
                         response.ResponseHeaders = new Dictionary<string, string>
+                        {
+                            { "Accept-Ranges", "bytes" },
+                            { "Content-Type", safeResponse.MimeType },
+                            { "Content-Range", safeResponse.Headers["Content-Range"] },
+                            { "Content-Length", safeResponse.Headers["Content-Length"] },
+                        };
+
+                        var responseHeaders = response?.ResponseHeaders;
+                        if (responseHeaders != null)
+                        {
+                            Logger.Info("Response Header");
+                            foreach (var key in responseHeaders?.Keys)
                             {
-                                { "Accept-Ranges", "bytes" },
-                                { "content-type", safeResponse.MimeType },
-                                { "Content-Range", safeResponse.Headers["Content-Range"] },
-                                { "Content-Length", safeResponse.Headers["Content-Length"] },
-                            };
+                                Logger.Info($"Key: {key}, Value: {responseHeaders[key]}");
+                            }
+                        }
                         return response;
                     }
                     else
@@ -76,14 +91,14 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
             {
                 Logger.Error(ex);
 
-                if (ex.InnerException != null)
+                if (ex.InnerException == null)
+                    return base.ShouldInterceptRequest(view, request);
+
+                using (var stream = new MemoryStream())
                 {
-                    using (var stream = new MemoryStream())
-                    {
-                        var response = new WebResourceResponse("text/html", "UTF-8", stream);
-                        response.SetStatusCodeAndReasonPhrase(404, "Not Found");
-                        return response;
-                    }
+                    var response = new WebResourceResponse("text/html", "UTF-8", stream);
+                    response.SetStatusCodeAndReasonPhrase(404, "Not Found");
+                    return response;
                 }
             }
             return base.ShouldInterceptRequest(view, request);

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using SafeApp;
 using SafeApp.Utilities;
@@ -29,34 +29,66 @@ namespace SafeMobileBrowser.Helpers
             return await Session.EncodeAuthReqAsync(authReq);
         }
 
-        public static List<ByteRange> RangeStringToArray(string rangeString)
+        public static List<ByteRangeHeader> GetRangeFromHeaderRangeValue(string rangeHeaderString, [Optional] ulong contentSize)
         {
-            var byteRanges = new List<ByteRange>();
+            var byteRanges = new List<ByteRangeHeader>();
 
             var bytes = "bytes=";
-            var rangeValues = rangeString.Remove(0, bytes.Length).Split(',');
+            var rangeValues = rangeHeaderString.Remove(0, bytes.Length).Split(',');
+
+            // rangeHeader contains the value of the Range HTTP Header and can have values like:
+            //      Range: bytes=0-1            * Get bytes 0 and 1, inclusive
+            //      Range: bytes=0-500          * Get bytes 0 to 500 (the first 501 bytes), inclusive
+            //      Range: bytes=400-1000       * Get bytes 500 to 1000 (501 bytes in total), inclusive
+            //      Range: bytes=-200           * Get the last 200 bytes
+            //      Range: bytes=500-           * Get all bytes from byte 500 to the end
+            //
+            // Can also have multiple ranges delimited by commas, as in:
+            //      Range: bytes=0-500,600-1000 * Get bytes 0-500 (the first 501 bytes), inclusive plus bytes 600-1000 (401 bytes) inclusive
 
             foreach (var item in rangeValues)
             {
-                var part = item.Split('-');
-                var byteRange = new ByteRange();
-
-                if (part.Length == 2)
+                if (!string.IsNullOrEmpty(rangeHeaderString))
                 {
-                    if (part[1] == string.Empty)
+                    // Remove "Ranges" and break up the ranges
+                    string[] ranges = rangeHeaderString.Replace("bytes=", string.Empty).Split(",".ToCharArray());
+
+                    for (int i = 0; i < ranges.Length; i++)
                     {
-                        byteRange.End = 0;
-                    }
-                    else
-                    {
-                        byteRange.End = (ulong)Convert.ToInt32(part[1]);
+                        const int START = 0, END = 1;
+                        ulong endByte, startByte;
+                        string[] currentRange = ranges[i].Split("-".ToCharArray());
+
+                        if (ulong.TryParse(currentRange[END], out ulong parsedValue))
+                            endByte = parsedValue;
+                        else
+                            endByte = contentSize == 0 ? 0 : contentSize - 1;
+
+                        if (ulong.TryParse(currentRange[START], out parsedValue))
+                        {
+                            startByte = parsedValue;
+                        }
+                        else
+                        {
+                            // No beginning specified, get last n bytes of file
+                            // We already parsed end, so subtract from total and
+                            // make end the actual size of the file
+                            if (contentSize == 0)
+                            {
+                                startByte = 0;
+                            }
+                            else
+                            {
+                                startByte = contentSize - endByte;
+                                endByte = contentSize - 1;
+                            }
+                        }
+
+                        Logger.Info($"StartByte {startByte}; EndByte: {endByte}");
+                        byteRanges.Add(new ByteRangeHeader(startByte, endByte));
                     }
                 }
-                byteRange.Start = (ulong)Convert.ToInt32(part[0]);
-
-                byteRanges.Add(byteRange);
             }
-
             return byteRanges;
         }
     }

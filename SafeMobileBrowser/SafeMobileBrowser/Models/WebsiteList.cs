@@ -23,10 +23,13 @@ namespace SafeMobileBrowser.Models
                 "maidsafe.safenet",
                 "the.odyssey",
                 "safenetworkprimer",
-                "safe-blues.jpl",
                 "typer.game",
                 "complements.valmarkpro",
-                "safedapps.jpl1"
+                "safedapps.jpl1",
+                "maid.safedemo",
+                "cyberpunk",
+                "safe-blues.jpl",
+                "dog.tk1"
             };
         }
     }

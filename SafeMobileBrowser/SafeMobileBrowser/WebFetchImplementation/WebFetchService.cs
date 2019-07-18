@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using SafeApp.Utilities;
@@ -12,7 +13,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
     {
         private static readonly WebFetch WebFetch = new WebFetch(App.AppSession);
 
-        public static async Task<WebFetchResponse> FetchResourceAsync(string url, WebFetchOptions options = null)
+        public static async Task<WebFetchResponse> FetchResourceAsync(string url, [Optional] WebFetchOptions options)
         {
             try
             {

@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using Android.Content;
+﻿using Android.Content;
 using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.Droid.ControlRenderers;
-using SafeMobileBrowser.Helpers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 

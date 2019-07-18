@@ -37,6 +37,9 @@ namespace SafeMobileBrowser.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             UserDialogs.Init(() => this);
+#if DEBUG
+            Android.Webkit.WebView.SetWebContentsDebuggingEnabled(true);
+#endif
             LoadApplication(new App());
         }
 

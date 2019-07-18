@@ -4,18 +4,19 @@ namespace SafeMobileBrowser.Models
 {
     public class WebFetchOptions
     {
-        public List<ByteRange> Range { get; set; }
-
-        public WebFetchOptions()
-        {
-            Range = new List<ByteRange>();
-        }
+        public List<ByteRangeHeader> RangeHeader { get; set; }
     }
 
-    public class ByteRange
+    public class ByteRangeHeader
     {
-        public ulong Start { get; set; }
+        public ulong Start { get; }
 
-        public ulong End { get; set; }
+        public ulong End { get; }
+
+        public ByteRangeHeader(ulong startByteIndex, ulong endByteIndex)
+        {
+            Start = startByteIndex;
+            End = endByteIndex;
+        }
     }
 }

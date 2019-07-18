@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using MimeMapping;
 using SafeApp;
@@ -19,7 +20,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             _session = session;
         }
 
-        public async Task<WebFetchResponse> FetchAsync(string url, WebFetchOptions options = null)
+        public async Task<WebFetchResponse> FetchAsync(string url, [Optional] WebFetchOptions options)
         {
             try
             {
@@ -104,7 +105,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// <returns>MDataInfo for the service MData</returns>
         public async Task<MDataInfo> GetContainerFromPublicId(string pubName, string serviceName)
         {
-            var serviceInfo = (default(List<byte>), default(ulong));
+            (List<byte>, ulong) serviceInfo;
             try
             {
                 // Fetch mdata entry value for service
@@ -139,7 +140,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 throw new WebFetchException(WebFetchConstants.ServiceNotFound, WebFetchConstants.ServiceNotFoundMessage);
             }
 
-            // Try parsing the serive mdinfo
+            // Try parsing the service mdinfo
             MDataInfo serviceMd;
             try
             {
@@ -245,45 +246,54 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// <param name="openedFile">Open file</param>
         /// <param name="options">WebFetch options (ex. range to read)</param>
         /// <returns>Data as List<byte>, startIndex, endIndex, and size</returns>
-        public async Task<(List<byte>, ulong, ulong, ulong)> ReadContentFromFile(
+        public async Task<(List<byte>, ulong, ulong, ulong, ulong)> ReadContentFromFile(
             MDataInfo fileMdInfo,
             WebFile openedFile,
-            WebFetchOptions options = null)
+            [Optional] WebFetchOptions options)
         {
             try
             {
-                var filehandle = await _session.NFS.FileOpenAsync(fileMdInfo, openedFile.File, SafeApp.Misc.NFS.OpenMode.Read);
-                var filesize = await _session.NFS.FileSizeAsync(filehandle);
+                var fileHandle = await _session.NFS.FileOpenAsync(fileMdInfo, openedFile.File, SafeApp.Misc.NFS.OpenMode.Read);
+                var fileSize = await _session.NFS.FileSizeAsync(fileHandle);
 
                 if (options == null)
                 {
-                    var filedata = await _session.NFS.FileReadAsync(filehandle, 0, filesize - 1);
-                    return (filedata, 0, filesize - 1, filesize);
+                    var fileData = await _session.NFS.FileReadAsync(fileHandle, 0, fileSize - 1);
+                    return (fileData, 0, fileSize - 1, 0, fileSize);
                 }
                 else
                 {
-                    var partStartIndex = (ulong)(options?.Range[0].Start > 0 ? options?.Range[0].Start : 0);
-                    var partendIndex = 0UL;
+                    var partStartIndex = (ulong)options?.RangeHeader.First().Start;
+                    ulong partEndIndex;
 
-                    if (options?.Range[0].End > 0)
+                    if (options?.RangeHeader.First().End > 0)
                     {
-                        partendIndex = (ulong)options?.Range[0].End;
+                        partEndIndex = (ulong)options?.RangeHeader.First().End;
                     }
                     else
                     {
-                        partendIndex = filesize - 1;
+                        partEndIndex = fileSize - 1;
                     }
 
-                    var partSize = partendIndex - partStartIndex + 1;
-                    var filedata = await _session.NFS.FileReadAsync(filehandle, partStartIndex, partSize);
-                    return (filedata, partStartIndex, partendIndex, partSize);
+                    var partSize = partEndIndex - partStartIndex + 1;
+                    const ulong contentBufferLength = 1000000;
+                    if (partSize > contentBufferLength && (partSize + contentBufferLength) < fileSize)
+                    {
+                        var fileData = await _session.NFS.FileReadAsync(fileHandle, partStartIndex, contentBufferLength);
+                        return (fileData, partStartIndex, partEndIndex, partSize, fileSize);
+                    }
+                    else
+                    {
+                        var fileData = await _session.NFS.FileReadAsync(fileHandle, partStartIndex, partSize);
+                        return (fileData, partStartIndex, partEndIndex, partSize, fileSize);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
+                return (null, 0, 0, 0, 0);
             }
-            return (null, 0, 0, 0);
         }
     }
 }
