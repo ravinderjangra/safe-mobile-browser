@@ -27,15 +27,15 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 var (serviceMd, parsedPath) = await WebFetchHelper(url);
                 var path = CreateFinalPath(parsedPath);
                 var file = await TryDifferentPaths(serviceMd, path);
-                var filedata = await ReadContentFromFile(serviceMd, file, options);
-                response.Data = filedata.Item1.ToArray();
+                var fileData = await ReadContentFromFile(serviceMd, file, options);
+                response.Data = fileData.Item1.ToArray();
                 response.MimeType = file.MimeType;
                 response.Headers.Add("Content-Type", file.MimeType);
-                if (options != null)
-                {
-                    response.Headers.Add("Content-Range", $"bytes {filedata.Item2}-{filedata.Item3}/{filedata.Item4}");
-                    response.Headers.Add("Content-Length", $"{filedata.Item4}");
-                }
+                if (options == null)
+                    return response;
+
+                response.Headers.Add("Content-Range", $"bytes {fileData.Item2}-{fileData.Item3}/{fileData.Item4}");
+                response.Headers.Add("Content-Length", $"{fileData.Item4}");
                 return response;
             }
             catch (WebFetchException ex)
@@ -84,14 +84,19 @@ namespace SafeMobileBrowser.WebFetchImplementation
             var parsedUrl = new Uri(url);
             var hostname = parsedUrl.Host;
 
-            var hostparts = hostname.Split('.').ToList();
-            var publicName = hostparts.Last();
-            hostparts.Remove(publicName);
-            var serviceName = string.Join(".", hostparts);
+            var hostParts = hostname.Split('.').ToList();
+            var publicName = hostParts.Last();
+            hostParts.Remove(publicName);
+            var serviceName = string.Join(".", hostParts);
+
+            Logger.Info($"Public Name: {publicName}");
+            Logger.Info($"Service Name: {serviceName}");
 
             // let's decompose and normalise the path
             var path = parsedUrl.AbsolutePath == "/" ? string.Empty : parsedUrl.AbsolutePath;
             var parsedPath = string.IsNullOrEmpty(path) ? string.Empty : System.Web.HttpUtility.UrlDecode(path);
+
+            Logger.Info($"Parsed Path: {parsedPath}");
 
             var mdataInfo = await GetContainerFromPublicId(publicName, serviceName);
 
@@ -107,12 +112,12 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// <returns>MDataInfo for the service MData</returns>
         public async Task<MDataInfo> GetContainerFromPublicId(string pubName, string serviceName)
         {
-            (List<byte>, ulong) serviceInfo = (default(List<byte>), default(ulong));
+            var serviceInfo = (default(List<byte>), default(ulong));
             try
             {
                 // Fetch mdata entry value for service
                 var address = await SafeApp.Misc.Crypto.Sha3HashAsync(pubName.ToUtfBytes());
-                MDataInfo servicesContainer = new MDataInfo
+                var servicesContainer = new MDataInfo
                 {
                     TypeTag = WebFetchConstants.DNSTagType,
                     Name = address.ToArray()
@@ -217,6 +222,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
                         HandleNFSFetchException((FfiException)ex);
                 }
             }
+
             if (file == null)
             {
                 try
@@ -233,8 +239,8 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 }
             }
 
-            string extension = filePath.Substring(filePath.LastIndexOf('.') + 1);
-            string mimeType = MimeUtility.GetMimeMapping(extension);
+            var extension = filePath.Substring(filePath.LastIndexOf('.') + 1);
+            var mimeType = MimeUtility.GetMimeMapping(extension);
             return new WebFile { File = file.Value, MimeType = mimeType };
         }
 
