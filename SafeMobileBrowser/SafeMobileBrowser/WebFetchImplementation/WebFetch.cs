@@ -65,9 +65,6 @@ namespace SafeMobileBrowser.WebFetchImplementation
             else
                 finalPath = path;
 
-            Logger.Info($"Input path: {path}");
-            Logger.Info($"final path: {finalPath}");
-
             return finalPath;
         }
 
@@ -89,14 +86,9 @@ namespace SafeMobileBrowser.WebFetchImplementation
             hostParts.Remove(publicName);
             var serviceName = string.Join(".", hostParts);
 
-            Logger.Info($"Public Name: {publicName}");
-            Logger.Info($"Service Name: {serviceName}");
-
             // let's decompose and normalise the path
             var path = parsedUrl.AbsolutePath == "/" ? string.Empty : parsedUrl.AbsolutePath;
             var parsedPath = string.IsNullOrEmpty(path) ? string.Empty : System.Web.HttpUtility.UrlDecode(path);
-
-            Logger.Info($"Parsed Path: {parsedPath}");
 
             var mdataInfo = await GetContainerFromPublicId(publicName, serviceName);
 
@@ -199,7 +191,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
             {
                 try
                 {
-                    filePath = initialPath.Replace("/", string.Empty);
+                    filePath = initialPath.Substring(1, initialPath.Length - 1);
                     (file, _) = await _session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
                 }
                 catch (Exception ex)
@@ -227,7 +219,8 @@ namespace SafeMobileBrowser.WebFetchImplementation
             {
                 try
                 {
-                    filePath = $"{initialPath}/{WebFetchConstants.IndexFileName}".Replace("/", string.Empty);
+                    filePath = $"{initialPath}/{WebFetchConstants.IndexFileName}";
+                    filePath = filePath.Substring(1, filePath.Length - 1);
                     (file, _) = await _session.NFS.DirFetchFileAsync(fileMdInfo, filePath);
                 }
                 catch (Exception ex)
