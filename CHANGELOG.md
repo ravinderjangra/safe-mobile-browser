@@ -1,3 +1,10 @@
+## 0.1.1 - (2019-07-26)
+
+* fix/browser: update webfetch to load content from url with long path ([e0a998b](https://github.com/ravinderjangra/safe-mobile-browser/commit/e0a998b))
+* iOS Change Release to auto provisoning and remove entitlement ([63731b4](https://github.com/ravinderjangra/safe-mobile-browser/commit/63731b4))
+* refactor/browser: refactor browser code using resharper (#132) ([1f78142](https://github.com/ravinderjangra/safe-mobile-browser/commit/1f78142)), closes [#132](https://github.com/ravinderjangra/safe-mobile-browser/issues/132)
+* refactor/browser: refactoring ([ffcfc12](https://github.com/ravinderjangra/safe-mobile-browser/commit/ffcfc12))
+
 ## 0.1.0 - (2019-07-24)
 
 * Integrate address bar (#25) ([8c0daa5](https://github.com/ravinderjangra/SafeMobileBrowser/commit/8c0daa5)), closes [#25](https://github.com/ravinderjangra/SafeMobileBrowser/issues/25)
