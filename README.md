@@ -146,6 +146,7 @@ Copyrights in the SAFE Network are retained by their contributors. No copyright 
 
 Get your developer related questions clarified on [SAFE Dev Forum](https://forum.safedev.org/). If you're looking to share any ideas or thoughts on the SAFE Network you can reach out on [SAFE Network Forum](https://safenetforum.org/)
 
+
 ## License
 
 Licensed under the General Public License (GPL), version 3 [LICENSE](http://www.gnu.org/licenses/gpl-3.0.en.html).
