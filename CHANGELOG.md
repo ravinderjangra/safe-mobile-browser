@@ -1,3 +1,7 @@
+## 0.1.2 - (2019-07-26)
+
+* TEST (#25) ([8c0daa5](https://github.com/ravinderjangra/SafeMobileBrowser/commit/8c0daa5)), closes [#25](https://github.com/ravinderjangra/SafeMobileBrowser/issues/25)
+
 ## 0.1.0 - (2019-07-24)
 
 * Integrate address bar (#25) ([8c0daa5](https://github.com/ravinderjangra/SafeMobileBrowser/commit/8c0daa5)), closes [#25](https://github.com/ravinderjangra/SafeMobileBrowser/issues/25)
