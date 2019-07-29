@@ -196,20 +196,27 @@ namespace SafeMobileBrowser.ViewModels
 
         internal void SetAddressBarText(string url)
         {
+            var newUrlText = url;
+
             if (url.StartsWith("file://") && !IsErrorState)
             {
                 AddressbarText = string.Empty;
+                return;
             }
-            else if (url.StartsWith("safe://"))
+
+            if (url.StartsWith("safe://"))
             {
-                string newurlText = url.Replace("safe://", string.Empty).TrimEnd('/');
-                AddressbarText = newurlText;
+                newUrlText = url.Replace("safe://", string.Empty).TrimEnd('/');
             }
             else if (url.StartsWith("https://"))
             {
-                string newurlText = url.Replace("https://", string.Empty).TrimEnd('/');
-                AddressbarText = newurlText;
+                newUrlText = url.Replace("https://", string.Empty).TrimEnd('/');
             }
+            else if (url.StartsWith("http://"))
+            {
+                newUrlText = url.Replace("http://", string.Empty).TrimEnd('/');
+            }
+            AddressbarText = newUrlText;
         }
 
         public void OnTapped(string navigationBarIconString)
@@ -250,11 +257,11 @@ namespace SafeMobileBrowser.ViewModels
             try
             {
                 url = url?.Trim().ToLower() ?? AddressbarText.Trim().ToLower();
-
                 if (string.IsNullOrWhiteSpace(url))
                     return;
-                else
-                    AddressbarText = url;
+
+                SetAddressBarText(url);
+                url = AddressbarText;
 
                 if (!App.IsConnectedToInternet)
                 {

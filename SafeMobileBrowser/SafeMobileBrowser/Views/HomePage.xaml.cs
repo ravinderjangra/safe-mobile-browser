@@ -226,6 +226,7 @@ namespace SafeMobileBrowser.Views
 
         private async void EntryUnfocused(object sender, FocusEventArgs e)
         {
+            _viewModel.AddressBarUnfocusCommand.Execute(null);
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 AddressBarButton.IsVisible = false;
@@ -234,7 +235,6 @@ namespace SafeMobileBrowser.Views
                 AddressBarEntry.TranslateTo(0, 0, 250, Easing.CubicOut);
                 AddressBarEntry.WidthRequest -= SafeLabel.WidthRequest;
             });
-            _viewModel.AddressBarUnfocusCommand.Execute(null);
             _viewModel.IsAddressBarFocused = false;
         }
 
