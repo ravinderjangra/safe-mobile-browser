@@ -1,3 +1,10 @@
+## 0.1.3 - (2019-07-29)
+
+* Fixed sharing issue
+* Using updated NuGet package
+* Fix iOS crashes
+* Add zoom feature for Android
+
 ## 0.1.0 - (2019-07-24)
 
 * Integrate address bar (#25) ([8c0daa5](https://github.com/ravinderjangra/SafeMobileBrowser/commit/8c0daa5)), closes [#25](https://github.com/ravinderjangra/SafeMobileBrowser/issues/25)
