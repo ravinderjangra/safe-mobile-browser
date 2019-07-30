@@ -18,7 +18,17 @@ namespace SafeMobileBrowser.iOS
             Rg.Plugins.Popup.Popup.Init();
             XamEffects.iOS.Effects.Init();
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+
+            if (launchOptions != null)
+            {
+                var url = launchOptions["UIApplicationLaunchOptionsURLKey"] as NSUrl;
+                LoadApplication(new App(url.ToString()));
+            }
+            else
+            {
+                LoadApplication(new App());
+            }
+
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
 
@@ -29,7 +39,15 @@ namespace SafeMobileBrowser.iOS
               {
                   try
                   {
-                      await _authenticationService.ProcessAuthenticationResponseAsync(url.ToString());
+                      var opendUrl = url.ToString();
+                      if (opendUrl.ToLower().StartsWith("safe://"))
+                      {
+                          MessagingCenter.Send((App)Xamarin.Forms.Application.Current, MessageCenterConstants.LoadSafeWebsite, opendUrl);
+                      }
+                      else if (opendUrl.StartsWith(Constants.AppId))
+                      {
+                          await _authenticationService.ProcessAuthenticationResponseAsync(opendUrl);
+                      }
                       Logger.Info("IPC Msg Handling Completed");
                   }
                   catch (Exception ex)
