@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Foundation;
 using SafeMobileBrowser.Controls;
 using SafeMobileBrowser.iOS.ControlRenderers;
@@ -12,6 +13,8 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 {
     public class HybridWebViewRenderer : WkWebViewRenderer
     {
+        IDisposable _progressObserver;
+
         public static WKWebViewConfiguration GetHybridWKWebViewConfiguration()
         {
             var config = new WKWebViewConfiguration();
@@ -32,8 +35,14 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
 
             if (NativeView != null)
             {
+                _progressObserver = NativeView.AddObserver("estimatedProgress", NSKeyValueObservingOptions.New, ProgressObserverAction);
                 SetSource();
             }
+        }
+
+        private void ProgressObserverAction(NSObservedChange obj)
+        {
+            ((HybridWebView)Element).ContentLoadProgress = ((WKWebView)NativeView).EstimatedProgress;
         }
 
         private void SetSource()
@@ -46,6 +55,12 @@ namespace SafeMobileBrowser.iOS.ControlRenderers
             var nsBaseUri = new NSUrl($"file://{BaseUrl}");
 
             ((WKWebView)NativeView).LoadFileUrl(nsFileUri, nsBaseUri);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _progressObserver?.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
