@@ -5,10 +5,12 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Android.Views;
 using Plugin.CurrentActivity;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using Xamarin.Forms;
+using View = Android.Views.View;
 
 namespace SafeMobileBrowser.Droid
 {
@@ -66,6 +68,11 @@ namespace SafeMobileBrowser.Droid
                       Logger.Error(ex);
                   }
               });
+        }
+
+        public override void OnCreateContextMenu(IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
+        {
+            base.OnCreateContextMenu(menu, v, menuInfo);
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
