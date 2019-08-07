@@ -9,6 +9,10 @@ namespace SafeMobileBrowser.Helpers
 {
     public static class RequestHelpers
     {
+        private const string BytesText = "bytes=";
+        private const int StartIndex = 0;
+        private const int EndIndex = 1;
+
         // Generating encoded app request using app name, appid, vendor
         public static async Task<(uint, string)> GenerateEncodedAppRequestAsync()
         {
@@ -32,9 +36,7 @@ namespace SafeMobileBrowser.Helpers
         public static List<ByteRangeHeader> GetRangeFromHeaderRangeValue(string rangeHeaderString, [Optional] ulong contentSize)
         {
             var byteRanges = new List<ByteRangeHeader>();
-
-            var bytes = "bytes=";
-            var rangeValues = rangeHeaderString.Remove(0, bytes.Length).Split(',');
+            var rangeValues = rangeHeaderString.Remove(0, BytesText.Length).Split(',');
 
             // rangeHeader contains the value of the Range HTTP Header and can have values like:
             //      Range: bytes=0-1            * Get bytes 0 and 1, inclusive
@@ -48,45 +50,44 @@ namespace SafeMobileBrowser.Helpers
 
             foreach (var item in rangeValues)
             {
-                if (!string.IsNullOrEmpty(rangeHeaderString))
+                if (string.IsNullOrEmpty(rangeHeaderString))
+                    continue;
+
+                // Remove "Ranges" and break up the ranges
+                var ranges = rangeHeaderString.Replace(BytesText, string.Empty).Split(",".ToCharArray());
+
+                foreach (var rangeItem in ranges)
                 {
-                    // Remove "Ranges" and break up the ranges
-                    string[] ranges = rangeHeaderString.Replace("bytes=", string.Empty).Split(",".ToCharArray());
+                    ulong endByte, startByte;
+                    var currentRange = rangeItem.Split("-".ToCharArray());
 
-                    for (int i = 0; i < ranges.Length; i++)
+                    if (ulong.TryParse(currentRange[EndIndex], out var parsedValue))
+                        endByte = parsedValue;
+                    else
+                        endByte = contentSize == 0 ? 0 : contentSize - 1;
+
+                    if (ulong.TryParse(currentRange[StartIndex], out parsedValue))
                     {
-                        const int START = 0, END = 1;
-                        ulong endByte, startByte;
-                        string[] currentRange = ranges[i].Split("-".ToCharArray());
-
-                        if (ulong.TryParse(currentRange[END], out ulong parsedValue))
-                            endByte = parsedValue;
-                        else
-                            endByte = contentSize == 0 ? 0 : contentSize - 1;
-
-                        if (ulong.TryParse(currentRange[START], out parsedValue))
-                        {
-                            startByte = parsedValue;
-                        }
-                        else
-                        {
-                            // No beginning specified, get last n bytes of file
-                            // We already parsed end, so subtract from total and
-                            // make end the actual size of the file
-                            if (contentSize == 0)
-                            {
-                                startByte = 0;
-                            }
-                            else
-                            {
-                                startByte = contentSize - endByte;
-                                endByte = contentSize - 1;
-                            }
-                        }
-
-                        Logger.Info($"StartByte {startByte}; EndByte: {endByte}");
-                        byteRanges.Add(new ByteRangeHeader(startByte, endByte));
+                        startByte = parsedValue;
                     }
+                    else
+                    {
+                        // No beginning specified, get last n bytes of file
+                        // We already parsed end, so subtract from total and
+                        // make end the actual size of the file
+                        if (contentSize == 0)
+                        {
+                            startByte = 0;
+                        }
+                        else
+                        {
+                            startByte = contentSize - endByte;
+                            endByte = contentSize - 1;
+                        }
+                    }
+
+                    Logger.Info($"StartByte {startByte}; EndByte: {endByte}");
+                    byteRanges.Add(new ByteRangeHeader(startByte, endByte));
                 }
             }
             return byteRanges;
