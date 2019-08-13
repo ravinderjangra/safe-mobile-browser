@@ -62,7 +62,7 @@
                             <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
                                              Glyph="{x:Static icons:IconFont.ArrowLeft}"
                                              Size="30"
-                                             Color="{StaticResource BookmarkDeleteIconColor}" />
+                                             Color="{StaticResource ActionIconColor}" />
                         </Image.Source>
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoBackCommand}" />
@@ -96,7 +96,7 @@
                                     <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
                                                      Glyph="{x:Static icons:IconFont.Delete}"
                                                      Size="30"
-                                                     Color="{StaticResource BookmarkDeleteIconColor}" />
+                                                     Color="{StaticResource ActionIconColor}" />
                                 </Image.Source>
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Path=BindingContext.DeleteBookmarkCommand, Source={x:Reference BookmarkModalPage}}"

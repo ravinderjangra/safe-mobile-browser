@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icons="clr-namespace:SafeMobileBrowser.Models;assembly=SafeMobileBrowser"
+             xmlns:controls="clr-namespace:SafeMobileBrowser.Controls;assembly=SafeMobileBrowser"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.PrefersHomeIndicatorAutoHidden="true"
+             ios:Page.UseSafeArea="true"
+             mc:Ignorable="d"
+             x:Class="SafeMobileBrowser.Views.LogsModalPage"
+             x:Name="LogsModalPageReference">
+    <ContentPage.Resources>
+        <Style TargetType="StackLayout">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Image"
+               x:Key="ActionIconStyle">
+            <Setter Property="VerticalOptions"
+                    Value="Center" />
+            <Setter Property="HorizontalOptions"
+                    Value="End" />
+            <Setter Property="HeightRequest"
+                    Value="25" />
+            <Setter Property="WidthRequest"
+                    Value="25" />
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Spacing="0">
+            <StackLayout Spacing="0">
+                <StackLayout Style="{StaticResource ModalPageTitleView}">
+                    <Image VerticalOptions="Center"
+                           WidthRequest="25"
+                           HeightRequest="25">
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static icons:IconFont.ArrowLeft}"
+                                             Size="30"
+                                             Color="{StaticResource NavigationIconColor}" />
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Label Text="Logs"
+                           HorizontalOptions="StartAndExpand"
+                           Style="{StaticResource ModalPageTitleLabelStyle}" />
+                    <Image VerticalOptions="Center"
+                           HorizontalOptions="End"
+                           WidthRequest="25"
+                           HeightRequest="25">
+                        <Image.Source>
+                            <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                             Glyph="{x:Static icons:IconFont.Delete}"
+                                             Size="30"
+                                             Color="{StaticResource NavigationIconColor}" />
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DeleteAllLogFileCommand}" />
+                        </Image.GestureRecognizers>
+                        <Image.Triggers>
+                            <DataTrigger  TargetType="Image"
+                                          Binding="{Binding LogFiles.Count}"
+                                          Value="1">
+                                <Setter Property="Opacity"
+                                        Value="0.25" />
+                            </DataTrigger>
+                        </Image.Triggers>
+                    </Image>
+                </StackLayout>
+                <controls:ShadowBoxView ShadowType="Bottom"
+                                        HeightRequest="6" />
+            </StackLayout>
+            <CollectionView ItemsSource="{Binding LogFiles}"
+                            VerticalOptions="FillAndExpand">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="10">
+                            <Label Text="{Binding .}"
+                                   HorizontalOptions="StartAndExpand" />
+                            <Image Style="{StaticResource ActionIconStyle}"
+                                   HorizontalOptions="End">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                                     Glyph="{x:Static icons:IconFont.ContentCopy}"
+                                                     Size="30"
+                                                     Color="{StaticResource ActionIconColor}" />
+                                </Image.Source>
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer CommandParameter="{Binding}"
+                                                          Command="{Binding Path=BindingContext.CopyLogFileContentCommand, Source={x:Reference LogsModalPageReference}}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image Style="{StaticResource ActionIconStyle}"
+                                   HorizontalOptions="End">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="{DynamicResource MaterialFontFamily}"
+                                                     Glyph="{x:Static icons:IconFont.Delete}"
+                                                     Size="30"
+                                                     Color="{StaticResource ActionIconColor}" />
+                                </Image.Source>
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.DeleteLogFileCommand, Source={x:Reference LogsModalPageReference}}"
+                                                          CommandParameter="{Binding}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <Label Text="No logs files!!!"
+                           HorizontalOptions="Center"
+                           Margin="10" />
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
