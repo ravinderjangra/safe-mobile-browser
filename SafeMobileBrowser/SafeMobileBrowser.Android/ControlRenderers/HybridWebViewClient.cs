@@ -58,6 +58,7 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
 
                         var stream = new MemoryStream(safeResponse.Data);
                         var response = new WebResourceResponse(safeResponse.MimeType, "UTF-8", stream);
+
                         response.SetStatusCodeAndReasonPhrase(206, "Partial Content");
                         response.ResponseHeaders = new Dictionary<string, string>
                         {

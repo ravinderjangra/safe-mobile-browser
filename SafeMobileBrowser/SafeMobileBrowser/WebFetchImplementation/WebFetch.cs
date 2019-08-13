@@ -32,10 +32,11 @@ namespace SafeMobileBrowser.WebFetchImplementation
                 response.Data = fileData.Item1.ToArray();
                 response.MimeType = file.MimeType;
                 response.Headers.Add("Content-Type", file.MimeType);
+
                 if (options == null)
                     return response;
 
-                response.Headers.Add("Content-Range", $"bytes {fileData.Item2}-{fileData.Item3}/{fileData.Item4}");
+                response.Headers.Add("Content-Range", $"bytes {fileData.Item2}-{fileData.Item3}/{fileData.Item5}");
                 response.Headers.Add("Content-Length", $"{fileData.Item4}");
                 return response;
             }
@@ -245,7 +246,7 @@ namespace SafeMobileBrowser.WebFetchImplementation
         /// <param name="fileMdInfo">Opened file's MdInfo</param>
         /// <param name="openedFile">Open file</param>
         /// <param name="options">WebFetch options (ex. range to read)</param>
-        /// <returns>Data as List<byte>, startIndex, endIndex, and size</returns>
+        /// <returns>Data as List &lt; byte &gt;, startIndex, endIndex, and size</returns>
         public async Task<(List<byte>, ulong, ulong, ulong, ulong)> ReadContentFromFile(
             MDataInfo fileMdInfo,
             WebFile openedFile,
@@ -255,39 +256,23 @@ namespace SafeMobileBrowser.WebFetchImplementation
             {
                 var fileHandle = await _session.NFS.FileOpenAsync(fileMdInfo, openedFile.File, SafeApp.Misc.NFS.OpenMode.Read);
                 var fileSize = await _session.NFS.FileSizeAsync(fileHandle);
+                List<byte> fileData;
 
                 if (options == null)
                 {
-                    var fileData = await _session.NFS.FileReadAsync(fileHandle, 0, fileSize - 1);
+                    fileData = await _session.NFS.FileReadAsync(fileHandle, 0, fileSize - 1);
                     return (fileData, 0, fileSize - 1, 0, fileSize);
                 }
-                else
-                {
-                    var partStartIndex = (ulong)options?.RangeHeader.First().Start;
-                    ulong partEndIndex;
 
-                    if (options?.RangeHeader.First().End > 0)
-                    {
-                        partEndIndex = (ulong)options?.RangeHeader.First().End;
-                    }
-                    else
-                    {
-                        partEndIndex = fileSize - 1;
-                    }
+                var partStartIndex = options.RangeHeader.First().Start;
+                var partEndIndex = options.RangeHeader.First().End != 0 ?
+                    options.RangeHeader.First().End :
+                    fileSize - 1;
+                var partSize = (partEndIndex - partStartIndex) + 1;
 
-                    var partSize = partEndIndex - partStartIndex + 1;
-                    const ulong contentBufferLength = 1000000;
-                    if (partSize > contentBufferLength && (partSize + contentBufferLength) < fileSize)
-                    {
-                        var fileData = await _session.NFS.FileReadAsync(fileHandle, partStartIndex, contentBufferLength);
-                        return (fileData, partStartIndex, partEndIndex, partSize, fileSize);
-                    }
-                    else
-                    {
-                        var fileData = await _session.NFS.FileReadAsync(fileHandle, partStartIndex, partSize);
-                        return (fileData, partStartIndex, partEndIndex, partSize, fileSize);
-                    }
-                }
+                fileData = await _session.NFS.FileReadAsync(fileHandle, partStartIndex, partSize);
+
+                return (fileData, partStartIndex, partEndIndex, partSize, fileSize);
             }
             catch (Exception ex)
             {

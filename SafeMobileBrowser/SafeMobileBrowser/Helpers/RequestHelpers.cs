@@ -41,7 +41,7 @@ namespace SafeMobileBrowser.Helpers
             // rangeHeader contains the value of the Range HTTP Header and can have values like:
             //      Range: bytes=0-1            * Get bytes 0 and 1, inclusive
             //      Range: bytes=0-500          * Get bytes 0 to 500 (the first 501 bytes), inclusive
-            //      Range: bytes=400-1000       * Get bytes 500 to 1000 (501 bytes in total), inclusive
+            //      Range: bytes=500-1000       * Get bytes 500 to 1000 (501 bytes in total), inclusive
             //      Range: bytes=-200           * Get the last 200 bytes
             //      Range: bytes=500-           * Get all bytes from byte 500 to the end
             //
