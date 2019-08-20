@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
@@ -205,6 +206,11 @@ namespace SafeMobileBrowser.ViewModels
                 return;
             }
 
+            if (url.Contains(Constants.BufferText))
+            {
+                url = url.Replace(Constants.BufferText, string.Empty);
+            }
+
             if (url.StartsWith("safe://"))
             {
                 newUrlText = url.Replace("safe://", string.Empty).TrimEnd('/');
@@ -269,6 +275,13 @@ namespace SafeMobileBrowser.ViewModels
                     return;
 
                 IsNavigating = true;
+
+                string[] hostNames = AddressbarText.Split('.');
+
+                if (Device.RuntimePlatform == Device.Android && Regex.IsMatch(hostNames[hostNames.Length - 1], @"^\d+$"))
+                {
+                    url = $"{url}buffer-text";
+                }
 
                 Url = url;
             }
