@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using Acr.UserDialogs;
+using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Net;
@@ -61,7 +62,6 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         {
             var dataItem = @params[0].ToString();
             guessedFileName = URLUtil.GuessFileName(dataItem, null, null);
-
             if (dataItem.StartsWith("data:image"))
             {
                 var image = DataImage.TryParse(dataItem);
@@ -79,15 +79,16 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    Toast.MakeText(
-                        CrossCurrentActivity.Current.AppContext,
-                        "File Already Exists",
-                        ToastLength.Long).Show();
+                    UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
+                        .SetTitle("Media already Exists")
+                        .SetMessage($"Do you want replace the existing {guessedFileName} in Download")
+                        .Add("Replace File", null, null)
+                        .Add("Cancel", () => fileAlreadyExists = true, null)
+                        .SetUseBottomSheet(true));
                 });
-                fileAlreadyExists = true;
-                return true;
             }
-
+            if (fileAlreadyExists)
+                return true;
             var task = WebFetchService.FetchResourceAsync(dataItem);
             var webFetchResponse = task.WaitAndUnwrapException();
 
