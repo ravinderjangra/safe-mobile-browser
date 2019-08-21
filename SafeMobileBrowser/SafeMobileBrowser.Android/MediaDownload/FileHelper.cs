@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Android.Graphics;
 using Android.Widget;
 using Plugin.CurrentActivity;
@@ -13,21 +12,14 @@ namespace SafeMobileBrowser.Droid.MediaDownload
 {
     public static class FileHelper
     {
-        public static void ExportBitmapAsFile(Bitmap image, string fileType, [Optional] string fileName)
+        private static string DownloadPath => System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
+
+        public static void ExportBitmapAsFile(Bitmap image, string fileType, string fileName)
         {
             try
             {
-                var extKey = MimeMapping.MimeUtility.TypeMap.FirstOrDefault(t => t.Value == fileType).Key;
-                var downloadPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
-                var filePath = Path.Combine(downloadPath, fileName ?? $"image.{extKey}");
-                var stream = new FileStream(filePath, FileMode.Create);
-                image.Compress(Bitmap.CompressFormat.Png, 100, stream);
-                stream.Close();
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Toast.MakeText(CrossCurrentActivity.Current.AppContext, "Image downloaded", ToastLength.Long)
-                        .Show();
-                });
+                var filePath = Path.Combine(DownloadPath, fileName);
+                SaveMedia(image, filePath);
             }
             catch (Exception ex)
             {
@@ -40,6 +32,30 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                         ToastLength.Long).Show();
                 });
             }
+        }
+
+        public static bool MediaExists(string fileName)
+        {
+            var filePath = Path.Combine(DownloadPath, fileName);
+            return File.Exists(filePath);
+        }
+
+        public static void SaveImageAtDownloads(byte[] byteImageData, string fileName)
+        {
+            var filePath = Path.Combine(DownloadPath, fileName);
+            File.WriteAllBytes(filePath, byteImageData.Concat(new byte[] { (byte)0xD9 }).ToArray());
+        }
+
+        public static void SaveMedia(Bitmap image, string filePath)
+        {
+            var stream = new FileStream(filePath, FileMode.Create);
+            image.Compress(Bitmap.CompressFormat.Png, 100, stream);
+            stream.Close();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Toast.MakeText(CrossCurrentActivity.Current.AppContext, "Image downloaded", ToastLength.Long)
+                     .Show();
+            });
         }
     }
 }
