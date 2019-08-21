@@ -53,6 +53,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             _builder.SetContentTitle("Downloading Files");
             _builder.SetContentText("Download in progress...");
             _builder.SetSmallIcon(Resource.Drawable.safenetworklogo);
+            _builder.SetAutoCancel(true);
             _notificationManager.Notify(NotificationId, _builder.Build());
         }
 
