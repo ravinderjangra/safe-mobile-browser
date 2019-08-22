@@ -1,4 +1,5 @@
-﻿using Acr.UserDialogs;
+﻿using System.IO;
+using Acr.UserDialogs;
 using Android.Views;
 using Android.Webkit;
 
@@ -26,6 +27,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 .SetTitle("Image already exists")
                 .SetMessage($"Do you want replace the existing {guessedFileName} in Download")
                 .Add("Replace file", () => new ImageDownloader().Execute(_itemExtra, guessedFileName))
+                .Add("Create new file", () => CreateNewFileWithDifferentName(guessedFileName))
                 .SetCancel()
                 .SetUseBottomSheet(true));
             }
@@ -35,6 +37,21 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             }
 
             return true;
+        }
+
+        public void CreateNewFileWithDifferentName(string oldName)
+        {
+            int num = 0;
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(oldName);
+            var fileExtension = Path.GetExtension(oldName);
+            string newFileName;
+            do
+            {
+                num++;
+                newFileName = $"{fileNameWithoutExtension}-{num}{fileExtension}";
+            }
+            while (FileHelper.MediaExists(newFileName));
+            new ImageDownloader().Execute(_itemExtra, newFileName);
         }
     }
 }
