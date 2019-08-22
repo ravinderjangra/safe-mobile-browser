@@ -6,13 +6,16 @@ using Android.Widget;
 using Plugin.CurrentActivity;
 using SafeMobileBrowser.Helpers;
 using Xamarin.Forms;
+using AEnvironment = Android.OS.Environment;
 using Path = System.IO.Path;
 
 namespace SafeMobileBrowser.Droid.MediaDownload
 {
     public static class FileHelper
     {
-        private static string DownloadPath => Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
+        private static string DownloadPath => Path.Combine(
+            AEnvironment.ExternalStorageDirectory.AbsolutePath,
+            AEnvironment.DirectoryDownloads);
 
         public static void ExportBitmapAsFile(Bitmap image, string fileType, string fileName)
         {
@@ -53,7 +56,10 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             stream.Close();
             Device.BeginInvokeOnMainThread(() =>
             {
-                Toast.MakeText(CrossCurrentActivity.Current.AppContext, "Image downloaded", ToastLength.Long)
+                Toast.MakeText(
+                        CrossCurrentActivity.Current.AppContext,
+                        "Image downloaded",
+                        ToastLength.Long)
                      .Show();
             });
         }

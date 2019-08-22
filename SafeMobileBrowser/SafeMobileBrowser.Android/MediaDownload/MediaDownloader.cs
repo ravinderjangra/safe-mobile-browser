@@ -13,7 +13,9 @@ using Plugin.CurrentActivity;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.WebFetchImplementation;
 using Xamarin.Forms;
+using AEnvironment = Android.OS.Environment;
 using Object = Java.Lang.Object;
+using Path = System.IO.Path;
 
 namespace SafeMobileBrowser.Droid.MediaDownload
 {
@@ -83,7 +85,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                     UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
                         .SetTitle("Media already Exists")
                         .SetMessage($"Do you want replace the existing {_guessedFileName} in Download")
-                        .Add("Replace File", () => DownloadMedia(), null)
+                        .Add("Replace File", DownloadMedia, null)
                         .Add("Cancel", () => _fileAlreadyExists = true, null)
                         .SetUseBottomSheet(true));
                 });
@@ -98,7 +100,11 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 var task = WebFetchService.FetchResourceAsync(_guessedFileName);
                 var webFetchResponse = task.WaitAndUnwrapException();
 
-                var bitmap = BitmapFactory.DecodeByteArray(webFetchResponse.Data, 0, webFetchResponse.Data.Length);
+                var bitmap = BitmapFactory.DecodeByteArray(
+                    webFetchResponse.Data,
+                    0,
+                    webFetchResponse.Data.Length);
+
                 if (bitmap == null)
                 {
                     // work around as some jpg images are encoded incorrectly
@@ -135,11 +141,12 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                         ToastLength.Long).Show();
                 });
 
-                var downloadPath = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
-                var filePath = System.IO.Path.Combine(downloadPath, _guessedFileName);
-                File file = new File(filePath);
+                var downloadPath = Path.Combine(
+                    AEnvironment.ExternalStorageDirectory.AbsolutePath,
+                    AEnvironment.DirectoryDownloads);
+                var filePath = Path.Combine(downloadPath, _guessedFileName);
+                var file = new File(filePath);
 
-                var mimeTypeMap = MimeTypeMap.Singleton;
                 var fileExtension = MimeTypeMap.GetFileExtensionFromUrl(filePath);
                 var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(fileExtension.ToLower());
 
