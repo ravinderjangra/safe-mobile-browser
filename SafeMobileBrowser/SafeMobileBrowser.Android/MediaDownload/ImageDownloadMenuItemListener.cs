@@ -16,7 +16,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             if (string.IsNullOrEmpty(_itemExtra))
                 return false;
 
-            new MediaDownloader().Execute(_itemExtra);
+            new MediaDownloader(_itemExtra).Execute();
             return true;
         }
     }

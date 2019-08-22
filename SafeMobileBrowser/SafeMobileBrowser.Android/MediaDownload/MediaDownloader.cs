@@ -26,14 +26,37 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         private const string ChannelDescription = "Notification channel used by browser app";
         private const int NotificationId = 123456789;
         private const NotificationImportance ChannelNotificationImportance = NotificationImportance.Low;
+        private readonly string _imageDownloadData;
         private NotificationManager _notificationManager;
         private NotificationCompat.Builder _builder;
         private string _guessedFileName;
         private bool _fileAlreadyExists;
 
+        public MediaDownloader(Object imageDownloadData)
+        {
+            _imageDownloadData = imageDownloadData.ToString();
+        }
+
         protected override void OnPreExecute()
         {
             base.OnPreExecute();
+
+            _guessedFileName = URLUtil.GuessFileName(_imageDownloadData, null, null);
+            if (FileHelper.MediaExists(_guessedFileName))
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
+                    .SetTitle("Media already Exists")
+                    .SetMessage($"Do you want replace the existing {_guessedFileName} in Download")
+                    .Add("Replace File", null, null)
+                    .Add("Cancel", () => _fileAlreadyExists = true, null)
+                    .SetUseBottomSheet(true));
+                });
+            }
+
+            if (_fileAlreadyExists)
+                return;
 
             if (_notificationManager == null)
             {
@@ -63,11 +86,12 @@ namespace SafeMobileBrowser.Droid.MediaDownload
 
         protected override Object DoInBackground(params Object[] @params)
         {
-            var dataItem = @params[0].ToString();
-            _guessedFileName = URLUtil.GuessFileName(dataItem, null, null);
-            if (dataItem.StartsWith("data:image"))
+            if (_fileAlreadyExists)
+                return true;
+
+            if (_imageDownloadData.StartsWith("data:image"))
             {
-                var image = DataImage.TryParse(dataItem);
+                var image = DataImage.TryParse(_imageDownloadData);
                 if (image == null)
                     return false;
 
@@ -75,21 +99,10 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 return true;
             }
 
-            if (!dataItem.StartsWith("https"))
+            if (!_imageDownloadData.StartsWith("https"))
                 return false;
 
-            if (FileHelper.MediaExists(_guessedFileName))
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
-                        .SetTitle("Media already Exists")
-                        .SetMessage($"Do you want replace the existing {_guessedFileName} in Download")
-                        .Add("Replace File", DownloadMedia, null)
-                        .Add("Cancel", () => _fileAlreadyExists = true, null)
-                        .SetUseBottomSheet(true));
-                });
-            }
+            DownloadMedia();
             return true;
         }
 
@@ -125,14 +138,11 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         {
             base.OnPostExecute(result);
 
+            if (_fileAlreadyExists)
+                return;
+
             if ((bool)result)
             {
-                if (_fileAlreadyExists)
-                {
-                    _notificationManager.Cancel(NotificationId);
-                    return;
-                }
-
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     Toast.MakeText(
