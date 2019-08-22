@@ -1,8 +1,8 @@
-﻿using Acr.UserDialogs;
+﻿using System;
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
-using Android.Net;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Webkit;
@@ -10,6 +10,7 @@ using Android.Widget;
 using Java.IO;
 using Nito.AsyncEx.Synchronous;
 using Plugin.CurrentActivity;
+using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.WebFetchImplementation;
 using Xamarin.Forms;
 using Object = Java.Lang.Object;
@@ -82,28 +83,36 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                     UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
                         .SetTitle("Media already Exists")
                         .SetMessage($"Do you want replace the existing {_guessedFileName} in Download")
-                        .Add("Replace File", null, null)
+                        .Add("Replace File", () => DownloadMedia(), null)
                         .Add("Cancel", () => _fileAlreadyExists = true, null)
                         .SetUseBottomSheet(true));
                 });
             }
-            if (_fileAlreadyExists)
-                return true;
-            var task = WebFetchService.FetchResourceAsync(dataItem);
-            var webFetchResponse = task.WaitAndUnwrapException();
-
-            var bitmap = BitmapFactory.DecodeByteArray(webFetchResponse.Data, 0, webFetchResponse.Data.Length);
-            if (bitmap == null)
-            {
-                // work around as some jpg images are encoded incorrectly
-                FileHelper.SaveImageAtDownloads(webFetchResponse.Data, _guessedFileName);
-            }
-            else
-            {
-                FileHelper.ExportBitmapAsFile(bitmap, webFetchResponse.MimeType, _guessedFileName);
-            }
-
             return true;
+        }
+
+        private void DownloadMedia()
+        {
+            try
+            {
+                var task = WebFetchService.FetchResourceAsync(_guessedFileName);
+                var webFetchResponse = task.WaitAndUnwrapException();
+
+                var bitmap = BitmapFactory.DecodeByteArray(webFetchResponse.Data, 0, webFetchResponse.Data.Length);
+                if (bitmap == null)
+                {
+                    // work around as some jpg images are encoded incorrectly
+                    FileHelper.SaveImageAtDownloads(webFetchResponse.Data, _guessedFileName);
+                }
+                else
+                {
+                    FileHelper.ExportBitmapAsFile(bitmap, webFetchResponse.MimeType, _guessedFileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex);
+            }
         }
 
         protected override void OnPostExecute(Object result)
@@ -126,7 +135,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                         ToastLength.Long).Show();
                 });
 
-                var downloadPath = System.IO.Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, Environment.DirectoryDownloads);
+                var downloadPath = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
                 var filePath = System.IO.Path.Combine(downloadPath, _guessedFileName);
                 File file = new File(filePath);
 
@@ -135,7 +144,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(fileExtension.ToLower());
 
                 var intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(filePath));
-                intent.SetDataAndType(Uri.FromFile(file), mimeType);
+                intent.SetDataAndType(Android.Net.Uri.FromFile(file), mimeType);
                 intent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop | ActivityFlags.NewTask);
                 var pendingIntent = PendingIntent.GetActivity(CrossCurrentActivity.Current.Activity, 0, intent, 0);
 

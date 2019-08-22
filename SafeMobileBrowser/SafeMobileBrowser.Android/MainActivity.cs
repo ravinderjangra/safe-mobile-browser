@@ -69,11 +69,6 @@ namespace SafeMobileBrowser.Droid
               });
         }
 
-        public override void OnCreateContextMenu(IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
-        {
-            base.OnCreateContextMenu(menu, v, menuInfo);
-        }
-
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
