@@ -17,20 +17,21 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         {
             if (string.IsNullOrEmpty(_itemExtra))
                 return false;
+
             var guessedFileName = URLUtil.GuessFileName(_itemExtra, null, null);
 
             if (FileHelper.MediaExists(guessedFileName))
             {
                 UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
-                .SetTitle("Media already Exists")
+                .SetTitle("Image already exists")
                 .SetMessage($"Do you want replace the existing {guessedFileName} in Download")
-                .Add("Replace File", () => new MediaDownloader().Execute(_itemExtra, guessedFileName), null)
+                .Add("Replace file", () => new ImageDownloader().Execute(_itemExtra, guessedFileName))
                 .SetCancel()
                 .SetUseBottomSheet(true));
             }
             else
             {
-                _ = new MediaDownloader().Execute(_itemExtra, guessedFileName);
+                new ImageDownloader().Execute(_itemExtra, guessedFileName);
             }
 
             return true;

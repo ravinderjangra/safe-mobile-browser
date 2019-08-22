@@ -101,7 +101,7 @@
     <Compile Include="MediaDownload\DataImage.cs" />
     <Compile Include="MediaDownload\FileHelper.cs" />
     <Compile Include="MediaDownload\ImageDownloadMenuItemListener.cs" />
-    <Compile Include="MediaDownload\MediaDownloader.cs" />
+    <Compile Include="MediaDownload\ImageDownloader.cs" />
     <Compile Include="PlatformServices\PlatformService.cs" />
     <Compile Include="PlatformServices\GetAssetsFileData.cs" />
     <Compile Include="Resources\Resource.designer.cs" />

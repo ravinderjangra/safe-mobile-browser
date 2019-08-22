@@ -46,7 +46,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         public static void SaveImageAtDownloads(byte[] byteImageData, string fileName)
         {
             var filePath = Path.Combine(DownloadPath, fileName);
-            File.WriteAllBytes(filePath, byteImageData.Concat(new byte[] { (byte)0xD9 }).ToArray());
+            File.WriteAllBytes(filePath, byteImageData.Concat(new[] { (byte)0xD9 }).ToArray());
         }
 
         public static void SaveMedia(Bitmap image, string filePath)

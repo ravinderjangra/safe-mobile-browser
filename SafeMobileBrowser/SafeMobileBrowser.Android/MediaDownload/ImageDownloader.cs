@@ -1,5 +1,4 @@
 ﻿using System;
-using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -19,7 +18,7 @@ using Path = System.IO.Path;
 
 namespace SafeMobileBrowser.Droid.MediaDownload
 {
-    public class MediaDownloader : AsyncTask
+    public class ImageDownloader : AsyncTask
     {
         private const string ChannelId = "browser_notification_channel";
         private const string ChannelName = "browser_channel";
@@ -45,7 +44,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 {
                     var mChannel = new NotificationChannel(ChannelId, ChannelName, ChannelNotificationImportance)
                     {
-                        Description = ChannelDescription,
+                        Description = ChannelDescription
                     };
                     mChannel.EnableLights(false);
                     mChannel.SetShowBadge(false);
