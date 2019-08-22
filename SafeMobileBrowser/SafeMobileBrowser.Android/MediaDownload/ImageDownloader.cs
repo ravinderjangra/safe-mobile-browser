@@ -64,21 +64,30 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         {
             _imageDownloadData = @params[0].ToString();
             _guessedFileName = @params[1].ToString();
-            if (_imageDownloadData.StartsWith("data:image"))
+
+            try
             {
-                var image = DataImage.TryParse(_imageDownloadData);
-                if (image == null)
+                if (_imageDownloadData.StartsWith("data:image"))
+                {
+                    var image = DataImage.TryParse(_imageDownloadData);
+                    if (image == null)
+                        return false;
+
+                    FileHelper.ExportBitmapAsFile(image.Image, image.MimeType, _guessedFileName);
+                    return true;
+                }
+
+                if (!_imageDownloadData.StartsWith("https"))
                     return false;
 
-                FileHelper.ExportBitmapAsFile(image.Image, image.MimeType, _guessedFileName);
+                DownloadMedia();
                 return true;
             }
-
-            if (!_imageDownloadData.StartsWith("https"))
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
                 return false;
-
-            DownloadMedia();
-            return true;
+            }
         }
 
         private void DownloadMedia()
@@ -106,6 +115,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             catch (Exception ex)
             {
                 Logger.Debug(ex);
+                throw;
             }
         }
 

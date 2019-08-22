@@ -27,13 +27,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Toast.MakeText(
-                        CrossCurrentActivity.Current.AppContext,
-                        "Failed to download image",
-                        ToastLength.Long).Show();
-                });
+                throw;
             }
         }
 
@@ -45,23 +39,31 @@ namespace SafeMobileBrowser.Droid.MediaDownload
 
         public static void SaveImageAtDownloads(byte[] byteImageData, string fileName)
         {
-            var filePath = Path.Combine(DownloadPath, fileName);
-            File.WriteAllBytes(filePath, byteImageData.Concat(new[] { (byte)0xD9 }).ToArray());
+            try
+            {
+                var filePath = Path.Combine(DownloadPath, fileName);
+                File.WriteAllBytes(filePath, byteImageData.Concat(new[] { (byte)0xD9 }).ToArray());
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                throw;
+            }
         }
 
         public static void SaveMedia(Bitmap image, string filePath)
         {
-            var stream = new FileStream(filePath, FileMode.Create);
-            image.Compress(Bitmap.CompressFormat.Png, 100, stream);
-            stream.Close();
-            Device.BeginInvokeOnMainThread(() =>
+            try
             {
-                Toast.MakeText(
-                        CrossCurrentActivity.Current.AppContext,
-                        "Image downloaded",
-                        ToastLength.Long)
-                     .Show();
-            });
+                var stream = new FileStream(filePath, FileMode.Create);
+                image.Compress(Bitmap.CompressFormat.Png, 100, stream);
+                stream.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                throw;
+            }
         }
     }
 }
