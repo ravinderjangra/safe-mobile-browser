@@ -25,8 +25,8 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         private const NotificationImportance ChannelNotificationImportance = NotificationImportance.Low;
         private NotificationManager _notificationManager;
         private NotificationCompat.Builder _builder;
-        private string guessedFileName;
-        private bool fileAlreadyExists = false;
+        private string _guessedFileName;
+        private bool _fileAlreadyExists;
 
         protected override void OnPreExecute()
         {
@@ -61,33 +61,33 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         protected override Object DoInBackground(params Object[] @params)
         {
             var dataItem = @params[0].ToString();
-            guessedFileName = URLUtil.GuessFileName(dataItem, null, null);
+            _guessedFileName = URLUtil.GuessFileName(dataItem, null, null);
             if (dataItem.StartsWith("data:image"))
             {
                 var image = DataImage.TryParse(dataItem);
                 if (image == null)
                     return false;
 
-                FileHelper.ExportBitmapAsFile(image.Image, image.MimeType, guessedFileName);
+                FileHelper.ExportBitmapAsFile(image.Image, image.MimeType, _guessedFileName);
                 return true;
             }
 
             if (!dataItem.StartsWith("https"))
                 return false;
 
-            if (FileHelper.MediaExists(guessedFileName))
+            if (FileHelper.MediaExists(_guessedFileName))
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
                         .SetTitle("Media already Exists")
-                        .SetMessage($"Do you want replace the existing {guessedFileName} in Download")
+                        .SetMessage($"Do you want replace the existing {_guessedFileName} in Download")
                         .Add("Replace File", null, null)
-                        .Add("Cancel", () => fileAlreadyExists = true, null)
+                        .Add("Cancel", () => _fileAlreadyExists = true, null)
                         .SetUseBottomSheet(true));
                 });
             }
-            if (fileAlreadyExists)
+            if (_fileAlreadyExists)
                 return true;
             var task = WebFetchService.FetchResourceAsync(dataItem);
             var webFetchResponse = task.WaitAndUnwrapException();
@@ -96,11 +96,11 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             if (bitmap == null)
             {
                 // work around as some jpg images are encoded incorrectly
-                FileHelper.SaveImageAtDownloads(webFetchResponse.Data, guessedFileName);
+                FileHelper.SaveImageAtDownloads(webFetchResponse.Data, _guessedFileName);
             }
             else
             {
-                FileHelper.ExportBitmapAsFile(bitmap, webFetchResponse.MimeType, guessedFileName);
+                FileHelper.ExportBitmapAsFile(bitmap, webFetchResponse.MimeType, _guessedFileName);
             }
 
             return true;
@@ -112,7 +112,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
 
             if ((bool)result)
             {
-                if (fileAlreadyExists)
+                if (_fileAlreadyExists)
                 {
                     _notificationManager.Cancel(NotificationId);
                     return;
@@ -127,7 +127,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 });
 
                 var downloadPath = System.IO.Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, Environment.DirectoryDownloads);
-                var filePath = System.IO.Path.Combine(downloadPath, guessedFileName);
+                var filePath = System.IO.Path.Combine(downloadPath, _guessedFileName);
                 File file = new File(filePath);
 
                 var mimeTypeMap = MimeTypeMap.Singleton;
@@ -140,7 +140,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 var pendingIntent = PendingIntent.GetActivity(CrossCurrentActivity.Current.Activity, 0, intent, 0);
 
                 _builder.SetContentTitle("Download completed");
-                _builder.SetContentText(guessedFileName);
+                _builder.SetContentText(_guessedFileName);
                 _builder.SetContentIntent(pendingIntent);
                 _notificationManager.Notify(NotificationId, _builder.Build());
             }

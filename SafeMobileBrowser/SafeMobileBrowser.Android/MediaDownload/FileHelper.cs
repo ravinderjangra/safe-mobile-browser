@@ -12,7 +12,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
 {
     public static class FileHelper
     {
-        private static string DownloadPath => System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
+        private static string DownloadPath => Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
 
         public static void ExportBitmapAsFile(Bitmap image, string fileType, string fileName)
         {
