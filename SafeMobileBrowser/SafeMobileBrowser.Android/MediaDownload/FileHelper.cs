@@ -65,5 +65,20 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 throw;
             }
         }
+
+        public static string GenerateNewFileName(string oldName)
+        {
+            int num = 0;
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(oldName);
+            var fileExtension = Path.GetExtension(oldName);
+            string newFileName;
+            do
+            {
+                num++;
+                newFileName = $"{fileNameWithoutExtension}-{num}{fileExtension}";
+            }
+            while (MediaExists(newFileName));
+            return newFileName;
+        }
     }
 }
