@@ -1,8 +1,8 @@
 ﻿using Android.Content;
-using SafeMobileBrowser.Controls;
-using SafeMobileBrowser.Droid.ControlRenderers;
 using Android.Views;
 using Plugin.CurrentActivity;
+using SafeMobileBrowser.Controls;
+using SafeMobileBrowser.Droid.ControlRenderers;
 using SafeMobileBrowser.Droid.MediaDownload;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;

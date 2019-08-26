@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Android.Views;
 using Android.Webkit;
 
