@@ -28,7 +28,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         private string _imageDownloadData;
         private NotificationManager _notificationManager;
         private NotificationCompat.Builder _builder;
-        private string _guessedFileName;
+        private string _fileName;
 
         protected override void OnPreExecute()
         {
@@ -63,7 +63,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         protected override Object DoInBackground(params Object[] @params)
         {
             _imageDownloadData = @params[0].ToString();
-            _guessedFileName = @params[1].ToString();
+            _fileName = @params[1].ToString();
 
             try
             {
@@ -73,7 +73,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                     if (image == null)
                         return false;
 
-                    FileHelper.ExportBitmapAsFile(image.Image, image.MimeType, _guessedFileName);
+                    FileHelper.ExportBitmapAsFile(image.Image, image.MimeType, _fileName);
                     return true;
                 }
 
@@ -105,11 +105,11 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 if (bitmap == null)
                 {
                     // work around as some jpg images are encoded incorrectly
-                    FileHelper.SaveImageAtDownloads(webFetchResponse.Data, _guessedFileName);
+                    FileHelper.SaveImageAtDownloads(webFetchResponse.Data, _fileName);
                 }
                 else
                 {
-                    FileHelper.ExportBitmapAsFile(bitmap, webFetchResponse.MimeType, _guessedFileName);
+                    FileHelper.ExportBitmapAsFile(bitmap, webFetchResponse.MimeType, _fileName);
                 }
             }
             catch (Exception ex)
@@ -136,7 +136,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 var downloadPath = Path.Combine(
                     AEnvironment.ExternalStorageDirectory.AbsolutePath,
                     AEnvironment.DirectoryDownloads);
-                var filePath = Path.Combine(downloadPath, _guessedFileName);
+                var filePath = Path.Combine(downloadPath, _fileName);
                 var file = new File(filePath);
 
                 var fileExtension = MimeTypeMap.GetFileExtensionFromUrl(filePath);
@@ -148,7 +148,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 var pendingIntent = PendingIntent.GetActivity(CrossCurrentActivity.Current.Activity, 0, intent, 0);
 
                 _builder.SetContentTitle("Download completed");
-                _builder.SetContentText(_guessedFileName);
+                _builder.SetContentText(_fileName);
                 _builder.SetContentIntent(pendingIntent);
                 _notificationManager.Notify(NotificationId, _builder.Build());
             }

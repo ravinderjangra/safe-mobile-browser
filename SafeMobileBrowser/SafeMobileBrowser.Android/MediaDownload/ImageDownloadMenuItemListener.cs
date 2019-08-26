@@ -19,25 +19,25 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             if (string.IsNullOrEmpty(_itemExtra))
                 return false;
 
-            var guessedFileName = URLUtil.GuessFileName(_itemExtra, null, null);
+            var fileName = URLUtil.GuessFileName(_itemExtra, null, null);
 
-            if (FileHelper.MediaExists(guessedFileName))
+            if (FileHelper.MediaExists(fileName))
             {
                 UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
                 .SetTitle("Image already exists")
-                .SetMessage($"Do you want replace the existing {guessedFileName} in Download")
+                .SetMessage($"Do you want replace the existing {fileName} in Download")
                 .Add(
                     "Replace file",
-                    () => new ImageDownloader().Execute(_itemExtra, guessedFileName))
+                    () => new ImageDownloader().Execute(_itemExtra, fileName))
                 .Add(
                     "Create new file",
-                    () => new ImageDownloader().Execute(_itemExtra, FileHelper.GenerateNewFileName(guessedFileName)))
+                    () => new ImageDownloader().Execute(_itemExtra, FileHelper.GenerateNewFileName(fileName)))
                 .SetCancel()
                 .SetUseBottomSheet(true));
             }
             else
             {
-                new ImageDownloader().Execute(_itemExtra, guessedFileName);
+                new ImageDownloader().Execute(_itemExtra, fileName);
             }
 
             return true;
