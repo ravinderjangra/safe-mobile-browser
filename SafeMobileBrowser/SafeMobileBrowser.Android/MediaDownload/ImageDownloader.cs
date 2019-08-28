@@ -20,19 +20,23 @@ namespace SafeMobileBrowser.Droid.MediaDownload
 {
     public class ImageDownloader : AsyncTask
     {
-        private const string ChannelId = "browser_notification_channel";
         private const string ChannelName = "browser_channel";
+        private const string ChannelId = "browser_notification_channel";
         private const string ChannelDescription = "Notification channel used by browser app";
-        private const int NotificationId = 123456789;
         private const NotificationImportance ChannelNotificationImportance = NotificationImportance.Low;
+        private int _notificationId;
         private string _imageDownloadData;
         private NotificationManager _notificationManager;
         private NotificationCompat.Builder _builder;
         private string _fileName;
+        Random _rand = new Random();
 
         protected override void OnPreExecute()
         {
             base.OnPreExecute();
+
+            var randNo = _rand.Next(10000000);
+            _notificationId = randNo;
 
             if (_notificationManager == null)
             {
@@ -55,9 +59,9 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             _builder = new NotificationCompat.Builder(CrossCurrentActivity.Current.AppContext, ChannelId);
             _builder.SetContentTitle("Downloading Files");
             _builder.SetContentText("Download in progress...");
-            _builder.SetSmallIcon(Resource.Drawable.safenetworklogo);
+            _builder.SetSmallIcon(Resource.Drawable.notification_icon);
             _builder.SetAutoCancel(true);
-            _notificationManager.Notify(NotificationId, _builder.Build());
+            _notificationManager.Notify(_notificationId, _builder.Build());
         }
 
         protected override Object DoInBackground(params Object[] @params)
@@ -150,7 +154,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 _builder.SetContentTitle("Download completed");
                 _builder.SetContentText(_fileName);
                 _builder.SetContentIntent(pendingIntent);
-                _notificationManager.Notify(NotificationId, _builder.Build());
+                _notificationManager.Notify(_notificationId, _builder.Build());
             }
             else
             {
@@ -162,7 +166,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                         ToastLength.Long).Show();
                 });
                 _builder.SetContentText("Download failed");
-                _notificationManager.Notify(NotificationId, _builder.Build());
+                _notificationManager.Notify(_notificationId, _builder.Build());
             }
         }
     }
