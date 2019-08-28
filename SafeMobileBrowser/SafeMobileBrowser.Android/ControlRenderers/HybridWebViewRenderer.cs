@@ -43,10 +43,9 @@ namespace SafeMobileBrowser.Droid.ControlRenderers
 
             var webViewHitTestResult = Control.GetHitTestResult().Type;
 
-            if (webViewHitTestResult == AWebkit.HitTestResult.ImageType ||
-                webViewHitTestResult == AWebkit.HitTestResult.SrcAnchorType)
+            if (webViewHitTestResult == AWebkit.HitTestResult.ImageType)
             {
-                menu.SetHeaderTitle("Download Image");
+                menu.SetHeaderTitle("Download image");
                 menu.Add(0, 1, 0, "click to download")
                     .SetOnMenuItemClickListener(new ImageDownloadMenuItemListener(Control.GetHitTestResult().Extra));
             }
