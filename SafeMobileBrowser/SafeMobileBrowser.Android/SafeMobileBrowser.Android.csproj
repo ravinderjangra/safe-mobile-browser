@@ -98,6 +98,10 @@
     <Compile Include="ControlRenderers\FontExtensions.cs" />
     <Compile Include="PlatformServices\NativeThemeManager.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MediaDownload\DataImage.cs" />
+    <Compile Include="MediaDownload\FileHelper.cs" />
+    <Compile Include="MediaDownload\ImageDownloadMenuItemListener.cs" />
+    <Compile Include="MediaDownload\ImageDownloader.cs" />
     <Compile Include="PlatformServices\PlatformService.cs" />
     <Compile Include="PlatformServices\GetAssetsFileData.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -180,6 +184,9 @@
     <AndroidAsset Include="..\SafeMobileBrowser\AssetFiles\index.html">
       <Link>Assets\index.html</Link>
     </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\notification_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />

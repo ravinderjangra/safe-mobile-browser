@@ -9,6 +9,7 @@ using Plugin.CurrentActivity;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
 using Xamarin.Forms;
+using View = Android.Views.View;
 
 namespace SafeMobileBrowser.Droid
 {
