@@ -29,7 +29,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         private NotificationManager _notificationManager;
         private NotificationCompat.Builder _builder;
         private string _fileName;
-        Random _rand = new Random();
+        private Random _rand = new Random();
 
         protected override void OnPreExecute()
         {

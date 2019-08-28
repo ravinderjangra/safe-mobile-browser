@@ -19,8 +19,8 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                 return false;
 
             var fileName = _itemExtra.StartsWith("data:image") ?
-                            $"image.{DataImage.GetImageExtension(_itemExtra)}"
-                            : URLUtil.GuessFileName(_itemExtra, null, null);
+                            $"image.{DataImage.GetImageExtension(_itemExtra)}" :
+                            URLUtil.GuessFileName(_itemExtra, null, null);
 
             if (FileHelper.MediaExists(fileName))
             {
