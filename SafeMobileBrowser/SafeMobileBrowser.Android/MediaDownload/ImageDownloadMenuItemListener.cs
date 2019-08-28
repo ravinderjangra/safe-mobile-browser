@@ -23,8 +23,8 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             if (FileHelper.MediaExists(fileName))
             {
                 UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
-                .SetTitle("Image already exists")
-                .SetMessage($"Do you want replace the existing {fileName} in Download")
+                .SetTitle("An image with the same name already exists")
+                .SetMessage($"Do you want replace the existing {fileName} in download")
                 .Add(
                     "Replace file",
                     () => new ImageDownloader().Execute(_itemExtra, fileName))

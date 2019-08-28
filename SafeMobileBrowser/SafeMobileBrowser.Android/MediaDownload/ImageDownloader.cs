@@ -57,7 +57,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
             }
 
             _builder = new NotificationCompat.Builder(CrossCurrentActivity.Current.AppContext, ChannelId);
-            _builder.SetContentTitle("Downloading Files");
+            _builder.SetContentTitle("Downloading file");
             _builder.SetContentText("Download in progress...");
             _builder.SetSmallIcon(Resource.Drawable.notification_icon);
             _builder.SetAutoCancel(true);
