@@ -2,10 +2,7 @@
 using System.IO;
 using System.Linq;
 using Android.Graphics;
-using Android.Widget;
-using Plugin.CurrentActivity;
 using SafeMobileBrowser.Helpers;
-using Xamarin.Forms;
 using AEnvironment = Android.OS.Environment;
 using Path = System.IO.Path;
 

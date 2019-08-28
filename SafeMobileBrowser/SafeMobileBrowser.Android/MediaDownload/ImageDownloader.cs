@@ -76,8 +76,7 @@ namespace SafeMobileBrowser.Droid.MediaDownload
                     var image = DataImage.TryParse(_imageDownloadData);
                     if (image == null)
                         return false;
-
-                    FileHelper.ExportBitmapAsFile(image.Image, image.MimeType, _fileName);
+                    FileHelper.SaveImageAtDownloads(image.RawData, _fileName);
                     return true;
                 }
 

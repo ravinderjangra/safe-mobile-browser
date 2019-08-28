@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Android.Graphics;
+using Android.Webkit;
 
 namespace SafeMobileBrowser.Droid.MediaDownload
 {
@@ -21,6 +22,18 @@ namespace SafeMobileBrowser.Droid.MediaDownload
         public byte[] RawData { get; }
 
         public Bitmap Image => BitmapFactory.DecodeByteArray(RawData, 0, RawData.Length);
+
+        public static string GetImageExtension(string dataUri)
+        {
+            if (string.IsNullOrWhiteSpace(dataUri))
+                return null;
+
+            var match = DataUriPattern.Match(dataUri);
+            if (!match.Success)
+                return null;
+
+            return MimeTypeMap.Singleton.GetExtensionFromMimeType(match.Groups["type"].Value);
+        }
 
         public static DataImage TryParse(string dataUri)
         {
