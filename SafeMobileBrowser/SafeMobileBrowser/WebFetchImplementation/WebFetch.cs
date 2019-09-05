@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MimeMapping;
 using SafeApp;
 using SafeApp.Utilities;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
+using Xamarin.Forms;
 
 namespace SafeMobileBrowser.WebFetchImplementation
 {
@@ -78,6 +80,15 @@ namespace SafeMobileBrowser.WebFetchImplementation
             if (string.IsNullOrWhiteSpace(url))
                 throw new WebFetchException(WebFetchConstants.NullUrl, WebFetchConstants.NullUrlMessage);
 
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                var urlCheck = url.Replace("https://", string.Empty);
+                var firstSlash = urlCheck.IndexOf('/');
+                var host = urlCheck.Substring(0, firstSlash);
+
+                if (int.TryParse(host, out _))
+                    url = $"https://www.{urlCheck}";
+            }
             var parsedUrl = new Uri(url);
             var hostname = parsedUrl.Host;
 
@@ -91,7 +102,6 @@ namespace SafeMobileBrowser.WebFetchImplementation
             var parsedPath = string.IsNullOrEmpty(path) ? string.Empty : System.Web.HttpUtility.UrlDecode(path);
 
             var mdataInfo = await GetContainerFromPublicId(publicName, serviceName);
-
             return (mdataInfo, parsedPath);
         }
 
