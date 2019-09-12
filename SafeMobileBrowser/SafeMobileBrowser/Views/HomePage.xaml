@@ -9,6 +9,7 @@
              BackgroundColor="{DynamicResource ContentPageBackgroundColor}"
              xmlns:xamEffect="clr-namespace:XamEffects;assembly=XamEffects"
              xmlns:icons="clr-namespace:SafeMobileBrowser.Models"
+             xmlns:pulltorefresh="clr-namespace:Refractored.XamForms.PullToRefresh;assembly=Refractored.XamForms.PullToRefresh"
              Padding="0">
 
     <NavigationPage.TitleView>
@@ -98,8 +99,20 @@
             <Grid VerticalOptions="FillAndExpand"
                   HorizontalOptions="FillAndExpand"
                   RowSpacing="0">
-                
-                <controls:HybridWebView x:Name="HybridWebViewControl"
+
+                <pulltorefresh:PullToRefreshLayout RefreshCommand="{Binding Source={x:Reference HybridWebViewControl}, Path=ReloadCommand}"
+                                                   IsRefreshing="{Binding IsRefreshing}"
+                                                   RefreshColor="{StaticResource PrimaryColor}">
+                    <pulltorefresh:PullToRefreshLayout.Triggers>
+                        <DataTrigger TargetType="pulltorefresh:PullToRefreshLayout"
+                                     Binding="{Binding CanGoToHomePage}"
+                                     Value="False">
+                            <Setter Property="IsEnabled"
+                                    Value="False" />
+                        </DataTrigger>
+                    </pulltorefresh:PullToRefreshLayout.Triggers>
+
+                    <controls:HybridWebView x:Name="HybridWebViewControl"
                                         HorizontalOptions="FillAndExpand"
                                         VerticalOptions="FillAndExpand"
                                         Source="{Binding Url, Mode=TwoWay}"
@@ -112,6 +125,8 @@
                                         NavigatedCommand="{Binding WebViewNavigatedCommand}"
                                         android:WebView.EnableZoomControls="true"
                                         android:WebView.DisplayZoomControls="False" />
+
+                </pulltorefresh:PullToRefreshLayout>
 
                 <ProgressBar x:Name="AdvancedProgressbar"
                              IsVisible="{Binding IsNavigating}"

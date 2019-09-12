@@ -99,6 +99,14 @@ namespace SafeMobileBrowser.ViewModels
 
         public bool CanGoToHomePage { get; set; }
 
+        private bool _isRefreshing;
+
+        public bool IsRefreshing
+        {
+            get => _isRefreshing;
+            set => SetProperty(ref _isRefreshing, value);
+        }
+
         public string ErrorType { get; private set; }
 
         public bool IsErrorState { get; set; }
@@ -147,6 +155,9 @@ namespace SafeMobileBrowser.ViewModels
             }
 
             MessagingCenter.Send((App)Application.Current, MessageCenterConstants.UpdateWelcomePageTheme);
+            if (obj.NavigationEvent == WebNavigationEvent.Refresh)
+                IsRefreshing = false;
+
             IsNavigating = false;
         }
 
@@ -159,6 +170,9 @@ namespace SafeMobileBrowser.ViewModels
 
                 if (!IsNavigating)
                     IsNavigating = true;
+
+                if (args.NavigationEvent == WebNavigationEvent.Refresh && CurrentUrl != args.Url.Replace("https://", "safe://"))
+                    IsRefreshing = true;
             }
             catch (Exception ex)
             {
