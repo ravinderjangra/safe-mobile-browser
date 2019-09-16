@@ -15,6 +15,10 @@ namespace SafeMobileBrowser.iOS
 
         public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
+#if ENABLE_TEST_CLOUD
+            Xamarin.Calabash.Start();
+#endif
+
             Forms.SetFlags("CollectionView_Experimental");
             Rg.Plugins.Popup.Popup.Init();
             XamEffects.iOS.Effects.Init();
