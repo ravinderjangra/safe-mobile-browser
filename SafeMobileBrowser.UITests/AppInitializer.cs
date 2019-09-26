@@ -11,6 +11,7 @@ namespace SafeMobileBrowser.UITests
             {
                 return ConfigureApp
                     .Android
+                    .EnableLocalScreenshots()
                     .InstalledApp(packageIdentifier)
                     .StartApp();
             }

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeMobileBrowser.Android",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeMobileBrowser.iOS", "SafeMobileBrowser\SafeMobileBrowser.iOS\SafeMobileBrowser.iOS.csproj", "{57FE94F9-50C7-46ED-9D5B-454D7B2976C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafeMobileBrowser", "SafeMobileBrowser\SafeMobileBrowser\SafeMobileBrowser.csproj", "{6ACB7EE7-DD48-4E79-AB5B-C1492BDCC349}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeMobileBrowser", "SafeMobileBrowser\SafeMobileBrowser\SafeMobileBrowser.csproj", "{6ACB7EE7-DD48-4E79-AB5B-C1492BDCC349}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeMobileBrowser.UITests", "SafeMobileBrowser.UITests\SafeMobileBrowser.UITests.csproj", "{645E49E0-3012-4CE5-A713-2E3E338DFB2C}"
 EndProject

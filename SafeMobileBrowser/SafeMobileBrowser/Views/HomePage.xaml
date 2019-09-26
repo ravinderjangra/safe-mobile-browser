@@ -51,6 +51,7 @@
                                               IsTextPredictionEnabled="False"
                                               Text="{Binding AddressbarText}"
                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                              AutomationId="AddressBarEntry"
                                               AddressBarFocusCommand="{Binding AddressBarFocusCommand, Mode=OneWayToSource}"
                                               ios:Entry.CursorColor="{DynamicResource PrimaryColor}">
                         <controls:AddressBarEntry.Margin>
@@ -116,6 +117,7 @@
                                         HorizontalOptions="FillAndExpand"
                                         VerticalOptions="FillAndExpand"
                                         Source="{Binding Url, Mode=TwoWay}"
+                                        AutomationId="HybridWebView"
                                         CanGoBack="{Binding CanGoBack}"
                                         CanGoForward="{Binding CanGoForward}"
                                         GoBackCommand="{Binding GoBackCommand}"
@@ -163,6 +165,7 @@
                 <xamEffect:BorderView Grid.Row="1"
                                       Grid.Column="0"
                                       IsEnabled="{Binding CanGoBack}"
+                                      AutomationId="BackActionIcon"
                                       Style="{StaticResource BottomMenubarIconFrameStyle}"
                                       xamEffect:TouchEffect.Color="{DynamicResource GrayUnFippedColor}"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
@@ -175,6 +178,7 @@
                                       Grid.Row="1"
                                       Style="{StaticResource BottomMenubarIconFrameStyle}"
                                       IsEnabled="{Binding CanGoForward}"
+                                      AutomationId="ForwardActionIcon"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
                                       xamEffect:Commands.TapParameter="Forward"
                                       xamEffect:TouchEffect.Color="LightGray">
@@ -185,6 +189,7 @@
                 <xamEffect:BorderView Grid.Column="2"
                                       Grid.Row="1"
                                       Style="{StaticResource BottomMenubarIconFrameStyle}"
+                                      AutomationId="FocusActionIcon"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
                                       xamEffect:Commands.TapParameter="Focus">
                     <Label Style="{DynamicResource BottomNavigationIconStyle}"
@@ -194,6 +199,7 @@
                 <xamEffect:BorderView Grid.Column="3"
                                       Grid.Row="1"
                                       IsEnabled="{Binding CanGoToHomePage}"
+                                      AutomationId="HomeActionIcon"
                                       Style="{StaticResource BottomMenubarIconFrameStyle}"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
                                       xamEffect:Commands.TapParameter="Home">
@@ -205,6 +211,7 @@
                 <xamEffect:BorderView Grid.Column="4"
                                       Grid.Row="1"
                                       Style="{StaticResource BottomMenubarIconFrameStyle}"
+                                      AutomationId="MenuActionIcon"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
                                       xamEffect:Commands.TapParameter="Menu">
                     <Label Style="{DynamicResource BottomNavigationIconStyle}"

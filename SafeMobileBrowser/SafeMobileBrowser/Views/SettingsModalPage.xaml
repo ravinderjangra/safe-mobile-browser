@@ -78,6 +78,7 @@
                                 HorizontalOptions="End"
                                 VerticalOptions="Center"
                                 x:Name="AppThemeChangeSwitch"
+                                AutomationId="AppDarkModeSwitch"
                                 IsToggled="{Binding AppDarkMode, Mode=OneWayToSource}" />
                     </Grid>
 
