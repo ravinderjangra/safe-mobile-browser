@@ -1,97 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:PopupPage xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+<pages:PopupPage x:Class="SafeMobileBrowser.Views.MenuPopUp"
                  xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 mc:Ignorable="d"
-                 x:Class="SafeMobileBrowser.Views.MenuPopUp"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  xmlns:xamEffect="clr-namespace:XamEffects;assembly=XamEffects"
-                 BackgroundColor="Transparent"
                  x:Name="MenuPopUpPage"
-                 HasSystemPadding="True">
+                 BackgroundColor="Transparent"
+                 HasSystemPadding="True"
+                 mc:Ignorable="d">
 
     <ContentPage.Resources>
-        <Style TargetType="Grid"
-               x:Key="PopupMenuItemGridStyle">
-            <Setter Property="Opacity"
-                    Value="0.75" />
-            <Setter Property="Padding"
-                    Value="25, 5" />
-            <Setter Property="HeightRequest"
-                    Value="40" />
-            <Setter Property="RowSpacing"
-                    Value="0" />
-            <Setter Property="ColumnSpacing"
-                    Value="10" />
+        <Style x:Key="PopupMenuItemGridStyle"
+               TargetType="Grid">
+            <Setter Property="Opacity" Value="0.75" />
+            <Setter Property="Padding" Value="25, 5" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="RowSpacing" Value="0" />
+            <Setter Property="ColumnSpacing" Value="10" />
         </Style>
-        <Style TargetType="Label"
-               x:Key="PopupMenuItemLabelStyle">
-            <Setter Property="TextColor"
-                    Value="{DynamicResource PrimaryTextColor}" />
-            <Setter Property="FontSize"
-                    Value="Medium" />
-            <Setter Property="VerticalOptions"
-                    Value="Center" />
+        <Style x:Key="PopupMenuItemLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+            <Setter Property="FontSize" Value="Medium" />
+            <Setter Property="VerticalOptions" Value="Center" />
         </Style>
-        <Style TargetType="Label"
+        <Style x:Key="PopupMenuItemIconStyle"
                BasedOn="{StaticResource PrimaryActionIconStyle}"
-               x:Key="PopupMenuItemIconStyle">
-            <Setter Property="FontSize"
-                    Value="20" />
-            <Setter Property="HeightRequest"
-                    Value="20" />
-            <Setter Property="WidthRequest"
-                    Value="20" />
-            <Setter Property="VerticalOptions"
-                    Value="Center" />
+               TargetType="Label">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="HeightRequest" Value="20" />
+            <Setter Property="WidthRequest" Value="20" />
+            <Setter Property="VerticalOptions" Value="Center" />
         </Style>
 
-        <Style TargetType="Label"
+        <Style x:Key="PopUpBottomMenuBarIconStyle"
                BasedOn="{StaticResource PrimaryActionIconStyle}"
-               x:Key="PopUpBottomMenuBarIconStyle">
-            <Setter Property="Margin"
-                    Value="30,0,0,0" />
-            <Setter Property="FontSize"
-                    Value="25" />
+               TargetType="Label">
+            <Setter Property="Margin" Value="30,0,0,0" />
+            <Setter Property="FontSize" Value="25" />
         </Style>
 
         <Style x:Key="PopUpBottomMenubarIconFrameStyle"
-               TargetType="xamEffect:BorderView"
-               BasedOn="{StaticResource BottomMenubarIconFrameStyle}">
-            <Setter Property="WidthRequest"
-                    Value="80" />
-            <Setter Property="Margin"
-                    Value="0" />
-            <Setter Property="HorizontalOptions"
-                    Value="CenterAndExpand" />
+               BasedOn="{StaticResource BottomMenubarIconFrameStyle}"
+               TargetType="xamEffect:BorderView">
+            <Setter Property="WidthRequest" Value="80" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
         </Style>
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <Frame CornerRadius="10"
-               Padding="0, 10, 0, 0"
+        <Frame Padding="0,10,0,0"
                BackgroundColor="{DynamicResource ContentPageBackgroundColor}"
-               HeightRequest="200"
-               WidthRequest="220"
+               CornerRadius="10"
+               HeightRequest="140"
+               HorizontalOptions="EndAndExpand"
                VerticalOptions="EndAndExpand"
-               HorizontalOptions="EndAndExpand">
+               WidthRequest="220">
             <StackLayout Margin="0"
                          Spacing="0">
                 <StackLayout BindableLayout.ItemsSource="{Binding PopMenuItems}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Grid Style="{StaticResource PopupMenuItemGridStyle}"
-                                  IsEnabled="{Binding IsEnabled}"
-                                  xamEffect:Commands.Tap="{Binding Source={x:Reference MenuPopUpPage}, Path=BindingContext.PopupMenuItemTappedCommand}"
+                            <Grid xamEffect:Commands.Tap="{Binding Source={x:Reference MenuPopUpPage}, Path=BindingContext.PopupMenuItemTappedCommand}"
                                   xamEffect:Commands.TapParameter="{Binding MenuItemTitle}"
-                                  xamEffect:TouchEffect.Color="{DynamicResource SecondaryGrayColor}">
+                                  xamEffect:TouchEffect.Color="{DynamicResource SecondaryGrayColor}"
+                                  IsEnabled="{Binding IsEnabled}"
+                                  Style="{StaticResource PopupMenuItemGridStyle}">
                                 <Grid.Triggers>
-                                    <DataTrigger TargetType="Grid"
-                                                 Binding="{Binding IsEnabled}"
+                                    <DataTrigger Binding="{Binding IsEnabled}"
+                                                 TargetType="Grid"
                                                  Value="false">
-                                        <Setter Property="Opacity"
-                                                Value="0.25" />
+                                        <Setter Property="Opacity" Value="0.25" />
                                     </DataTrigger>
                                 </Grid.Triggers>
                                 <Grid.ColumnDefinitions>
@@ -107,21 +89,21 @@
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
-                <BoxView HeightRequest="0.5"
-                         BackgroundColor="{DynamicResource BoxViewSyleColor}" />
-                <StackLayout Orientation="Horizontal"
-                             Padding="10"
-                             HeightRequest="30">
+                <BoxView BackgroundColor="{DynamicResource BoxViewSyleColor}"
+                         HeightRequest="0.5" />
+                <StackLayout Padding="10"
+                             HeightRequest="30"
+                             Orientation="Horizontal">
 
-                    <xamEffect:BorderView IsEnabled="{Binding ReloadMenuItem.IsEnabled}"
-                                          xamEffect:TouchEffect.Color="{DynamicResource SecondaryGrayColor}"
-                                          Style="{StaticResource PopUpBottomMenubarIconFrameStyle}"
+                    <xamEffect:BorderView Margin="0"
                                           xamEffect:Commands.Tap="{Binding RefreshWebViewCommand}"
-                                          Margin="0"
-                                          WidthRequest="80"
-                                          HorizontalOptions="CenterAndExpand">
-                        <Label Style="{DynamicResource PopUpBottomMenuBarIconStyle}"
-                               AutomationId="ReloadActionIcon"
+                                          xamEffect:TouchEffect.Color="{DynamicResource SecondaryGrayColor}"
+                                          HorizontalOptions="CenterAndExpand"
+                                          IsEnabled="{Binding ReloadMenuItem.IsEnabled}"
+                                          Style="{StaticResource PopUpBottomMenubarIconFrameStyle}"
+                                          WidthRequest="80">
+                        <Label AutomationId="ReloadActionIcon"
+                               Style="{DynamicResource PopUpBottomMenuBarIconStyle}"
                                Text="{Binding ReloadMenuItem.MenuItemIcon}" />
                     </xamEffect:BorderView>
                 </StackLayout>

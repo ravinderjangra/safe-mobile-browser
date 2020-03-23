@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
+using SafeMobileBrowser.Services;
 using SafeMobileBrowser.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -101,6 +102,13 @@ namespace SafeMobileBrowser.Views
                     var theme = Xamarin.Essentials.Preferences.Get(Constants.AppThemePreferenceKey, false);
                     var jsToEvaluate = "ChangeBackgroundColor (" + $"'{theme.ToString()}'" + ")";
                     await HybridWebViewControl.EvaluateJavaScriptAsync(jsToEvaluate);
+                });
+            MessagingCenter.Subscribe<AuthenticationService>(
+                this,
+                MessageCenterConstants.Authenticated,
+                (sender) =>
+                {
+                    _viewModel.UpdateAuthenticationState();
                 });
 
             HybridWebViewControl.Navigated += HybridWebViewControl_NavigatedAsync;
@@ -295,6 +303,9 @@ namespace SafeMobileBrowser.Views
             MessagingCenter.Unsubscribe<HomePageViewModel>(
                 this,
                 MessageCenterConstants.UpdateErrorMsg);
+            MessagingCenter.Unsubscribe<AuthenticationService>(
+                this,
+                MessageCenterConstants.Authenticated);
         }
     }
 }

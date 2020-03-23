@@ -11,7 +11,6 @@ using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Acr.UserDialogs;
 using Rg.Plugins.Popup.Extensions;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Services;
@@ -55,6 +54,16 @@ namespace SafeMobileBrowser.ViewModels
         public ICommand FetchPreviousVersionCommand { get; set; }
 
         public ICommand FetchNextVersionCommand { get; set; }
+
+        public ICommand AuthenticateBrowserCommand { get; set; }
+
+        private bool _isAuthenticated;
+
+        public bool IsAuthenticated
+        {
+            get => _isAuthenticated;
+            set => SetProperty(ref _isAuthenticated, value);
+        }
 
         private bool _canFetchPreviousVersion;
 
@@ -187,6 +196,17 @@ namespace SafeMobileBrowser.ViewModels
             AddressBarUnfocusCommand = new Command(RestoreAddressBar);
             FetchPreviousVersionCommand = new Command(FetchPreviousVersion);
             FetchNextVersionCommand = new Command(FetchNextVersion);
+            AuthenticateBrowserCommand = new Command(AuthenticateBrowser);
+        }
+
+        internal void UpdateAuthenticationState()
+        {
+            IsAuthenticated = App.AppSession != null;
+        }
+
+        private async void AuthenticateBrowser()
+        {
+            await AuthenticationService.RequestAuthenticationAsync(true);
         }
 
         private void FetchPreviousVersion()

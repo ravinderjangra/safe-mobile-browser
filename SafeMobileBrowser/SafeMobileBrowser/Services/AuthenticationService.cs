@@ -72,7 +72,7 @@ namespace SafeMobileBrowser.Services
                 if (!appLaunched)
                 {
                     await Application.Current.MainPage.DisplayAlert(
-                        "Authorisation failed",
+                        "Authentication failed",
                         "The SAFE Authenticator app is required to authorise this application",
                         "OK");
                 }
@@ -99,7 +99,7 @@ namespace SafeMobileBrowser.Services
                         using (UserDialogs.Instance.Loading(Constants.ConnectingProgressText))
                         {
                             App.AppSession = await Session.AppConnectAsync(Constants.AppId, encodedResponse);
-                            MessagingCenter.Send(this, MessageCenterConstants.Authenticated, encodedResponse);
+                            MessagingCenter.Send(this, MessageCenterConstants.Authenticated);
                         }
                     }
                 }

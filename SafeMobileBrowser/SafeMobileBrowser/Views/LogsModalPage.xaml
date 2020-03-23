@@ -34,7 +34,8 @@
         </Style>
     </ContentPage.Resources>
     <NavigationPage.TitleView>
-        <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+        <StackLayout HorizontalOptions="FillAndExpand"
+                     Orientation="Horizontal">
             <Label HorizontalOptions="StartAndExpand"
                    Style="{StaticResource ModalPageTitleLabelStyle}"
                    Text="Logs" />
@@ -47,25 +48,33 @@
             </Label>
             <StackLayout.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="Android">0,0,10,0</On>
-                    <On Platform="iOS">0</On>
+                    <On Platform="Android">
+                        0,0,10,0
+                    </On>
+                    <On Platform="iOS">
+                        0
+                    </On>
                 </OnPlatform>
             </StackLayout.Padding>
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout Spacing="0">
-            <CollectionView ItemsSource="{Binding LogFiles}" VerticalOptions="FillAndExpand">
+            <CollectionView ItemsSource="{Binding LogFiles}"
+                            VerticalOptions="FillAndExpand">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Padding="10" Orientation="Horizontal">
+                        <StackLayout Padding="10"
+                                     Orientation="Horizontal">
                             <Label HorizontalOptions="StartAndExpand"
                                    Text="{Binding .}"
                                    TextColor="{DynamicResource PrimaryTextColor}" />
 
-                            <Label Style="{StaticResource ActionIconStyle}" Text="{x:Static icons:IconFont.ContentCopy}">
+                            <Label Style="{StaticResource ActionIconStyle}"
+                                   Text="{x:Static icons:IconFont.ContentCopy}">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.CopyLogFileContentCommand, Source={x:Reference LogsModalPageReference}}" CommandParameter="{Binding}" />
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.CopyLogFileContentCommand, Source={x:Reference LogsModalPageReference}}"
+                                                          CommandParameter="{Binding}" />
                                 </Label.GestureRecognizers>
                             </Label>
 
@@ -73,7 +82,8 @@
                                    Style="{StaticResource ActionIconStyle}"
                                    Text="{x:Static icons:IconFont.Delete}">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.DeleteLogFileCommand, Source={x:Reference LogsModalPageReference}}" CommandParameter="{Binding}" />
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.DeleteLogFileCommand, Source={x:Reference LogsModalPageReference}}"
+                                                          CommandParameter="{Binding}" />
                                 </Label.GestureRecognizers>
                             </Label>
 

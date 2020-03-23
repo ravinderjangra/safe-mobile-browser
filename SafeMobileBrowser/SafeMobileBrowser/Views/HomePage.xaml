@@ -2,49 +2,37 @@
 <ContentPage x:Class="SafeMobileBrowser.Views.HomePage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
              xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-             ios:Page.PrefersHomeIndicatorAutoHidden="true"
-             BackgroundColor="{DynamicResource ContentPageBackgroundColor}"
-             xmlns:xamEffect="clr-namespace:XamEffects;assembly=XamEffects"
+             xmlns:controls="clr-namespace:SafeMobileBrowser.Controls"
              xmlns:icons="clr-namespace:SafeMobileBrowser.Models"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:pulltorefresh="clr-namespace:Refractored.XamForms.PullToRefresh;assembly=Refractored.XamForms.PullToRefresh"
-             Padding="0">
+             xmlns:xamEffect="clr-namespace:XamEffects;assembly=XamEffects"
+             Padding="0"
+             ios:Page.PrefersHomeIndicatorAutoHidden="true"
+             BackgroundColor="{DynamicResource ContentPageBackgroundColor}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="Frame"
-                   x:Key="VersionChangeLabelFrame">
-                <Setter Property="HasShadow"
-                        Value="False" />
-                <Setter Property="CornerRadius"
-                        Value="5" />
-                <Setter Property="Padding"
-                        Value="3" />
-                <Setter Property="VerticalOptions"
-                        Value="Center" />
-                <Setter Property="BackgroundColor"
-                        Value="LightGreen" />
+            <Style x:Key="VersionChangeLabelFrame"
+                   TargetType="Frame">
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Padding" Value="3" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="BackgroundColor" Value="LightGreen" />
                 <Style.Triggers>
-                    <Trigger TargetType="Frame"
-                             Property="IsEnabled"
-                             Value="False">
-                        <Setter Property="BackgroundColor"
-                                Value="LightGray" />
+                    <Trigger TargetType="Frame" Property="IsEnabled" Value="False">
+                        <Setter Property="BackgroundColor" Value="LightGray" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style TargetType="Label"
-                   x:Key="VersionChangeLabelIcon">
-                <Setter Property="FontSize"
-                        Value="20" />
-                <Setter Property="VerticalOptions"
-                        Value="Center" />
-                <Setter Property="HorizontalTextAlignment"
-                        Value="Center" />
-                <Setter Property="FontFamily"
-                        Value="{DynamicResource MaterialFontFamily}" />
+            <Style x:Key="VersionChangeLabelIcon"
+                   TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="FontFamily" Value="{DynamicResource MaterialFontFamily}" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -61,8 +49,8 @@
                    HasShadow="False"
                    HorizontalOptions="FillAndExpand">
                 <Grid Padding="5,1"
-                      HeightRequest="30"
                       ColumnSpacing="0"
+                      HeightRequest="30"
                       HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -80,18 +68,18 @@
 
                     <controls:AddressBarEntry x:Name="AddressBarEntry"
                                               Grid.Column="1"
+                                              ios:Entry.CursorColor="{DynamicResource PrimaryColor}"
+                                              AddressBarFocusCommand="{Binding AddressBarFocusCommand, Mode=OneWayToSource}"
+                                              AutomationId="AddressBarEntry"
                                               FontSize="14"
                                               HorizontalOptions="FillAndExpand"
-                                              Placeholder="enter url"
-                                              PlaceholderColor="{DynamicResource GreySmokeMediumColor}"
-                                              VerticalOptions="Center"
                                               IsSpellCheckEnabled="False"
                                               IsTextPredictionEnabled="False"
+                                              Placeholder="enter url"
+                                              PlaceholderColor="{DynamicResource GreySmokeMediumColor}"
                                               Text="{Binding AddressbarText}"
                                               TextColor="{DynamicResource SecondaryTextColor}"
-                                              AutomationId="AddressBarEntry"
-                                              AddressBarFocusCommand="{Binding AddressBarFocusCommand, Mode=OneWayToSource}"
-                                              ios:Entry.CursorColor="{DynamicResource PrimaryColor}">
+                                              VerticalOptions="Center">
                         <controls:AddressBarEntry.Margin>
                             <OnPlatform x:TypeArguments="Thickness">
                                 <On Platform="iOS"
@@ -110,25 +98,25 @@
                     </controls:AddressBarEntry>
 
                     <Label x:Name="AddressBarButton"
-                           Style="{StaticResource PrimaryActionIconStyle}"
-                           Text="{x:Static icons:IconFont.Close}"
+                           Grid.Column="2"
+                           Margin="3"
                            FontSize="25"
                            HeightRequest="20"
-                           Margin="3"
+                           HorizontalOptions="End"
                            IsVisible="False"
-                           Grid.Column="2"
-                           HorizontalOptions="End">
+                           Style="{StaticResource PrimaryActionIconStyle}"
+                           Text="{x:Static icons:IconFont.Close}">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="ClearAddressBar" />
                         </Label.GestureRecognizers>
                     </Label>
 
-                    <StackLayout Orientation="Horizontal"
-                                 Grid.Column="3"
+                    <StackLayout Grid.Column="3"
                                  HorizontalOptions="End"
-                                 IsVisible="{Binding ShowVersionChangeControls}">
-                        <Frame Style="{DynamicResource VersionChangeLabelFrame}"
-                               IsEnabled="{Binding CanFetchPreviousVersion}">
+                                 IsVisible="{Binding ShowVersionChangeControls}"
+                                 Orientation="Horizontal">
+                        <Frame IsEnabled="{Binding CanFetchPreviousVersion}"
+                               Style="{DynamicResource VersionChangeLabelFrame}">
                             <Label Style="{DynamicResource VersionChangeLabelIcon}"
                                    Text="{x:Static icons:IconFont.SkipPrevious}">
                                 <Label.GestureRecognizers>
@@ -137,8 +125,8 @@
                             </Label>
                         </Frame>
 
-                        <Frame Style="{DynamicResource VersionChangeLabelFrame}"
-                               IsEnabled="{Binding CanFetchNextVersion}">
+                        <Frame IsEnabled="{Binding CanFetchNextVersion}"
+                               Style="{DynamicResource VersionChangeLabelFrame}">
                             <Label Style="{DynamicResource VersionChangeLabelIcon}"
                                    Text="{x:Static icons:IconFont.SkipNext}">
                                 <Label.GestureRecognizers>
@@ -150,65 +138,83 @@
                 </Grid>
             </Frame>
 
+            <xamEffect:BorderView xamEffect:Commands.Tap="{Binding AuthenticateBrowserCommand}"
+                                  xamEffect:TouchEffect.Color="LightGray"
+                                  CornerRadius="10"
+                                  WidthRequest="40">
+                <Label FontSize="25"
+                       HorizontalOptions="Center"
+                       Style="{StaticResource PrimaryActionIconStyle}"
+                       Text="{x:Static icons:IconFont.Web}"
+                       TextColor="DarkSlateGray"
+                       VerticalOptions="Center">
+                    <Label.Triggers>
+                        <DataTrigger Binding="{Binding IsAuthenticated}"
+                                     TargetType="Label"
+                                     Value="True">
+                            <Setter Property="TextColor" Value="DarkGreen" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+            </xamEffect:BorderView>
         </StackLayout>
     </NavigationPage.TitleView>
 
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="FillAndExpand"
-                     Margin="0"
+        <StackLayout Margin="0"
                      Padding="0"
+                     HorizontalOptions="FillAndExpand"
                      Spacing="0"
                      VerticalOptions="FillAndExpand">
 
-            <Grid VerticalOptions="FillAndExpand"
-                  HorizontalOptions="FillAndExpand"
-                  RowSpacing="0">
+            <Grid HorizontalOptions="FillAndExpand"
+                  RowSpacing="0"
+                  VerticalOptions="FillAndExpand">
 
-                <pulltorefresh:PullToRefreshLayout RefreshCommand="{Binding Source={x:Reference HybridWebViewControl}, Path=ReloadCommand}"
-                                                   IsRefreshing="{Binding IsRefreshing}"
-                                                   RefreshColor="{StaticResource PrimaryColor}">
+                <pulltorefresh:PullToRefreshLayout IsRefreshing="{Binding IsRefreshing}"
+                                                   RefreshColor="{StaticResource PrimaryColor}"
+                                                   RefreshCommand="{Binding Source={x:Reference HybridWebViewControl}, Path=ReloadCommand}">
                     <pulltorefresh:PullToRefreshLayout.Triggers>
-                        <DataTrigger TargetType="pulltorefresh:PullToRefreshLayout"
-                                     Binding="{Binding CanGoToHomePage}"
+                        <DataTrigger Binding="{Binding CanGoToHomePage}"
+                                     TargetType="pulltorefresh:PullToRefreshLayout"
                                      Value="False">
-                            <Setter Property="IsEnabled"
-                                    Value="False" />
+                            <Setter Property="IsEnabled" Value="False" />
                         </DataTrigger>
                     </pulltorefresh:PullToRefreshLayout.Triggers>
 
                     <controls:HybridWebView x:Name="HybridWebViewControl"
-                                            HorizontalOptions="FillAndExpand"
-                                            VerticalOptions="FillAndExpand"
-                                            Source="{Binding Url, Mode=TwoWay}"
+                                            android:WebView.DisplayZoomControls="False"
+                                            android:WebView.EnableZoomControls="true"
                                             AutomationId="HybridWebView"
                                             CanGoBack="{Binding CanGoBack}"
                                             CanGoForward="{Binding CanGoForward}"
+                                            CurrentPageVersion="{Binding CurrentWebPageVersion}"
                                             GoBackCommand="{Binding GoBackCommand}"
                                             GoForwardCommand="{Binding GoForwardCommand}"
-                                            ReloadCommand="{Binding ReloadCommand}"
-                                            NavigatingCommand="{Binding WebViewNavigatingCommand}"
-                                            NavigatedCommand="{Binding WebViewNavigatedCommand}"
-                                            CurrentPageVersion="{Binding CurrentWebPageVersion}"
+                                            HorizontalOptions="FillAndExpand"
                                             LatestPageVersion="{Binding LatestWebPageVersion}"
-                                            android:WebView.EnableZoomControls="true"
-                                            android:WebView.DisplayZoomControls="False" />
+                                            NavigatedCommand="{Binding WebViewNavigatedCommand}"
+                                            NavigatingCommand="{Binding WebViewNavigatingCommand}"
+                                            ReloadCommand="{Binding ReloadCommand}"
+                                            Source="{Binding Url, Mode=TwoWay}"
+                                            VerticalOptions="FillAndExpand" />
 
                 </pulltorefresh:PullToRefreshLayout>
 
                 <ProgressBar x:Name="AdvancedProgressbar"
-                             IsVisible="{Binding IsNavigating}"
-                             VerticalOptions="Start"
-                             HeightRequest="5"
                              BackgroundColor="{DynamicResource ContentPageBackgroundColor}"
+                             HeightRequest="5"
+                             IsVisible="{Binding IsNavigating}"
+                             Progress="{Binding Source={x:Reference HybridWebViewControl}, Path=ContentLoadProgress}"
                              ProgressColor="{DynamicResource PrimaryColor}"
-                             Progress="{Binding Source={x:Reference HybridWebViewControl}, Path=ContentLoadProgress}" />
+                             VerticalOptions="Start" />
             </Grid>
 
-            <Grid BackgroundColor="Transparent"
-                  RowSpacing="0"
-                  HeightRequest="55"
+            <Grid Margin="0,-6,0,0"
+                  BackgroundColor="Transparent"
                   ColumnSpacing="0"
-                  Margin="0,-6,0,0">
+                  HeightRequest="55"
+                  RowSpacing="0">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="6" />
@@ -223,62 +229,62 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <controls:ShadowBoxView ShadowType="Top"
+                <controls:ShadowBoxView Grid.ColumnSpan="5"
                                         IsVisible="{DynamicResource IsLightTheme}"
-                                        Grid.ColumnSpan="5" />
+                                        ShadowType="Top" />
 
                 <xamEffect:BorderView Grid.Row="1"
                                       Grid.Column="0"
-                                      IsEnabled="{Binding CanGoBack}"
-                                      AutomationId="BackActionIcon"
-                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
-                                      xamEffect:TouchEffect.Color="{DynamicResource GrayUnFippedColor}"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
-                                      xamEffect:Commands.TapParameter="Back">
+                                      xamEffect:Commands.TapParameter="Back"
+                                      xamEffect:TouchEffect.Color="{DynamicResource GrayUnFippedColor}"
+                                      AutomationId="BackActionIcon"
+                                      IsEnabled="{Binding CanGoBack}"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}">
                     <Label Style="{DynamicResource BottomNavigationIconStyle}"
                            Text="{x:Static icons:IconFont.ChevronLeft}" />
                 </xamEffect:BorderView>
 
-                <xamEffect:BorderView Grid.Column="1"
-                                      Grid.Row="1"
-                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
-                                      IsEnabled="{Binding CanGoForward}"
-                                      AutomationId="ForwardActionIcon"
+                <xamEffect:BorderView Grid.Row="1"
+                                      Grid.Column="1"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
                                       xamEffect:Commands.TapParameter="Forward"
-                                      xamEffect:TouchEffect.Color="LightGray">
+                                      xamEffect:TouchEffect.Color="LightGray"
+                                      AutomationId="ForwardActionIcon"
+                                      IsEnabled="{Binding CanGoForward}"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}">
                     <Label Style="{DynamicResource BottomNavigationIconStyle}"
                            Text="{x:Static icons:IconFont.ChevronRight}" />
                 </xamEffect:BorderView>
 
-                <xamEffect:BorderView Grid.Column="2"
-                                      Grid.Row="1"
-                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
-                                      AutomationId="FocusActionIcon"
+                <xamEffect:BorderView Grid.Row="1"
+                                      Grid.Column="2"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
-                                      xamEffect:Commands.TapParameter="Focus">
+                                      xamEffect:Commands.TapParameter="Focus"
+                                      AutomationId="FocusActionIcon"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}">
                     <Label Style="{DynamicResource BottomNavigationIconStyle}"
                            Text="{x:Static icons:IconFont.Magnify}" />
                 </xamEffect:BorderView>
 
-                <xamEffect:BorderView Grid.Column="3"
-                                      Grid.Row="1"
-                                      IsEnabled="{Binding CanGoToHomePage}"
-                                      AutomationId="HomeActionIcon"
-                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
+                <xamEffect:BorderView Grid.Row="1"
+                                      Grid.Column="3"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
-                                      xamEffect:Commands.TapParameter="Home">
+                                      xamEffect:Commands.TapParameter="Home"
+                                      AutomationId="HomeActionIcon"
+                                      IsEnabled="{Binding CanGoToHomePage}"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}">
 
                     <Label Style="{DynamicResource BottomNavigationIconStyle}"
                            Text="{x:Static icons:IconFont.Home}" />
                 </xamEffect:BorderView>
 
-                <xamEffect:BorderView Grid.Column="4"
-                                      Grid.Row="1"
-                                      Style="{StaticResource BottomMenubarIconFrameStyle}"
-                                      AutomationId="MenuActionIcon"
+                <xamEffect:BorderView Grid.Row="1"
+                                      Grid.Column="4"
                                       xamEffect:Commands.Tap="{Binding BottomNavbarTapCommand}"
-                                      xamEffect:Commands.TapParameter="Menu">
+                                      xamEffect:Commands.TapParameter="Menu"
+                                      AutomationId="MenuActionIcon"
+                                      Style="{StaticResource BottomMenubarIconFrameStyle}">
                     <Label Style="{DynamicResource BottomNavigationIconStyle}"
                            Text="{x:Static icons:IconFont.DotsVertical}" />
                 </xamEffect:BorderView>
