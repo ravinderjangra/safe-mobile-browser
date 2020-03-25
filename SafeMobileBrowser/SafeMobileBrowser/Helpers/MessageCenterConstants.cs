@@ -26,5 +26,6 @@ namespace SafeMobileBrowser.Helpers
         public const string SessionReconnect = "SessionReconnect";
         public const string LoadSafeWebsite = "LoadSafeWebsite";
         public const string UpdateWelcomePageTheme = "UpdateWelcomePageTheme";
+        public const string NoInternet = "NoInternet";
     }
 }

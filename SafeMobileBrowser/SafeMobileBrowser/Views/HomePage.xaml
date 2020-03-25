@@ -140,19 +140,25 @@
 
             <xamEffect:BorderView xamEffect:Commands.Tap="{Binding AuthenticateBrowserCommand}"
                                   xamEffect:TouchEffect.Color="LightGray"
+                                  BackgroundColor="{DynamicResource FrameBackgroundColor}"
                                   CornerRadius="10"
                                   WidthRequest="40">
-                <Label FontSize="25"
+                <Label FontFamily="{DynamicResource MaterialFontFamily}"
+                       FontSize="25"
                        HorizontalOptions="Center"
-                       Style="{StaticResource PrimaryActionIconStyle}"
                        Text="{x:Static icons:IconFont.Web}"
-                       TextColor="DarkSlateGray"
+                       TextColor="{DynamicResource SecondaryTextColor}"
                        VerticalOptions="Center">
                     <Label.Triggers>
                         <DataTrigger Binding="{Binding IsAuthenticated}"
                                      TargetType="Label"
-                                     Value="True">
-                            <Setter Property="TextColor" Value="DarkGreen" />
+                                     Value="1">
+                            <Setter Property="TextColor" Value="{DynamicResource ConnectIconColor}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsAuthenticated}"
+                                     TargetType="Label"
+                                     Value="-1">
+                            <Setter Property="TextColor" Value="Red" />
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>

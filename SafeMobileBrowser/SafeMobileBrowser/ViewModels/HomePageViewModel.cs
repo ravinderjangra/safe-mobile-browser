@@ -57,9 +57,9 @@ namespace SafeMobileBrowser.ViewModels
 
         public ICommand AuthenticateBrowserCommand { get; set; }
 
-        private bool _isAuthenticated;
+        private int _isAuthenticated;
 
-        public bool IsAuthenticated
+        public int IsAuthenticated
         {
             get => _isAuthenticated;
             set => SetProperty(ref _isAuthenticated, value);
@@ -199,9 +199,12 @@ namespace SafeMobileBrowser.ViewModels
             AuthenticateBrowserCommand = new Command(AuthenticateBrowser);
         }
 
-        internal void UpdateAuthenticationState()
+        internal void UpdateAuthenticationState(bool? noInternet = null)
         {
-            IsAuthenticated = App.AppSession != null;
+            if (noInternet.HasValue)
+                IsAuthenticated = -1;
+
+            IsAuthenticated = App.AppSession != null ? 1 : 0;
         }
 
         private async void AuthenticateBrowser()
