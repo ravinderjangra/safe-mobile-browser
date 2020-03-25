@@ -46,6 +46,8 @@ namespace SafeMobileBrowser
             else
             {
                 IsConnectedToInternet = false;
+                if (AppSession != null)
+                    MessagingCenter.Send(this, MessageCenterConstants.NoInternet);
             }
         }
 

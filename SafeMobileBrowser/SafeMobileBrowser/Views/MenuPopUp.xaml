@@ -55,7 +55,7 @@
         <Frame Padding="0,10,0,0"
                BackgroundColor="{DynamicResource ContentPageBackgroundColor}"
                CornerRadius="10"
-               HeightRequest="140"
+               HeightRequest="200"
                HorizontalOptions="EndAndExpand"
                VerticalOptions="EndAndExpand"
                WidthRequest="220">
