@@ -9,6 +9,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using SafeApp;
@@ -23,6 +26,12 @@ namespace SafeMobileBrowser.Services
 {
     public class AuthenticationService
     {
+        private static readonly string _vaultS3DownloadLink = "https://safe-vault-config.s3.eu-west-2.amazonaws.com/shared-section/vault_connection_info.config";
+
+        private static string ConfigFilePath => DependencyService.Get<IPlatformService>().ConfigFilesPath;
+
+        private static readonly string _defaultVaultConnectionFileName = "vault_connection_info.config";
+
         public static async Task<(uint, string)> GenerateEncodedAuthReqAsync()
         {
             // Create an AuthReq
@@ -48,6 +57,11 @@ namespace SafeMobileBrowser.Services
             try
             {
                 App.PendingRequest = true;
+
+                var filePath = Path.Combine(ConfigFilePath, _defaultVaultConnectionFileName);
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+
                 string req;
                 if (isUnregistered)
                     (_, req) = await Session.EncodeUnregisteredRequestAsync(Constants.AppId);
@@ -144,6 +158,44 @@ namespace SafeMobileBrowser.Services
                 Logger.Error(ex);
                 MessagingCenter.Send(this, MessageCenterConstants.AuthenticationFailed);
                 throw;
+            }
+        }
+
+        internal static async Task DownloadMaidSafeSharedSectionVault()
+        {
+            try
+            {
+                using (UserDialogs.Instance.Loading("Connect to the MaidSafe shared section"))
+                {
+                    using (var client = new HttpClient())
+                    {
+                        using (var response = await client.GetAsync(_vaultS3DownloadLink))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var fileContent = await response.Content.ReadAsStringAsync();
+                                if (fileContent.Length > 0)
+                                {
+                                    File.WriteAllText(Path.Combine(ConfigFilePath, _defaultVaultConnectionFileName), fileContent);
+                                    await Session.SetAppConfigurationDirectoryPathAsync(ConfigFilePath);
+                                    App.AppSession = await Session.AppConnectUnregisteredAsync(Constants.AppId);
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception("Failed to download file from S3.");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Download vault connection file",
+                    "Failed to download the vault connection file.",
+                    "ok");
+                Debug.WriteLine(ex.Message);
             }
         }
     }
