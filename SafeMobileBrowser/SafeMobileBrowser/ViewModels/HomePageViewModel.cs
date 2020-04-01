@@ -294,9 +294,9 @@ namespace SafeMobileBrowser.ViewModels
             {
                 var result = await Application.Current.MainPage.DisplayAlert(
                                 "Authentication",
-                                "You can connect to a vault using the authenticator app or connect to the MaidSafe hosted shared section.",
+                                "You can connect to a section of your choice using the Authenticator app, or you can connect to the MaidSafe hosted shared section.",
                                 "Use authenticator app",
-                                "Connect to the MaidSafe vaults");
+                                "Use MaidSafe shared section");
                 if (result)
                     await AuthenticationService.RequestAuthenticationAsync(true);
                 else
