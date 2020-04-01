@@ -157,7 +157,7 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsAuthenticated}"
                                      TargetType="Label"
-                                     Value="-1">
+                                     Value="2">
                             <Setter Property="TextColor" Value="Red" />
                         </DataTrigger>
                     </Label.Triggers>

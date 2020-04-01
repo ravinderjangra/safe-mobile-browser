@@ -202,9 +202,9 @@ namespace SafeMobileBrowser.ViewModels
         internal void UpdateAuthenticationState(bool? noInternet = null)
         {
             if (noInternet.HasValue)
-                IsAuthenticated = -1;
-
-            IsAuthenticated = App.AppSession != null ? 1 : 0;
+                IsAuthenticated = 2;
+            else
+                IsAuthenticated = App.AppSession != null ? 1 : 0;
         }
 
         private async void AuthenticateBrowser()

@@ -111,6 +111,15 @@ namespace SafeMobileBrowser.Views
                     _viewModel.UpdateAuthenticationState();
                 });
 
+            // Todo: Required to add no internet connection status in the top navigation bar
+            // MessagingCenter.Subscribe<App>(
+            //    this,
+            //    MessageCenterConstants.NoInternet,
+            //    (sender) =>
+            //    {
+            //        _viewModel.UpdateAuthenticationState(true);
+            //    });
+
             HybridWebViewControl.Navigated += HybridWebViewControl_NavigatedAsync;
         }
 
@@ -306,6 +315,11 @@ namespace SafeMobileBrowser.Views
             MessagingCenter.Unsubscribe<AuthenticationService>(
                 this,
                 MessageCenterConstants.Authenticated);
+
+            // Todo: Required to add no internet connection status in the top navigation bar
+            // MessagingCenter.Unsubscribe<App>(
+            //    this,
+            //    MessageCenterConstants.NoInternet);
         }
     }
 }

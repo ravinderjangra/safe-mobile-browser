@@ -46,8 +46,10 @@ namespace SafeMobileBrowser
             else
             {
                 IsConnectedToInternet = false;
-                if (AppSession != null)
-                    MessagingCenter.Send(this, MessageCenterConstants.NoInternet);
+
+                // Todo: Required to add no internet connection status in the top navigation bar
+                // if (AppSession != null)
+                //    MessagingCenter.Send(this, MessageCenterConstants.NoInternet);
             }
         }
 
