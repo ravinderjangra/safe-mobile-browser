@@ -294,13 +294,13 @@ namespace SafeMobileBrowser.ViewModels
             {
                 var result = await Application.Current.MainPage.DisplayAlert(
                                 "Authentication",
-                                "You will be redirected to the authenticator app for authentication.",
-                                "Authenticate",
-                                "Cancel");
+                                "You can connect to a vault using the authenticator app or connect to the MaidSafe hosted shared section.",
+                                "Use authenticator app",
+                                "Connect to the MaidSafe vaults");
                 if (result)
-                {
                     await AuthenticationService.RequestAuthenticationAsync(true);
-                }
+                else
+                    await AuthenticationService.DownloadMaidSafeSharedSectionVault();
             }
             catch (Exception ex)
             {
