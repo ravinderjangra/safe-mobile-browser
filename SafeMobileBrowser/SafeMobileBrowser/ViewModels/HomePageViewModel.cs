@@ -209,7 +209,27 @@ namespace SafeMobileBrowser.ViewModels
 
         private async void AuthenticateBrowser()
         {
-            await AuthenticationService.RequestAuthenticationAsync(true);
+            try
+            {
+                if (IsAuthenticated == 1)
+                {
+                    var result = await Application.Current.MainPage.DisplayAlert(
+                                "Authentication",
+                                "Please press continue to reset the current session and re-authenticate to start a new session.",
+                                "Continue",
+                                "Cancel");
+                    if (result)
+                        await InitilizeSessionAsync();
+                }
+                else
+                {
+                    await InitilizeSessionAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
 
         private void FetchPreviousVersion()
