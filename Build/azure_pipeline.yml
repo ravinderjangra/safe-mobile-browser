@@ -64,7 +64,7 @@ jobs:
     - task: XamarinAndroid@1
       displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
       inputs:
-        projectFile: '**/*Droid*.csproj'
+        projectFile: 'SafeMobileBrowser/SafeMobileBrowser.Android/SafeMobileBrowser.Android.csproj'
         outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
         configuration: '$(BuildConfiguration)'
 
