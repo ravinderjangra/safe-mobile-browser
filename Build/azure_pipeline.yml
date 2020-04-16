@@ -52,8 +52,6 @@ jobs:
 
     - task: NuGetCommand@2
       displayName: 'NuGet restore'
-      inputs:
-        restoreSolution: '$(Parameters.restorePkgSolution)'
 
     - bash: |
         bash ./Build/pre_build.sh
