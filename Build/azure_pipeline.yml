@@ -161,7 +161,7 @@ jobs:
       - ios_build
     pool:
       vmImage: 'macOS-latest'
-    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     steps:
     - bash: |
         export commitMessage=$(git log --format=%B -n 1)
@@ -182,7 +182,7 @@ jobs:
         itemPattern: |
           **/*.apk
           **/*.ipa
-          targetPath: '$(Build.ArtifactStagingDirectory)'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
       condition: and(succeeded(), eq(variables['isVersionChange'], 'true'))
 
     - task: CopyFiles@2
@@ -192,15 +192,15 @@ jobs:
         Contents: |
           **/*.apk
           **/*.ipa
-          TargetFolder: '$(Build.SourcesDirectory)'
-          flattenFolders: true
+        TargetFolder: '$(Build.SourcesDirectory)'
+        flattenFolders: true
       condition: and(succeeded(), eq(variables['isVersionChange'], 'true'))
 
     - bash: |
         brew install coreutils
         cd ./CakeScripts
         bash get_release_description.sh
-        displayName: 'Generate release notes'
+      displayName: 'Generate release notes'
       condition: and(succeeded(), eq(variables['isVersionChange'], 'true'))
 
     - task: GitHubRelease@1
@@ -214,8 +214,8 @@ jobs:
         assets: |
           $(Build.ArtifactStagingDirectory)/**/*.apk
           $(Build.ArtifactStagingDirectory)/**/*.ipa
-          isDraft: true
-          addChangeLog: false
+        isDraft: true
+        addChangeLog: false
       condition: and(succeeded(), eq(variables['isVersionChange'], 'true'))
 
     - task: AppCenterDistribute@3
