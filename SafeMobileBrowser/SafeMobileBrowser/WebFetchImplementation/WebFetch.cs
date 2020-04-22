@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SafeApp;
 using SafeApp.Core;
 using SafeMobileBrowser.Helpers;
 using SafeMobileBrowser.Models;
@@ -122,9 +121,13 @@ namespace SafeMobileBrowser.WebFetchImplementation
             var filesContainerContent = new StringBuilder();
             foreach (var file in files)
             {
-                filesContainerContent.Append($"<li>{file.FileName}</li>");
+                var fileLink = file
+                               .FileMetaData
+                               .FirstOrDefault(meta => meta.MetaDataKey == "link")
+                               .MetaDataValue;
+                filesContainerContent.Append($"<li><a href={fileLink}>{file.FileName}</a></li>");
             }
-            int index = htmlString.IndexOf(_filesContainerText, StringComparison.Ordinal);
+            var index = htmlString.IndexOf(_filesContainerText, StringComparison.Ordinal);
             return htmlString
                 .Remove(index, _filesContainerText.Length)
                 .Insert(index, filesContainerContent.ToString());
