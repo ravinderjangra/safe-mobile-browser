@@ -1,5 +1,14 @@
 # safe-mobile-browser changelog
 
+## [0.5.1]
+
+* Added option to browser files from the files containers.
+* Updated app to show different error dialogs when failed to download file from the S3.
+* Updated app to check for internet connection when downling file from S3.
+* Fixed FAQ link in the settings menu.
+* Fixed crash issue on app resume (Android).
+* Updated rust log levels.
+
 ## [0.5.0]
 
 * Added In-App Updates support using App Center Distribute SDK.
